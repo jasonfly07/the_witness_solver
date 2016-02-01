@@ -1,5 +1,7 @@
 #include "Puzzle.h"
 
+#include <cstdlib>
+
 void Puzzle::ResetPuzzle(int numRow, int numCol) {
   assert(numRow > 0 && numCol > 0);
   m_NodeMatrix.clear();
@@ -50,4 +52,19 @@ void Puzzle::AddTail(const Vector2& vec) {
 
   m_NodeTails.insert(&GetNode(vec));
   GetNode(vec).isTail = true;
+}
+
+void Puzzle::AddObstacle(const Vector2& vec1, const Vector2& vec2) {
+  Node& node1 = GetNode(vec1);
+  Node& node2 = GetNode(vec2);
+
+  // Check if node1 & node2 are adjacent
+  // TODO: this is probably unnecessary
+  if (node1.neighborSet.count(&node2) == 0 ||
+      node2.neighborSet.count(&node1) == 0) {
+    return;
+  }
+
+  node1.neighborSet.erase(&node2);
+  node2.neighborSet.erase(&node1);
 }

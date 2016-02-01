@@ -83,6 +83,10 @@ public:
   void AddHead(const Vector2& vec);
   void AddTail(const Vector2& vec);
 
+  // Add an obstacle between 2 adjacent nodes
+  // This will remove node2 from node1's neighborSet and vice versa
+  void AddObstacle(const Vector2& vec1, const Vector2& vec2);
+
 private:
   // TODO: eventually there'll be a m_BlockMatrix
   NodeMatrix m_NodeMatrix;
