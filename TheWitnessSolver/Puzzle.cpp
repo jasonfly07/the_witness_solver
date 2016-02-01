@@ -1,6 +1,7 @@
 #include "Puzzle.h"
 
 #include <cstdlib>
+#include <stack>
 
 void Puzzle::ResetPuzzle(int numRow, int numCol) {
   assert(numRow > 0 && numCol > 0);
@@ -67,4 +68,61 @@ void Puzzle::AddObstacle(const Vector2& vec1, const Vector2& vec2) {
 
   node1.neighborSet.erase(&node2);
   node2.neighborSet.erase(&node1);
+}
+
+void Puzzle::Solve() {
+  // Reset the visited map
+  m_Visited.clear();
+  m_Visited.resize(NodeRows(), std::vector<bool>(NodeCols()));
+  for (int r = 0; r < NodeRows(); r++) {
+    for (int c = 0; c < NodeCols(); c++) {
+      m_Visited[r][c] = false;
+    }
+  }
+
+  // Reset all the from nodes
+  for (int r = 0; r < NodeRows(); r++) {
+    for (int c = 0; c < NodeCols(); c++) {
+      GetNode(Vector2(r, c)).from = NULL;
+    }
+  }
+
+  // Create the stack for DFS
+  std::stack<Node*> dfsStack;
+  for (const auto& head : m_NodeHeads) {
+    dfsStack.push(head);
+  }
+
+  // Perform DFS
+  Node* finalNode = NULL;
+  while (!dfsStack.empty()) {
+    Node* currNode = dfsStack.top();
+    dfsStack.pop();
+    SetVisited(*currNode);
+
+    if (currNode->isTail) {
+      finalNode = currNode;
+      break;
+    }
+
+    for (const auto& neighbor : currNode->neighborSet) {
+      if (!HasVisited(*neighbor)) {
+        neighbor->from = currNode;
+        dfsStack.push(neighbor);
+      }
+    }
+  }
+
+  // Trace back the path
+  std::stack<Node*> pathStack;
+  Node* iter = finalNode;
+  while (iter != NULL) {
+    pathStack.push(iter);
+    iter = iter->from;
+  }
+  m_Path.clear();
+  while (!pathStack.empty()) {
+    m_Path.push_back(pathStack.top());
+    pathStack.pop();
+  }
 }

@@ -34,24 +34,30 @@ typedef std::vector<Vector2> Vector2List;
 // Contains coordinates, its reachable naighbors, and some extra info.
 struct Node {
   Node() {
-    coord = Vector2(0, 0);
-    isEssential = false;
-    isHead = false;
-    isTail = false;
+    InitNode(0, 0);
   }
   Node(int r, int c) {
+    InitNode(r, c);
+  }
+  void InitNode(int r, int c) {
     coord = Vector2(r, c);
     isEssential = false;
     isHead = false;
     isTail = false;
+    from = NULL;
   }
+
   Vector2 coord;
   std::unordered_set<Node*> neighborSet;
   bool isEssential;
   bool isHead;
   bool isTail;
+
+  // Optional fields used by the Solver
+  Node* from;
 };
 typedef std::unordered_set<Node*> NodeSet;
+typedef std::vector<Node*> NodeVector;
 typedef std::vector<std::vector<Node>> NodeMatrix;
 
 // Generic object representing the puzzle
@@ -72,6 +78,7 @@ public:
   inline Node& GetNode(const Vector2& vec) { return m_NodeMatrix[vec.r][vec.c]; }
   inline NodeSet& GetHeads() { return m_NodeHeads; }
   inline NodeSet& GetTails() { return m_NodeTails; }
+  inline NodeVector& GetPath() { return m_Path; } // TODO: support multiple paths eventually
 
   // Check the validity of a coordinate
   inline bool ValidCoord(const Vector2& v) { return ValidCoord(v.r, v.c); }
@@ -87,11 +94,26 @@ public:
   // This will remove node2 from node1's neighborSet and vice versa
   void AddObstacle(const Vector2& vec1, const Vector2& vec2);
 
+  // Solve the puzzle & return a valid path from any head to any tail
+  // TODO: expand this function for more types of puzzle
+  void Solve();
+
 private:
+
+  // Utility function used by Solve()
+  bool HasVisited(const Node& node) { return m_Visited[node.coord.r][node.coord.c]; }
+  void SetVisited(Node& node) { m_Visited[node.coord.r][node.coord.c] = true; }
+
   // TODO: eventually there'll be a m_BlockMatrix
   NodeMatrix m_NodeMatrix;
+
+  //Record the visited nodes for the solver
+  std::vector<std::vector<bool>> m_Visited;
 
   // Heads & tails (starts & goals)
   NodeSet m_NodeHeads;
   NodeSet m_NodeTails;
+
+  // Stores the path by Solve()
+  NodeVector m_Path;
 };
