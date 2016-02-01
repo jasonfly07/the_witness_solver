@@ -1,6 +1,7 @@
 #pragma once
 #include <cassert>
 #include <iostream>
+#include <unordered_set>
 #include <vector>
 
 // A 2d vector.
@@ -27,73 +28,66 @@ struct Vector2 {
   int r;
   int c;
 };
+typedef std::vector<Vector2> Vector2List;
 
-//ostream& operator<< (ostream &out, Point &cPoint)
-//{
-//  // Since operator<< is a friend of the Point class, we can access
-//  // Point's members directly.
-//  out << "(" << cPoint.m_dX << ", " <<
-//    cPoint.m_dY << ", " <<
-//    cPoint.m_dZ << ")";
-//  return out;
-//}
-
-// A node on the grid. 
+// A node on the grid.
 // Contains coordinates, its reachable naighbors, and some extra info.
 struct Node {
-  Node() {}
+  Node() {
+    coord = Vector2(0, 0);
+    isEssential = false;
+    isHead = false;
+    isTail = false;
+  }
   Node(int r, int c) {
     coord = Vector2(r, c);
-    essential = false;
+    isEssential = false;
+    isHead = false;
+    isTail = false;
   }
   Vector2 coord;
-  std::vector<Vector2> neightborList;
-  bool essential;
+  std::unordered_set<Node*> neighborSet;
+  bool isEssential;
+  bool isHead;
+  bool isTail;
 };
-
+typedef std::unordered_set<Node*> NodeSet;
 typedef std::vector<std::vector<Node>> NodeMatrix;
 
 // Generic object representing the puzzle
-struct Puzzle {
+class Puzzle {
+public:
   Puzzle() {}
   Puzzle(int numRow, int numCol) {
     ResetPuzzle(numRow, numCol);
   }
 
-  void ResetPuzzle(int numRow, int numCol) {
-    assert(numRow > 0 && numCol > 0);
-    m_NodeMatrix.clear();
-    m_NodeMatrix.resize(numRow, std::vector<Node>(numCol));
-    for (int r = 0; r < numRow; r++) {
-      for (int c = 0; c < numCol; c++) {
-        Node& currNode = m_NodeMatrix[r][c];
-        currNode.coord = Vector2(r, c);
-
-        currNode.neightborList.clear();
-        currNode.neightborList.reserve(4);
-        Vector2 lCoord(r, c - 1);
-        Vector2 rCoord(r, c + 1);
-        Vector2 tCoord(r - 1, c);
-        Vector2 bCoord(r + 1, c);
-        if (ValidCoord(lCoord)) currNode.neightborList.push_back(lCoord);
-        if (ValidCoord(rCoord)) currNode.neightborList.push_back(rCoord);
-        if (ValidCoord(tCoord)) currNode.neightborList.push_back(tCoord);
-        if (ValidCoord(bCoord)) currNode.neightborList.push_back(bCoord);
-      }
-    }
-  }
+  // Reset (& initialize) the puzzle
+  void ResetPuzzle(int numRow, int numCol);
 
   // Getters
   inline size_t NodeRows() { return m_NodeMatrix.size(); }
   inline size_t NodeCols() { return m_NodeMatrix[0].size(); }
+  inline Node& GetNode(int r, int c) { return m_NodeMatrix[r][c]; } // should we check the validity?
+  inline Node& GetNode(const Vector2& vec) { return m_NodeMatrix[vec.r][vec.c]; }
+  inline NodeSet& GetHeads() { return m_NodeHeads; }
+  inline NodeSet& GetTails() { return m_NodeTails; }
 
-  bool ValidCoord(int r, int c) {
+  // Check the validity of a coordinate
+  inline bool ValidCoord(const Vector2& v) { return ValidCoord(v.r, v.c); }
+  inline bool ValidCoord(int r, int c) {
     return (r >= 0 && c >= 0 && r < NodeRows() && c < NodeCols()) ? true : false;
   }
-  bool ValidCoord(Vector2& v) {
-    return ValidCoord(v.r, v.c);
-  }
 
+  // Add heads or tails to the puzzle
+  void AddHead(const Vector2& vec);
+  void AddTail(const Vector2& vec);
+
+private:
   // TODO: eventually there'll be a m_BlockMatrix
   NodeMatrix m_NodeMatrix;
+
+  // Heads & tails (starts & goals)
+  NodeSet m_NodeHeads;
+  NodeSet m_NodeTails;
 };
