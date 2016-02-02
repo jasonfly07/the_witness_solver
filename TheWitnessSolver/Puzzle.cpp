@@ -30,8 +30,6 @@ void Puzzle::ResetPuzzle(int numRow, int numCol) {
   m_NodeHeads.clear();
   m_NodeTails.clear();
   m_NodeEssentials.clear();
-  m_Path.clear();
-  m_Visited.clear();
 }
 
 void Puzzle::AddHead(const Vector2& vec) {
@@ -81,58 +79,44 @@ void Puzzle::AddEssential(const Vector2& vec) {
 
 
 void Puzzle::Solve() {
-  // Reset the visited map
-  m_Visited.clear();
-  m_Visited.resize(NodeRows(), std::vector<bool>(NodeCols()));
-  for (int r = 0; r < NodeRows(); r++) {
-    for (int c = 0; c < NodeCols(); c++) {
-      m_Visited[r][c] = false;
-    }
-  }
-
-  // Reset all the from nodes
-  for (int r = 0; r < NodeRows(); r++) {
-    for (int c = 0; c < NodeCols(); c++) {
-      GetNode(Vector2(r, c)).from = NULL;
-    }
-  }
+  m_Paths.clear();
 
   // Create the stack for DFS
-  std::stack<Node*> dfsStack;
+  std::stack<Path> pathStack;
   for (const auto& head : m_NodeHeads) {
-    dfsStack.push(head);
+    Path path;
+    path.AddNode(head);
+    pathStack.push(path);
   }
 
   // Perform DFS
-  Node* finalNode = NULL;
-  while (!dfsStack.empty()) {
-    Node* currNode = dfsStack.top();
-    dfsStack.pop();
-    SetVisited(*currNode);
+  while (!pathStack.empty()) {
+    Path currPath = pathStack.top();
+    pathStack.pop();
 
-    if (currNode->isTail) {
-      finalNode = currNode;
-      break;
+    // Perform additional evaluation if the current path
+    // has reached a goal (tail)
+    if (currPath.path.back()->isTail) {
+      // If essential count checks out, add this path to m_Paths
+      // TODO: do we need to continue exploring this path?
+      if (currPath.visitedEssentials.size() == m_NodeEssentials.size()) {
+        m_Paths.push_back(currPath);
+      }
+      // If there isn't enough essential count, and we've run out of tails for exit,
+      // stop exploring this path
+      else if (currPath.visitedTails.size() == m_NodeTails.size()) {
+        continue;
+      }
+      // TODO: any additional logic here?
     }
 
-    for (const auto& neighbor : currNode->neighborSet) {
-      if (!HasVisited(*neighbor)) {
-        neighbor->from = currNode;
-        dfsStack.push(neighbor);
+    // Iterate through neighbors of the end of path
+    for (const auto& neighbor : currPath.path.back()->neighborSet) {
+      Path newPath = currPath;
+      if (!currPath.HasVisited(neighbor)) {
+        newPath.AddNode(neighbor);
+        pathStack.push(newPath);
       }
     }
-  }
-
-  // Trace back the path
-  std::stack<Node*> pathStack;
-  Node* iter = finalNode;
-  while (iter != NULL) {
-    pathStack.push(iter);
-    iter = iter->from;
-  }
-  m_Path.clear();
-  while (!pathStack.empty()) {
-    m_Path.push_back(pathStack.top());
-    pathStack.pop();
   }
 }
