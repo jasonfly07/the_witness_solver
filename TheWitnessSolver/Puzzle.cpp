@@ -26,9 +26,12 @@ void Puzzle::ResetPuzzle(int numRow, int numCol) {
     }
   }
 
-  // Reset heads & tails
+  // Reset all auxiliary containers
   m_NodeHeads.clear();
   m_NodeTails.clear();
+  m_NodeEssentials.clear();
+  m_Path.clear();
+  m_Visited.clear();
 }
 
 void Puzzle::AddHead(const Vector2& vec) {
@@ -69,6 +72,13 @@ void Puzzle::AddObstacle(const Vector2& vec1, const Vector2& vec2) {
   node1.neighborSet.erase(&node2);
   node2.neighborSet.erase(&node1);
 }
+
+void Puzzle::AddEssential(const Vector2& vec) {
+  Node& node = GetNode(vec);
+  node.isEssential = true;
+  m_NodeEssentials.insert(&node);
+}
+
 
 void Puzzle::Solve() {
   // Reset the visited map

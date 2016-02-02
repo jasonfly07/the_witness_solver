@@ -94,6 +94,9 @@ public:
   // This will remove node2 from node1's neighborSet and vice versa
   void AddObstacle(const Vector2& vec1, const Vector2& vec2);
 
+  // Set a node to be essential, which means the path has to pass through it
+  void AddEssential(const Vector2& vec);
+
   // Solve the puzzle & return a valid path from any head to any tail
   // TODO: expand this function for more types of puzzle
   void Solve();
@@ -113,6 +116,9 @@ private:
   // Heads & tails (starts & goals)
   NodeSet m_NodeHeads;
   NodeSet m_NodeTails;
+
+  // Essential nodes
+  NodeSet m_NodeEssentials;
 
   // Stores the path by Solve()
   NodeVector m_Path;
