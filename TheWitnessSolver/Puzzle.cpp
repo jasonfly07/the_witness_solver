@@ -3,17 +3,25 @@
 #include <cstdlib>
 #include <stack>
 
-void Puzzle::ResetPuzzle(int numRow, int numCol) {
-  assert(numRow > 0 && numCol > 0);
-  m_NodeMatrix.clear();
-  m_NodeMatrix.resize(numRow, std::vector<Node>(numCol));
+void Puzzle::ResetPuzzle(int nodeRow, int nodeCol) {
+  // Since there's at least one block, the min size of node matrix is 2x2
+  assert(nodeRow > 1 && nodeCol > 1);
 
-  // Set the reachable neighbor for every node
-  for (int r = 0; r < numRow; r++) {
-    for (int c = 0; c < numCol; c++) {
+  // Set the size of node matrix
+  m_NodeMatrix.clear();
+  m_NodeMatrix.resize(nodeRow, std::vector<Node>(nodeCol));
+
+  // Set the size of block matrix
+  m_BlockMatrix.clear();
+  m_BlockMatrix.resize(nodeRow - 1, std::vector<Block>(nodeCol - 1));
+
+  // Initialize all the nodes
+  for (int r = 0; r < nodeRow; r++) {
+    for (int c = 0; c < nodeCol; c++) {
       Node& currNode = m_NodeMatrix[r][c];
       currNode.coord = Vector2(r, c);
 
+      // Set reachable neighbors
       currNode.neighborSet.clear();
       Vector2 lCoord(r, c - 1);
       Vector2 rCoord(r, c + 1);
@@ -23,6 +31,14 @@ void Puzzle::ResetPuzzle(int numRow, int numCol) {
       if (ValidCoord(rCoord)) currNode.neighborSet.insert(&GetNode(rCoord));
       if (ValidCoord(tCoord)) currNode.neighborSet.insert(&GetNode(tCoord));
       if (ValidCoord(bCoord)) currNode.neighborSet.insert(&GetNode(bCoord));
+    }
+  }
+
+  // Initialize all the blocks
+  for (int r = 0; r < nodeRow - 1; r++) {
+    for (int c = 0; c < nodeCol - 1; c++) {
+      Block& currBlock = m_BlockMatrix[r][c];
+      currBlock.coord = Vector2(r, c);
     }
   }
 
@@ -77,6 +93,10 @@ void Puzzle::AddEssential(const Vector2& vec) {
   m_NodeEssentials.insert(&node);
 }
 
+void Puzzle::SetBlockType(const Vector2& vec, BlockType type) {
+  Block& block = GetBlock(vec);
+  block.type = type;
+}
 
 void Puzzle::Solve() {
   m_Paths.clear();

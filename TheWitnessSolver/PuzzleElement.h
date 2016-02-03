@@ -31,7 +31,7 @@ struct Vector2 {
 };
 typedef std::vector<Vector2> Vector2List;
 
-// A node on the node map.
+// A node on the node matrix.
 // Contains coordinates, its reachable naighbors, and some extra info.
 struct Node {
   Node() {
@@ -80,7 +80,14 @@ struct Path {
   NodeVector path;
 };
 
-// A block on the block map.
+// Block type
+enum BlockType {
+  Empty,
+  White,
+  Black
+};
+
+// A block on the block matrix.
 struct Block {
   Block() {
     InitBlock(0, 0);
@@ -90,7 +97,12 @@ struct Block {
   }
   void InitBlock(int r, int c) {
     coord = Vector2(r, c);
+    type  = Empty;
+    clusterID = -1;
   }
 
+  BlockType type;
   Vector2 coord;
+  int clusterID;
 };
+typedef std::vector<std::vector<Block>> BlockMatrix;

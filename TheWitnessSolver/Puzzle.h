@@ -8,12 +8,12 @@
 class Puzzle {
 public:
   Puzzle() {}
-  Puzzle(int numRow, int numCol) {
-    ResetPuzzle(numRow, numCol);
+  Puzzle(int nodeRow, int nodeCol) {
+    ResetPuzzle(nodeRow, nodeCol);
   }
 
   // Reset (& initialize) the puzzle
-  void ResetPuzzle(int numRow, int numCol);
+  void ResetPuzzle(int nodeRow, int nodeCol);
 
   // Getters
   inline size_t NodeRows() { return m_NodeMatrix.size(); }
@@ -24,6 +24,11 @@ public:
   inline NodeSet& GetTails() { return m_NodeTails; }
   inline std::vector<Path>& GetPaths() { return m_Paths; }
 
+  inline size_t BlockRows() { return m_BlockMatrix.size(); }
+  inline size_t BlockCols() { return m_BlockMatrix[0].size(); }
+  inline Block& GetBlock(int r, int c) { return m_BlockMatrix[r][c]; }
+  inline Block& GetBlock(const Vector2& vec) { return m_BlockMatrix[vec.r][vec.c]; }
+
   // Check the validity of a coordinate
   inline bool ValidCoord(const Vector2& v) { return ValidCoord(v.r, v.c); }
   inline bool ValidCoord(int r, int c) {
@@ -33,6 +38,9 @@ public:
   // Add heads or tails to the puzzle
   void AddHead(const Vector2& vec);
   void AddTail(const Vector2& vec);
+
+  // Set the type of a block
+  void SetBlockType(const Vector2& vec, BlockType type);
 
   // Add an obstacle between 2 adjacent nodes
   // This will remove node2 from node1's neighborSet and vice versa
@@ -50,8 +58,9 @@ private:
   // all paths returned by the solver
   std::vector<Path> m_Paths;
 
-  NodeMatrix m_NodeMatrix;
-
+  // 2 main matrices of the puzzle
+  NodeMatrix  m_NodeMatrix;
+  BlockMatrix m_BlockMatrix;
 
   // Heads & tails (starts & goals)
   NodeSet m_NodeHeads;
