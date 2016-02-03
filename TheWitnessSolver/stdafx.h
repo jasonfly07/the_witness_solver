@@ -1,4 +1,7 @@
 #pragma once
 
-#include <stdio.h>
-#include <tchar.h>
+#include <cstdlib>
+#include <iostream>
+#include <stack>
+#include <unordered_set>
+#include <vector>

@@ -1,6 +1,6 @@
 #include "stdafx.h"
-#include "Puzzle.h"
 
+#include "Puzzle.h"
 #include <iostream>
 
 int main() {
