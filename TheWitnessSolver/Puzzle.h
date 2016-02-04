@@ -32,10 +32,16 @@ public:
   inline Block& GetBlock(int r, int c) { return m_BlockMatrix[r][c]; }
   inline Block& GetBlock(const Vector2& vec) { return m_BlockMatrix[vec.r][vec.c]; }
 
-  // Check the validity of a coordinate
-  inline bool ValidCoord(const Vector2& v) { return ValidCoord(v.r, v.c); }
-  inline bool ValidCoord(int r, int c) {
+  // Check the validity of a node coordinate
+  inline bool ValidNodeCoord(const Vector2& v) { return ValidNodeCoord(v.r, v.c); }
+  inline bool ValidNodeCoord(int r, int c) {
     return (r >= 0 && c >= 0 && r < NodeRows() && c < NodeCols()) ? true : false;
+  }
+
+  // Check the validity of a block coordinate
+  inline bool ValidBlockCoord(const Vector2& v) { return ValidBlockCoord(v.r, v.c); }
+  inline bool ValidBlockCoord(int r, int c) {
+    return (r >= 0 && c >= 0 && r < BlockRows() && c < BlockCols()) ? true : false;
   }
 
   // Add heads or tails to the puzzle

@@ -35,13 +35,13 @@ void Puzzle::ResetPuzzle(int nodeRow, int nodeCol) {
   }
 
   // Reset all auxiliary containers
+  m_Paths.clear();
   m_NodeHeads.clear();
   m_NodeTails.clear();
   m_NodeEssentials.clear();
 }
 
 void Puzzle::ResetNodeMatrixConnectivity() {
-  // Initialize all the nodes
   for (int r = 0; r < NodeRows(); r++) {
     for (int c = 0; c < NodeCols(); c++) {
       Node& currNode = m_NodeMatrix[r][c];
@@ -52,17 +52,20 @@ void Puzzle::ResetNodeMatrixConnectivity() {
       Vector2 rCoord(r, c + 1);
       Vector2 tCoord(r - 1, c);
       Vector2 bCoord(r + 1, c);
-      if (ValidCoord(lCoord)) currNode.neighborSet.insert(&GetNode(lCoord));
-      if (ValidCoord(rCoord)) currNode.neighborSet.insert(&GetNode(rCoord));
-      if (ValidCoord(tCoord)) currNode.neighborSet.insert(&GetNode(tCoord));
-      if (ValidCoord(bCoord)) currNode.neighborSet.insert(&GetNode(bCoord));
+      if (ValidNodeCoord(lCoord)) currNode.neighborSet.insert(&GetNode(lCoord));
+      if (ValidNodeCoord(rCoord)) currNode.neighborSet.insert(&GetNode(rCoord));
+      if (ValidNodeCoord(tCoord)) currNode.neighborSet.insert(&GetNode(tCoord));
+      if (ValidNodeCoord(bCoord)) currNode.neighborSet.insert(&GetNode(bCoord));
+    }
+  }
+}
     }
   }
 }
 
 
 void Puzzle::AddHead(const Vector2& vec) {
-  assert(ValidCoord(vec));
+  assert(ValidNodeCoord(vec));
   // If vec is already a head, no need to proceed
   if (GetNode(vec).isHead) return;
 
@@ -74,7 +77,7 @@ void Puzzle::AddHead(const Vector2& vec) {
 }
 
 void Puzzle::AddTail(const Vector2& vec) {
-  assert(ValidCoord(vec));
+  assert(ValidNodeCoord(vec));
   // If vec is already a tail, no need to proceed
   if (GetNode(vec).isTail) return;
 
@@ -86,6 +89,9 @@ void Puzzle::AddTail(const Vector2& vec) {
 }
 
 void Puzzle::AddObstacle(const Vector2& vec1, const Vector2& vec2) {
+  assert(ValidNodeCoord(vec1));
+  assert(ValidNodeCoord(vec2));
+
   Node& node1 = GetNode(vec1);
   Node& node2 = GetNode(vec2);
 
@@ -101,12 +107,16 @@ void Puzzle::AddObstacle(const Vector2& vec1, const Vector2& vec2) {
 }
 
 void Puzzle::AddEssential(const Vector2& vec) {
+  assert(ValidNodeCoord(vec));
+
   Node& node = GetNode(vec);
   node.isEssential = true;
   m_NodeEssentials.insert(&node);
 }
 
 void Puzzle::SetBlockType(const Vector2& vec, BlockType type) {
+  assert(ValidBlockCoord(vec));
+
   Block& block = GetBlock(vec);
   block.type = type;
 }
