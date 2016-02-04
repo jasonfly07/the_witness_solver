@@ -59,6 +59,22 @@ void Puzzle::ResetNodeMatrixConnectivity() {
     }
   }
 }
+
+void Puzzle::ResetBlockMatrixConnectivity() {
+  for (int r = 0; r < BlockRows(); r++) {
+    for (int c = 0; c < BlockCols(); c++) {
+      Block& currBlock = m_BlockMatrix[r][c];
+
+      // Set reachable neighbors
+      currBlock.neighborSet.clear();
+      Vector2 lCoord(r, c - 1);
+      Vector2 rCoord(r, c + 1);
+      Vector2 tCoord(r - 1, c);
+      Vector2 bCoord(r + 1, c);
+      if (ValidBlockCoord(lCoord)) currBlock.neighborSet.insert(&GetBlock(lCoord));
+      if (ValidBlockCoord(rCoord)) currBlock.neighborSet.insert(&GetBlock(rCoord));
+      if (ValidBlockCoord(tCoord)) currBlock.neighborSet.insert(&GetBlock(tCoord));
+      if (ValidBlockCoord(bCoord)) currBlock.neighborSet.insert(&GetBlock(bCoord));
     }
   }
 }
