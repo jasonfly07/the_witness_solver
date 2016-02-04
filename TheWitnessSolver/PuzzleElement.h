@@ -45,6 +45,7 @@ struct Node {
     isEssential = false;
     isHead = false;
     isTail = false;
+    neighborSet.clear();
   }
 
   Vector2 coord;
@@ -99,8 +100,10 @@ struct Block {
     coord = Vector2(r, c);
     type  = Empty;
     clusterID = -1;
+    neighborSet.clear();
   }
 
+  std::unordered_set<Block*> neighborSet;
   BlockType type;
   Vector2 coord;
   int clusterID;
