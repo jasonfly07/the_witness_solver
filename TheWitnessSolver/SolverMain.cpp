@@ -5,22 +5,19 @@
 
 int main() {
   // Simple maze
-  //Puzzle p1(5, 4);
-  //p1.AddHead(Vector2(4, 0));
-  //p1.AddTail(Vector2(0, 3));
-  //p1.AddObstacle(Vector2(3, 0), Vector2(4, 0));
-  //p1.AddObstacle(Vector2(3, 1), Vector2(4, 1));
-  //p1.AddObstacle(Vector2(1, 1), Vector2(2, 1));
-  //p1.AddObstacle(Vector2(1, 2), Vector2(2, 2));
-  //p1.AddObstacle(Vector2(1, 3), Vector2(2, 3));
-  //p1.AddObstacle(Vector2(0, 2), Vector2(1, 2));
-  //p1.AddObstacle(Vector2(0, 2), Vector2(0, 3));
-  //p1.AddObstacle(Vector2(0, 0), Vector2(0, 1));
-  //p1.Solve();
-  //auto& path = p1.GetPaths()[11];
-  //for (auto& node : path.path) {
-  //  std::cout << node->coord << std::endl;
-  //}
+  Puzzle p1(5, 4);
+  p1.AddHead(Vector2(4, 0));
+  p1.AddTail(Vector2(0, 3));
+  p1.AddObstacle(Vector2(3, 0), Vector2(4, 0));
+  p1.AddObstacle(Vector2(3, 1), Vector2(4, 1));
+  p1.AddObstacle(Vector2(1, 1), Vector2(2, 1));
+  p1.AddObstacle(Vector2(1, 2), Vector2(2, 2));
+  p1.AddObstacle(Vector2(1, 3), Vector2(2, 3));
+  p1.AddObstacle(Vector2(0, 2), Vector2(1, 2));
+  p1.AddObstacle(Vector2(0, 2), Vector2(0, 3));
+  p1.AddObstacle(Vector2(0, 0), Vector2(0, 1));
+  p1.Solve();
+  assert(p1.GetPaths().size() == 14);
   // TODO: check if there're duplicated paths
 
   // Maze with essential nodes
@@ -39,10 +36,9 @@ int main() {
   p2.AddEssential(Vector2(1, 3));
   p2.AddEssential(Vector2(3, 3));
   p2.Solve();
-  auto& path = p2.GetPaths()[0];
-  for (auto& node : path.path) {
-    std::cout << node->coord << std::endl;
-  }
+  assert(p2.GetPaths().size() == 1);
+
+
 
   return 0;
 }

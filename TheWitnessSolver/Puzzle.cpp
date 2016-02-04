@@ -16,23 +16,15 @@ void Puzzle::ResetPuzzle(int nodeRow, int nodeCol) {
   m_BlockMatrix.resize(nodeRow - 1, std::vector<Block>(nodeCol - 1));
 
   // Initialize all the nodes
-  for (int r = 0; r < nodeRow; r++) {
-    for (int c = 0; c < nodeCol; c++) {
+  for (int r = 0; r < NodeRows(); r++) {
+    for (int c = 0; c < NodeCols(); c++) {
       Node& currNode = m_NodeMatrix[r][c];
       currNode.coord = Vector2(r, c);
-
-      // Set reachable neighbors
-      currNode.neighborSet.clear();
-      Vector2 lCoord(r, c - 1);
-      Vector2 rCoord(r, c + 1);
-      Vector2 tCoord(r - 1, c);
-      Vector2 bCoord(r + 1, c);
-      if (ValidCoord(lCoord)) currNode.neighborSet.insert(&GetNode(lCoord));
-      if (ValidCoord(rCoord)) currNode.neighborSet.insert(&GetNode(rCoord));
-      if (ValidCoord(tCoord)) currNode.neighborSet.insert(&GetNode(tCoord));
-      if (ValidCoord(bCoord)) currNode.neighborSet.insert(&GetNode(bCoord));
     }
   }
+
+  // Reset the neighbors of every node
+  ResetNodeMatrixConnectivity();
 
   // Initialize all the blocks
   for (int r = 0; r < nodeRow - 1; r++) {
@@ -47,6 +39,27 @@ void Puzzle::ResetPuzzle(int nodeRow, int nodeCol) {
   m_NodeTails.clear();
   m_NodeEssentials.clear();
 }
+
+void Puzzle::ResetNodeMatrixConnectivity() {
+  // Initialize all the nodes
+  for (int r = 0; r < NodeRows(); r++) {
+    for (int c = 0; c < NodeCols(); c++) {
+      Node& currNode = m_NodeMatrix[r][c];
+
+      // Set reachable neighbors
+      currNode.neighborSet.clear();
+      Vector2 lCoord(r, c - 1);
+      Vector2 rCoord(r, c + 1);
+      Vector2 tCoord(r - 1, c);
+      Vector2 bCoord(r + 1, c);
+      if (ValidCoord(lCoord)) currNode.neighborSet.insert(&GetNode(lCoord));
+      if (ValidCoord(rCoord)) currNode.neighborSet.insert(&GetNode(rCoord));
+      if (ValidCoord(tCoord)) currNode.neighborSet.insert(&GetNode(tCoord));
+      if (ValidCoord(bCoord)) currNode.neighborSet.insert(&GetNode(bCoord));
+    }
+  }
+}
+
 
 void Puzzle::AddHead(const Vector2& vec) {
   assert(ValidCoord(vec));

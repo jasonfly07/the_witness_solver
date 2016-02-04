@@ -15,6 +15,9 @@ public:
   // Reset (& initialize) the puzzle
   void ResetPuzzle(int nodeRow, int nodeCol);
 
+  // Reset node matrix neighbors
+  void ResetNodeMatrixConnectivity();
+
   // Getters
   inline size_t NodeRows() { return m_NodeMatrix.size(); }
   inline size_t NodeCols() { return m_NodeMatrix[0].size(); }
