@@ -66,6 +66,19 @@ public:
 
 private:
 
+  // We need to check essential count if there are essential nodes
+  // in the puzzle
+  bool PuzzleHasEssentialNode();
+
+  // Evaluate whether a path has collected all the essential nodes.
+  // Since the path is not allowed to step on the same node twice,
+  // we only have to check whether the number of collected essential nodes
+  // checks out
+  bool PathHasCollectedAllEssentialNodes(const Path& path);
+
+  // Check if the path has unvisited tails
+  bool PathHasTailLeft(const Path& path);
+
   // all paths returned by the solver
   std::vector<Path> m_Paths;
 

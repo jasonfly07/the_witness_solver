@@ -175,17 +175,20 @@ void Puzzle::Solve() {
     // Perform additional evaluation if the current path
     // has reached a goal (tail)
     if (currPath.path.back()->isTail) {
-      // If essential count checks out, add this path to m_Paths
-      // TODO: do we need to continue exploring this path?
-      if (currPath.visitedEssentials.size() == m_NodeEssentials.size()) {
-        m_Paths.push_back(currPath);
+
+      // Essential nodes evaluation
+      if (PuzzleHasEssentialNode()) {
+        // Give up on this path if it has insufficient essential count &
+        // has run out of exits
+        if (!PathHasCollectedAllEssentialNodes(currPath) && !PathHasTailLeft(currPath)) {
+          continue;
+        }
       }
-      // If there isn't enough essential count, and we've run out of tails for exit,
-      // stop exploring this path
-      else if (currPath.visitedTails.size() == m_NodeTails.size()) {
-        continue;
-      }
-      // TODO: any additional logic here?
+
+      // Block evaluation
+
+      // If currPath survives all the checks above, include it in m_Paths
+      m_Paths.push_back(currPath);
     }
 
     // Iterate through neighbors of the end of path
@@ -198,3 +201,16 @@ void Puzzle::Solve() {
     }
   }
 }
+
+bool Puzzle::PuzzleHasEssentialNode() {
+  return m_NodeEssentials.size() > 0 ? true : false;
+}
+
+bool Puzzle::PathHasCollectedAllEssentialNodes(const Path& path) {
+  return path.visitedEssentials.size() == m_NodeEssentials.size() ? true : false;
+}
+
+bool Puzzle::PathHasTailLeft(const Path& path) {
+  return path.visitedTails.size() == m_NodeTails.size() ? false : true;
+}
+
