@@ -3,6 +3,24 @@
 #include <cstdlib>
 #include <stack>
 
+Node& Puzzle::GetNode(int r, int c) {
+  assert(ValidNodeCoord(Vector2(r, c)));
+  return m_NodeMatrix[r][c];
+}
+Node& Puzzle::GetNode(const Vector2& vec) {
+  assert(ValidNodeCoord(vec));
+  return m_NodeMatrix[vec.r][vec.c];
+}
+
+Block& Puzzle::GetBlock(int r, int c) {
+  assert(ValidBlockCoord(Vector2(r, c)));
+  return m_BlockMatrix[r][c];
+}
+Block& Puzzle::GetBlock(const Vector2& vec) {
+  assert(ValidBlockCoord(vec));
+  return m_BlockMatrix[vec.r][vec.c];
+}
+
 void Puzzle::ResetPuzzle(int nodeRow, int nodeCol) {
   // Since there's at least one block, the min size of node matrix is 2x2
   assert(nodeRow > 1 && nodeCol > 1);
@@ -23,8 +41,9 @@ void Puzzle::ResetPuzzle(int nodeRow, int nodeCol) {
     }
   }
 
-  // Reset the neighbors of every node
+  // Reset the neighbors of nodes & blocks
   ResetNodeMatrixConnectivity();
+  ResetBlockMatrixConnectivity();
 
   // Initialize all the blocks
   for (int r = 0; r < nodeRow - 1; r++) {

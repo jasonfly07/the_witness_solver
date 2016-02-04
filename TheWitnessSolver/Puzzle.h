@@ -20,18 +20,19 @@ public:
   void ResetBlockMatrixConnectivity();
 
   // Getters
+  Node& GetNode(int r, int c);
+  Node& GetNode(const Vector2& vec);
   inline size_t NodeRows() { return m_NodeMatrix.size(); }
   inline size_t NodeCols() { return m_NodeMatrix[0].size(); }
-  inline Node& GetNode(int r, int c) { return m_NodeMatrix[r][c]; } // should we check the validity?
-  inline Node& GetNode(const Vector2& vec) { return m_NodeMatrix[vec.r][vec.c]; }
   inline NodeSet& GetHeads() { return m_NodeHeads; }
   inline NodeSet& GetTails() { return m_NodeTails; }
   inline std::vector<Path>& GetPaths() { return m_Paths; }
 
+  Block& GetBlock(int r, int c);
+  Block& GetBlock(const Vector2& vec);
   inline size_t BlockRows() { return m_BlockMatrix.size(); }
   inline size_t BlockCols() { return m_BlockMatrix[0].size(); }
-  inline Block& GetBlock(int r, int c) { return m_BlockMatrix[r][c]; }
-  inline Block& GetBlock(const Vector2& vec) { return m_BlockMatrix[vec.r][vec.c]; }
+
 
   // Check the validity of a node coordinate
   inline bool ValidNodeCoord(const Vector2& v) { return ValidNodeCoord(v.r, v.c); }
