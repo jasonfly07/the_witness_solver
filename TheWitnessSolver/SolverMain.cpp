@@ -38,7 +38,27 @@ int main() {
   p2.Solve();
   assert(p2.GetPaths().size() == 1);
 
+  // Black & white separation
+  Puzzle p3(5, 5);
+  p3.SetBlockType(Vector2(0, 0), Black);
+  p3.SetBlockType(Vector2(0, 3), Black);
+  p3.SetBlockType(Vector2(1, 0), Black);
+  p3.SetBlockType(Vector2(1, 1), Black);
+  p3.SetBlockType(Vector2(1, 2), Black);
+  p3.SetBlockType(Vector2(1, 3), Black);
+  p3.SetBlockType(Vector2(2, 0), Black);
+  p3.SetBlockType(Vector2(2, 2), Black);
+  p3.SetBlockType(Vector2(2, 3), Black);
+  p3.SetBlockType(Vector2(3, 3), Black);
+  p3.SetBlockType(Vector2(0, 2), White);
+  p3.SetBlockType(Vector2(2, 1), White);
+  p3.SetBlockType(Vector2(3, 0), White);
+  p3.SetBlockType(Vector2(3, 1), White);
+  p3.SetBlockType(Vector2(3, 2), White);
 
+  for (auto& block : p3.GetBlock(0, 2).neighborSet) {
+    std::cout << block->coord << std::endl;
+  }
 
   return 0;
 }
