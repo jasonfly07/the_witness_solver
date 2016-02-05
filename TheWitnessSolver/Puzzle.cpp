@@ -156,9 +156,9 @@ void Puzzle::SetBlockType(const Vector2& vec, BlockType type) {
   block.type = type;
 }
 
-void Puzzle::AddBlockObstacle(const Side& side) {
-  Node& node1 = *(side.node1);
-  Node& node2 = *(side.node2);
+void Puzzle::AddBlockObstacle(const Vector2& vec1, const Vector2& vec2) {
+  Node& node1 = GetNode(vec1);
+  Node& node2 = GetNode(vec2);
   assert(ValidNodeCoord(node1.coord));
   assert(ValidNodeCoord(node2.coord));
 

@@ -62,7 +62,7 @@ public:
 
   // Add an obstacle between 2 blocks
   // This will remove block2 from block1's neighborSet and vice versa
-  void AddBlockObstacle(const Side& side);
+  void AddBlockObstacle(const Vector2& vec1, const Vector2& vec2);
 
 
   // Solve the puzzle & return a valid path from any head to any tail
