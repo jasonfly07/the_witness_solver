@@ -56,7 +56,8 @@ int main() {
   p3.SetBlockType(Vector2(3, 1), White);
   p3.SetBlockType(Vector2(3, 2), White);
 
-  for (auto& block : p3.GetBlock(0, 2).neighborSet) {
+  p3.AddBlockObstacle(Side(&p3.GetNode(2, 1), &p3.GetNode(2, 2)));
+  for (auto& block : p3.GetBlock(2, 1).neighborSet) {
     std::cout << block->coord << std::endl;
   }
 

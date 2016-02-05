@@ -156,6 +156,40 @@ void Puzzle::SetBlockType(const Vector2& vec, BlockType type) {
   block.type = type;
 }
 
+void Puzzle::AddBlockObstacle(const Side& side) {
+  Node& node1 = *(side.node1);
+  Node& node2 = *(side.node2);
+  assert(ValidNodeCoord(node1.coord));
+  assert(ValidNodeCoord(node2.coord));
+
+  // No need to proceed if side is on the border
+  // We only have to check one node to verify this
+  if (node1.coord.r == 0 || node1.coord.r == NodeRows() - 1 ||
+      node1.coord.c == 0 || node1.coord.c == NodeCols() - 1) {
+    return;
+  }
+
+  // Case 1: side is vertical
+  if (node1.coord.c == node2.coord.c) {
+    int R = std::min(node1.coord.r, node2.coord.r);
+    int C = node1.coord.c;
+    Block& block1 = GetBlock(R, C - 1);
+    Block& block2 = GetBlock(R, C);
+    block1.neighborSet.erase(&block2);
+    block2.neighborSet.erase(&block1);
+  }
+  // Case 2: side is horizontal
+  else if (node1.coord.r == node2.coord.r) {
+    int R = node1.coord.r;
+    int C = std::min(node1.coord.c, node2.coord.r);
+    Block& block1 = GetBlock(R - 1, C);
+    Block& block2 = GetBlock(R, C);
+    block1.neighborSet.erase(&block2);
+    block2.neighborSet.erase(&block1);
+  }
+}
+
+
 void Puzzle::Solve() {
   m_Paths.clear();
 

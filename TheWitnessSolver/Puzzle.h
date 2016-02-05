@@ -50,15 +50,20 @@ public:
   void AddHead(const Vector2& vec);
   void AddTail(const Vector2& vec);
 
-  // Set the type of a block
-  void SetBlockType(const Vector2& vec, BlockType type);
-
   // Add an obstacle between 2 adjacent nodes
   // This will remove node2 from node1's neighborSet and vice versa
   void AddNodeObstacle(const Vector2& vec1, const Vector2& vec2);
 
   // Set a node to be essential, which means the path has to pass through it
   void AddEssential(const Vector2& vec);
+
+  // Set the type of a block
+  void SetBlockType(const Vector2& vec, BlockType type);
+
+  // Add an obstacle between 2 blocks
+  // This will remove block2 from block1's neighborSet and vice versa
+  void AddBlockObstacle(const Side& side);
+
 
   // Solve the puzzle & return a valid path from any head to any tail
   // TODO: expand this function for more types of puzzle
