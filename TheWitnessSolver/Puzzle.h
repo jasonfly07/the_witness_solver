@@ -55,7 +55,7 @@ public:
 
   // Add an obstacle between 2 adjacent nodes
   // This will remove node2 from node1's neighborSet and vice versa
-  void AddObstacle(const Vector2& vec1, const Vector2& vec2);
+  void AddNodeObstacle(const Vector2& vec1, const Vector2& vec2);
 
   // Set a node to be essential, which means the path has to pass through it
   void AddEssential(const Vector2& vec);

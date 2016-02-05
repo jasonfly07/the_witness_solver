@@ -123,7 +123,7 @@ void Puzzle::AddTail(const Vector2& vec) {
   GetNode(vec).isTail = true;
 }
 
-void Puzzle::AddObstacle(const Vector2& vec1, const Vector2& vec2) {
+void Puzzle::AddNodeObstacle(const Vector2& vec1, const Vector2& vec2) {
   assert(ValidNodeCoord(vec1));
   assert(ValidNodeCoord(vec2));
 
