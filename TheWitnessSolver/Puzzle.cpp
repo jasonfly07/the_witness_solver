@@ -100,7 +100,6 @@ void Puzzle::ResetBlockMatrixConnectivity() {
 
 
 void Puzzle::AddHead(const Vector2& vec) {
-  assert(ValidNodeCoord(vec));
   // If vec is already a head, no need to proceed
   if (GetNode(vec).isHead) return;
 
@@ -112,7 +111,6 @@ void Puzzle::AddHead(const Vector2& vec) {
 }
 
 void Puzzle::AddTail(const Vector2& vec) {
-  assert(ValidNodeCoord(vec));
   // If vec is already a tail, no need to proceed
   if (GetNode(vec).isTail) return;
 
@@ -124,9 +122,6 @@ void Puzzle::AddTail(const Vector2& vec) {
 }
 
 void Puzzle::AddNodeObstacle(const Vector2& vec1, const Vector2& vec2) {
-  assert(ValidNodeCoord(vec1));
-  assert(ValidNodeCoord(vec2));
-
   Node& node1 = GetNode(vec1);
   Node& node2 = GetNode(vec2);
 
@@ -142,16 +137,12 @@ void Puzzle::AddNodeObstacle(const Vector2& vec1, const Vector2& vec2) {
 }
 
 void Puzzle::AddEssential(const Vector2& vec) {
-  assert(ValidNodeCoord(vec));
-
   Node& node = GetNode(vec);
   node.isEssential = true;
   m_NodeEssentials.insert(&node);
 }
 
 void Puzzle::SetBlockType(const Vector2& vec, BlockType type) {
-  assert(ValidBlockCoord(vec));
-
   Block& block = GetBlock(vec);
   block.type = type;
 }
@@ -159,8 +150,6 @@ void Puzzle::SetBlockType(const Vector2& vec, BlockType type) {
 void Puzzle::AddBlockObstacle(const Vector2& vec1, const Vector2& vec2) {
   Node& node1 = GetNode(vec1);
   Node& node2 = GetNode(vec2);
-  assert(ValidNodeCoord(node1.coord));
-  assert(ValidNodeCoord(node2.coord));
 
   // No need to proceed if side is on the border
   // We only have to check one node to verify this
