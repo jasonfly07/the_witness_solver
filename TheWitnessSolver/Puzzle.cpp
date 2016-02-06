@@ -58,6 +58,9 @@ void Puzzle::ResetPuzzle(int nodeRow, int nodeCol) {
   m_NodeHeads.clear();
   m_NodeTails.clear();
   m_NodeEssentials.clear();
+
+  // Reset some flags
+  m_HasBlackWhiteBlocks = false;
 }
 
 void Puzzle::ResetNodeMatrixConnectivity() {
@@ -176,6 +179,23 @@ void Puzzle::AddBlockObstacle(const Vector2& vec1, const Vector2& vec2) {
     block1.neighborSet.erase(&block2);
     block2.neighborSet.erase(&block1);
   }
+}
+
+void Puzzle::CheckBlackWhiteBlocks() {
+  for (int r = 0; r < BlockRows(); r++) {
+    for (int c = 0; c < BlockCols(); c++) {
+      const Block& currBlock = GetBlock(r, c);
+      if ((currBlock.type == Black) || (currBlock.type == White)) {
+        m_HasBlackWhiteBlocks = true;
+        return;
+      }
+    }
+  }
+  m_HasBlackWhiteBlocks = false;
+}
+
+void Puzzle::PreprocessBlackWhiteBlocks() {
+  // TODO
 }
 
 

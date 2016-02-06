@@ -64,7 +64,6 @@ public:
   // This will remove block2 from block1's neighborSet and vice versa
   void AddBlockObstacle(const Vector2& vec1, const Vector2& vec2);
 
-
   // Solve the puzzle & return a valid path from any head to any tail
   // TODO: expand this function for more types of puzzle
   void Solve();
@@ -84,6 +83,16 @@ private:
   // Check if the path has unvisited tails
   bool PathHasTailLeft(const Path& path);
 
+  // Scan through the puzzle and see if there are black/white blocks to be solved.
+  // The result will be stored in m_HasBlackWhiteBlocks,
+  // so this should be done only once before solving
+  void CheckBlackWhiteBlocks();
+
+  // If m_HasBlackWhiteBlocks = true, we can apply some heuristics to
+  // the pathfinding (the side between black & white must be visited)
+  // This should be done only once before solving
+  void PreprocessBlackWhiteBlocks();
+
   // all paths returned by the solver
   std::vector<Path> m_Paths;
 
@@ -97,4 +106,6 @@ private:
 
   // Essential nodes
   NodeSet m_NodeEssentials;
+
+  bool m_HasBlackWhiteBlocks;
 };
