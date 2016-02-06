@@ -109,3 +109,24 @@ struct Block {
   int clusterID;
 };
 typedef std::vector<std::vector<Block>> BlockMatrix;
+// A side is a line connecting 2 adjacent nodes
+struct Side {
+  Side() {}
+  Side(Node* n1, Node* n2) {
+    node1 = n1;
+    node2 = n2;
+  }
+  bool operator==(const Side& other) {
+    if ((node1->coord == other.node1->coord && node2->coord == other.node2->coord) ||
+        (node1->coord == other.node2->coord && node2->coord == other.node1->coord)) {
+      return true;
+    }
+    else return false;
+  }
+  bool operator!=(const Side& other) {
+    return !(*this == other);
+  }
+
+  Node* node1;
+  Node* node2;
+};
