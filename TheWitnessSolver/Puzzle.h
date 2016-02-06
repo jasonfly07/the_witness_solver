@@ -55,7 +55,7 @@ public:
   void AddNodeObstacle(const Vector2& vec1, const Vector2& vec2);
 
   // Set a node to be essential, which means the path has to pass through it
-  void AddEssential(const Vector2& vec);
+  void AddEssentialNode(const Vector2& vec);
 
   // Set the type of a block
   void SetBlockType(const Vector2& vec, BlockType type);

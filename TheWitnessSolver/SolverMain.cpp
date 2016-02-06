@@ -29,12 +29,12 @@ int main() {
   p2.AddNodeObstacle(Vector2(0, 0), Vector2(1, 0));
   p2.AddNodeObstacle(Vector2(1, 2), Vector2(1, 3));
   p2.AddNodeObstacle(Vector2(2, 2), Vector2(3, 2));
-  p2.AddEssential(Vector2(2, 0));
-  p2.AddEssential(Vector2(2, 1));
-  p2.AddEssential(Vector2(0, 1));
-  p2.AddEssential(Vector2(1, 2));
-  p2.AddEssential(Vector2(1, 3));
-  p2.AddEssential(Vector2(3, 3));
+  p2.AddEssentialNode(Vector2(2, 0));
+  p2.AddEssentialNode(Vector2(2, 1));
+  p2.AddEssentialNode(Vector2(0, 1));
+  p2.AddEssentialNode(Vector2(1, 2));
+  p2.AddEssentialNode(Vector2(1, 3));
+  p2.AddEssentialNode(Vector2(3, 3));
   p2.Solve();
   assert(p2.GetPaths().size() == 1);
 
@@ -56,7 +56,7 @@ int main() {
   p3.SetBlockType(Vector2(3, 1), White);
   p3.SetBlockType(Vector2(3, 2), White);
 
-  p3.AddBlockObstacle(Side(&p3.GetNode(2, 1), &p3.GetNode(2, 2)));
+  p3.AddBlockObstacle(Vector2(2, 1), Vector2(2, 2));
   for (auto& block : p3.GetBlock(2, 1).neighborSet) {
     std::cout << block->coord << std::endl;
   }

@@ -136,7 +136,7 @@ void Puzzle::AddNodeObstacle(const Vector2& vec1, const Vector2& vec2) {
   node2.neighborSet.erase(&node1);
 }
 
-void Puzzle::AddEssential(const Vector2& vec) {
+void Puzzle::AddEssentialNode(const Vector2& vec) {
   Node& node = GetNode(vec);
   node.isEssential = true;
   m_NodeEssentials.insert(&node);
@@ -230,7 +230,7 @@ bool Puzzle::PuzzleHasEssentialNode() {
 }
 
 bool Puzzle::PathHasCollectedAllEssentialNodes(const Path& path) {
-  return path.visitedEssentials.size() == m_NodeEssentials.size() ? true : false;
+  return path.visitedEssentialNodes.size() == m_NodeEssentials.size() ? true : false;
 }
 
 bool Puzzle::PathHasTailLeft(const Path& path) {

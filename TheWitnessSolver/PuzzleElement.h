@@ -59,7 +59,7 @@ typedef std::vector<Node*> NodeVector;
 typedef std::vector<std::vector<Node>> NodeMatrix;
 
 // A path object is used by the solver to record the history of searching
-// It contains all node visited, essential counts, etc.
+// It contains all node visited, essential node counts, etc.
 struct Path {
 
   Path() {}
@@ -67,7 +67,7 @@ struct Path {
   void AddNode(Node* node) {
     visited.insert(node);
     path.push_back(node);
-    if (node->isEssential) visitedEssentials.insert(node);
+    if (node->isEssential) visitedEssentialNodes.insert(node);
     if (node->isTail)      visitedTails.insert(node);
   }
 
@@ -77,7 +77,7 @@ struct Path {
 
   NodeSet visited;
   NodeSet visitedTails;
-  NodeSet visitedEssentials;
+  NodeSet visitedEssentialNodes;
   NodeVector path;
 };
 
