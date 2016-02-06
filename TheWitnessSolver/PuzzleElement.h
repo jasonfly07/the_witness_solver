@@ -21,6 +21,12 @@ struct Vector2 {
     c = other.c;
     return;
   }
+  bool operator==(const Vector2& other) {
+    return (r == other.r) && (c == other.c);
+  }
+  bool operator!=(const Vector2& other) {
+    return !(*this == other);
+  }
   friend std::ostream& operator<< (std::ostream &out, Vector2& vec) {
     out << "[" << vec.r << ", " << vec.c << "]";
     return out;
@@ -109,6 +115,8 @@ struct Block {
   int clusterID;
 };
 typedef std::vector<std::vector<Block>> BlockMatrix;
+typedef std::unordered_set<Block*> BlockSet;
+
 // A side is a line connecting 2 adjacent nodes
 struct Side {
   Side() {}
