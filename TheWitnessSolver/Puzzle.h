@@ -60,6 +60,9 @@ public:
   // Set a node to be essential, which means the path has to pass through it
   void AddEssentialNode(const Vector2& vec);
 
+  // Set a side to be essential
+  void AddEssentialSide(const Vector2& vec1, const Vector2& vec2);
+
   // Set the type of a block
   void SetBlockType(const Vector2& vec, BlockType type);
 

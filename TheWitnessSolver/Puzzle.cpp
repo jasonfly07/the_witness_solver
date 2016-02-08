@@ -154,6 +154,10 @@ void Puzzle::AddEssentialNode(const Vector2& vec) {
   m_NodeEssentials.insert(&node);
 }
 
+void Puzzle::AddEssentialSide(const Vector2& vec1, const Vector2& vec2) {
+  m_SideEssentials.insert(Side(&GetNode(vec1), &GetNode(vec2)));
+}
+
 void Puzzle::SetBlockType(const Vector2& vec, BlockType type) {
   Block& block = GetBlock(vec);
   block.type = type;
@@ -298,6 +302,7 @@ void Puzzle::Solve() {
         }
       }
 
+      std::cout << "survived" << std::endl;
       // If currPath survives all the checks above, include it in m_Paths
       m_Paths.push_back(currPath);
     }
@@ -345,6 +350,7 @@ void Puzzle::Solve() {
     else {
       // If currEssentialSideCount > 1, do nothing
     }
+
   }
 }
 
