@@ -27,7 +27,7 @@ struct Vector2 {
   bool operator!=(const Vector2& other) {
     return !(*this == other);
   }
-  friend std::ostream& operator<< (std::ostream &out, Vector2& vec) {
+  friend std::ostream& operator<< (std::ostream &out, const Vector2& vec) {
     out << "[" << vec.r << ", " << vec.c << "]";
     return out;
   }
