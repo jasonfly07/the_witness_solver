@@ -156,11 +156,10 @@ void Puzzle::AddBlockObstacle(const Vector2& vec1, const Vector2& vec2) {
   Node& node2 = GetNode(vec2);
 
   // No need to proceed if side is on the border
-  // We only have to check one node to verify this
-  if (node1.coord.r == 0 || node1.coord.r == NodeRows() - 1 ||
-      node1.coord.c == 0 || node1.coord.c == NodeCols() - 1) {
-    return;
-  }
+  if (node1.coord.r == 0 && node2.coord.r == 0) return;
+  if (node1.coord.c == 0 && node2.coord.c == 0) return;
+  if (node1.coord.r == NodeRows() - 1 && node2.coord.r == NodeRows() - 1) return;
+  if (node1.coord.c == NodeCols() - 1 && node2.coord.c == NodeCols() - 1) return;
 
   // Case 1: side is vertical
   if (node1.coord.c == node2.coord.c) {
@@ -174,7 +173,7 @@ void Puzzle::AddBlockObstacle(const Vector2& vec1, const Vector2& vec2) {
   // Case 2: side is horizontal
   else if (node1.coord.r == node2.coord.r) {
     int R = node1.coord.r;
-    int C = std::min(node1.coord.c, node2.coord.r);
+    int C = std::min(node1.coord.c, node2.coord.c);
     Block& block1 = GetBlock(R - 1, C);
     Block& block2 = GetBlock(R, C);
     block1.neighborSet.erase(&block2);
