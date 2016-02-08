@@ -103,6 +103,12 @@ private:
   // we have to reset the connectivity at the end
   void SegmentBlockMap(const Path& path, BlockSetVector& segments);
 
+  // Check if a path has visited all essential sides, as required by the
+  // black/white blocks.
+  // TODO: this could be optimzied in the same way as
+  // PathHasCollectedAllEssentialNodes().
+  bool PathHasCollectedAllEssentialSides(const Path& path);
+
   // Check the black/white count of a segment.
   // By the rule, a segment cannot have both white and black blocks
   bool HasValidBlackWhiteCount(const BlockSet& segment);

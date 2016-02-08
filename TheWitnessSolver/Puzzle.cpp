@@ -239,6 +239,13 @@ void Puzzle::PreprocessBlackWhiteBlocks() {
 void Puzzle::Solve() {
   m_Paths.clear();
 
+  // Check if there're black/white blocks to solve
+  // If yes, record all the essential sides
+  CheckBlackWhiteBlocks();
+  if (m_HasBlackWhiteBlocks) {
+    PreprocessBlackWhiteBlocks();
+  }
+
   // Create the stack for DFS
   std::stack<Path> pathStack;
   for (const auto& head : m_NodeHeads) {
@@ -258,19 +265,57 @@ void Puzzle::Solve() {
 
       // Essential nodes evaluation
       if (PuzzleHasEssentialNode()) {
-        // Give up on this path if it has insufficient essential count &
-        // has run out of exits
-        if (!PathHasCollectedAllEssentialNodes(currPath) && !PathHasTailLeft(currPath)) {
+        // Give up on this path if it has insufficient essential node count
+        if (!PathHasCollectedAllEssentialNodes(currPath)) {
           continue;
         }
       }
 
       // Block evaluation
+      if (m_HasBlackWhiteBlocks) {
+        //std::cout << "block evaluation : " << std::endl;
+        //currPath.Print();
 
+        // Give up on this path if it has insufficient essential block count
+        if (!PathHasCollectedAllEssentialSides(currPath)) {
+          continue;
+        }
+
+        std::cout << "start segmentation" << std::endl;
+        // Perform segmentation on block matrix
+        // For every segment, check if black/white count is correct
+        BlockSetVector segments;
+        SegmentBlockMap(currPath, segments);
+        bool everySegmentHasCorrectCount = true;
+        std::cout << "has " << segments.size() << " segments" << std::endl;
+        for (auto& segment : segments) {
+          std::cout << "segment : " << std::endl;
+          for (auto& block : segment) {
+            std::cout << block->coord << std::endl;
+          }
+          const bool currSegmentHasCorrectCount = HasValidBlackWhiteCount(segment);
+          std::cout << currSegmentHasCorrectCount << std::endl;
+          if (!currSegmentHasCorrectCount) {
+            everySegmentHasCorrectCount = false;
+            break;
+          }
+        }
+        if (!everySegmentHasCorrectCount) {
+          continue;
+        }
+      }
+
+      std::cout << "survived" << std::endl;
       // If currPath survives all the checks above, include it in m_Paths
       m_Paths.push_back(currPath);
     }
 
+    // If the current path has no exit left, there's no need to further explore it
+    if (!PathHasTailLeft(currPath)) {
+      continue;
+    }
+
+    //std::cout << m_Paths.size() << std::endl;
     // Iterate through neighbors of the end of path
     for (const auto& neighbor : currPath.path.back()->neighborSet) {
       Path newPath = currPath;
@@ -331,6 +376,18 @@ void Puzzle::SegmentBlockMap(const Path& path, BlockSetVector& segments) {
   ResetBlockMatrixConnectivity();
   ResetBlockMatrixVisitHistory();
 }
+
+bool Puzzle::PathHasCollectedAllEssentialSides(const Path& path) {
+  int essentialSideCount = 0;
+  for (int i = 0; i < path.path.size() - 1; i++) {
+    Side side(path.path[i], path.path[i + 1]);
+    if (m_SideEssentials.count(side) == 1) {
+      essentialSideCount++;
+    }
+  }
+  return (essentialSideCount == m_SideEssentials.size()) ? true : false;
+}
+
 
 bool Puzzle::HasValidBlackWhiteCount(const BlockSet& segment) {
   bool hasWhite = false;
