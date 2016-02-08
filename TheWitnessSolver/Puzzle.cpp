@@ -307,13 +307,43 @@ void Puzzle::Solve() {
       continue;
     }
 
-    // Iterate through neighbors of the end of path
+    // Heuristic:
+    // There're at most 3 unvisited neighbors, so 3 sides to explore
+    // If none of them are essential sides, proceed as usual
+    // If 1 of them is an (unvisited) essential side, we HAVE to take it
+    // (otherwise there's no chance of stepping on it later)
+    // If 2 or 3 of them are (unvisited) essential sides, this path is screwed
+    int currEssentialSideCount = 0;
+    Node& currNode = *(currPath.path.back());
     for (const auto& neighbor : currPath.path.back()->neighborSet) {
-      Path newPath = currPath;
       if (!currPath.HasVisitedNode(neighbor)) {
-        newPath.AddNode(neighbor);
-        pathStack.push(newPath);
+        if (m_SideEssentials.count(Side(&currNode, neighbor)) == 1) {
+          currEssentialSideCount++;
+        }
       }
+    }
+    if (currEssentialSideCount == 0) {
+      for (const auto& neighbor : currPath.path.back()->neighborSet) {
+        if (!currPath.HasVisitedNode(neighbor)) {
+          Path newPath = currPath;
+          newPath.AddNode(neighbor);
+          pathStack.push(newPath);
+        }
+      }
+    }
+    else if (currEssentialSideCount == 1) {
+      for (const auto& neighbor : currPath.path.back()->neighborSet) {
+        if (!currPath.HasVisitedNode(neighbor)) {
+          if (m_SideEssentials.count(Side(&currNode, neighbor)) == 1) {
+            Path newPath = currPath;
+            newPath.AddNode(neighbor);
+            pathStack.push(newPath);
+          }
+        }
+      }
+    }
+    else {
+      // If currEssentialSideCount > 1, do nothing
     }
   }
 }
