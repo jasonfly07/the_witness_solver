@@ -19,6 +19,9 @@ public:
   void ResetNodeMatrixConnectivity();
   void ResetBlockMatrixConnectivity();
 
+  // Reset the visited flags in block matrix
+  void ResetBlockMatrixVisitHistory();
+
   // Getters
   Node& GetNode(int r, int c);
   Node& GetNode(const Vector2& vec);
@@ -63,6 +66,7 @@ public:
   // Add an obstacle between 2 blocks
   // This will remove block2 from block1's neighborSet and vice versa
   void AddBlockObstacle(const Vector2& vec1, const Vector2& vec2);
+  void AddBlockObstacle(const Side& side);
 
   // Solve the puzzle & return a valid path from any head to any tail
   // TODO: expand this function for more types of puzzle
@@ -92,6 +96,16 @@ private:
   // the pathfinding (all sides between black & white must be visited)
   // This should be done only once before solving
   void PreprocessBlackWhiteBlocks();
+
+  // Given a path, perform segmentation on the block map
+  // The output is list of BlockSet (segments)
+  // Since this operation will destroy the connectivity of block map,
+  // we have to reset the connectivity at the end
+  void SegmentBlockMap(const Path& path, BlockSetVector& segments);
+
+  // Check the black/white count of a segment.
+  // By the rule, a segment cannot have both white and black blocks
+  bool HasValidBlackWhiteCount(const BlockSet& segment);
 
   // all paths returned by the solver
   std::vector<Path> m_Paths;

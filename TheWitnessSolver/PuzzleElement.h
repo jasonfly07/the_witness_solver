@@ -107,15 +107,18 @@ struct Block {
     type  = Empty;
     clusterID = -1;
     neighborSet.clear();
+    visited = false;
   }
 
   std::unordered_set<Block*> neighborSet;
   BlockType type;
   Vector2 coord;
   int clusterID;
+  bool visited; // used by segmentation
 };
 typedef std::vector<std::vector<Block>> BlockMatrix;
 typedef std::unordered_set<Block*> BlockSet;
+typedef std::vector<BlockSet> BlockSetVector;
 
 // A side is a line connecting 2 adjacent nodes
 struct Side {

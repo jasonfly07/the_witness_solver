@@ -102,6 +102,14 @@ void Puzzle::ResetBlockMatrixConnectivity() {
   }
 }
 
+void Puzzle::ResetBlockMatrixVisitHistory() {
+  for (int r = 0; r < BlockRows(); r++) {
+    for (int c = 0; c < BlockCols(); c++) {
+      Block& currBlock = m_BlockMatrix[r][c];
+      currBlock.visited = false;
+    }
+  }
+}
 
 void Puzzle::AddHead(const Vector2& vec) {
   // If vec is already a head, no need to proceed
@@ -149,6 +157,10 @@ void Puzzle::AddEssentialNode(const Vector2& vec) {
 void Puzzle::SetBlockType(const Vector2& vec, BlockType type) {
   Block& block = GetBlock(vec);
   block.type = type;
+}
+
+void Puzzle::AddBlockObstacle(const Side& side) {
+  AddBlockObstacle(side.node1->coord, side.node2->coord);
 }
 
 void Puzzle::AddBlockObstacle(const Vector2& vec1, const Vector2& vec2) {
@@ -282,3 +294,57 @@ bool Puzzle::PathHasTailLeft(const Path& path) {
   return path.visitedTails.size() == m_NodeTails.size() ? false : true;
 }
 
+void Puzzle::SegmentBlockMap(const Path& path, BlockSetVector& segments) {
+
+  for (int i = 0; i < path.path.size() - 1; i++) {
+    const Node& node1 = *(path.path[i]);
+    const Node& node2 = *(path.path[i + 1]);
+    AddBlockObstacle(node1.coord, node2.coord);
+  }
+
+  segments.clear();
+  for (int r = 0; r < BlockRows(); r++) {
+    for (int c = 0; c < BlockCols(); c++) {
+      Block& seedBlock = m_BlockMatrix[r][c];
+      if (seedBlock.visited == true) continue;
+
+      BlockSet segment;
+      std::stack<Block*> blockStack;
+      blockStack.push(&seedBlock);
+      while (!blockStack.empty()) {
+        Block& currBlock = *(blockStack.top());
+        blockStack.pop();
+
+        currBlock.visited = true;
+        segment.insert(&currBlock);
+        for (auto& neighbor : currBlock.neighborSet) {
+          if (!neighbor->visited) {
+            blockStack.push(neighbor);
+          }
+        }
+      }
+      segments.push_back(segment);
+    }
+  }
+
+  // Reset the block map
+  ResetBlockMatrixConnectivity();
+  ResetBlockMatrixVisitHistory();
+}
+
+bool Puzzle::HasValidBlackWhiteCount(const BlockSet& segment) {
+  bool hasWhite = false;
+  bool hasBlack = false;
+  for (const auto& block : segment) {
+    if (block->type == White) {
+      hasWhite = true;
+    }
+    else if (block->type == Black) {
+      hasBlack = true;
+    }
+    if (hasWhite && hasWhite) {
+      return false;
+    }
+  }
+  return true;
+}
