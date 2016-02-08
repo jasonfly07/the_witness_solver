@@ -89,7 +89,7 @@ private:
   void CheckBlackWhiteBlocks();
 
   // If m_HasBlackWhiteBlocks = true, we can apply some heuristics to
-  // the pathfinding (the side between black & white must be visited)
+  // the pathfinding (all sides between black & white must be visited)
   // This should be done only once before solving
   void PreprocessBlackWhiteBlocks();
 
@@ -104,8 +104,9 @@ private:
   NodeSet m_NodeHeads;
   NodeSet m_NodeTails;
 
-  // Essential nodes
+  // Essentials
   NodeSet m_NodeEssentials;
+  SideSet m_SideEssentials;
 
   bool m_HasBlackWhiteBlocks;
 };
