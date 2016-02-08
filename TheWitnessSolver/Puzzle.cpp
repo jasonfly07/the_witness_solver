@@ -342,7 +342,7 @@ bool Puzzle::HasValidBlackWhiteCount(const BlockSet& segment) {
     else if (block->type == Black) {
       hasBlack = true;
     }
-    if (hasWhite && hasWhite) {
+    if (hasWhite && hasBlack) {
       return false;
     }
   }
