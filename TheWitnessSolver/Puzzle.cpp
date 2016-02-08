@@ -273,28 +273,21 @@ void Puzzle::Solve() {
 
       // Block evaluation
       if (m_HasBlackWhiteBlocks) {
-        //std::cout << "block evaluation : " << std::endl;
-        //currPath.Print();
 
         // Give up on this path if it has insufficient essential block count
         if (!PathHasCollectedAllEssentialSides(currPath)) {
           continue;
         }
 
-        std::cout << "start segmentation" << std::endl;
         // Perform segmentation on block matrix
         // For every segment, check if black/white count is correct
         BlockSetVector segments;
         SegmentBlockMap(currPath, segments);
         bool everySegmentHasCorrectCount = true;
-        std::cout << "has " << segments.size() << " segments" << std::endl;
         for (auto& segment : segments) {
-          std::cout << "segment : " << std::endl;
           for (auto& block : segment) {
-            std::cout << block->coord << std::endl;
           }
           const bool currSegmentHasCorrectCount = HasValidBlackWhiteCount(segment);
-          std::cout << currSegmentHasCorrectCount << std::endl;
           if (!currSegmentHasCorrectCount) {
             everySegmentHasCorrectCount = false;
             break;
@@ -305,7 +298,6 @@ void Puzzle::Solve() {
         }
       }
 
-      std::cout << "survived" << std::endl;
       // If currPath survives all the checks above, include it in m_Paths
       m_Paths.push_back(currPath);
     }
