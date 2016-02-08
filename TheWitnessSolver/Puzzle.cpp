@@ -444,6 +444,12 @@ void Puzzle::CreateDisplayMatrix(DisplayMatrix& display) {
     }
   }
 
+  // Essential nodes
+  for (const auto& essentialNode : m_NodeEssentials) {
+    Vector2 eCoord = essentialNode->coord;
+    display[eCoord.r * 2][eCoord.c * 2] = 'e';
+  }
+
   // Heads & tails
   for (const auto& head : m_NodeHeads) {
     Vector2 hCoord = head->coord;
@@ -452,12 +458,6 @@ void Puzzle::CreateDisplayMatrix(DisplayMatrix& display) {
   for (const auto& tail : m_NodeTails) {
     Vector2 tCoord = tail->coord;
     display[tCoord.r * 2][tCoord.c * 2] = 'T';
-  }
-
-  // Essential nodes
-  for (const auto& essentialNode : m_NodeEssentials) {
-    Vector2 eCoord = essentialNode->coord;
-    display[eCoord.r * 2][eCoord.c * 2] = 'e';
   }
 
   // Blocks
