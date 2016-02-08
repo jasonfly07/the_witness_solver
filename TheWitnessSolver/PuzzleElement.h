@@ -128,12 +128,33 @@ typedef std::unordered_set<Block*> BlockSet;
 typedef std::vector<BlockSet> BlockSetVector;
 
 // A side is a line connecting 2 adjacent nodes
+// When initialized, the order of node1 & node2 is rearranged
+// ex. [1, 2] comes before [2, 5]
+// ex. [1, 2] comes before [1, 3]
 struct Side {
   Side() {}
   Side(Node* n1, Node* n2) {
-    node1 = n1;
-    node2 = n2;
+    if (n1->coord.r < n2->coord.r) {
+      node1 = n1;
+      node2 = n2;
+    }
+    else if (n1->coord.r == n2->coord.r) {
+      if (n1->coord.c <= n2->coord.c) {
+        node1 = n1;
+        node2 = n2;
+      }
+      else {
+        node1 = n2;
+        node2 = n1;
+      }
+    }
+    else {
+      node1 = n2;
+      node2 = n1;
+    }
   }
+
+  // TODO: we only need to check the first case now
   bool operator==(const Side& other) const {
     if ((node1->coord == other.node1->coord && node2->coord == other.node2->coord) ||
         (node1->coord == other.node2->coord && node2->coord == other.node1->coord)) {
@@ -141,6 +162,7 @@ struct Side {
     }
     else return false;
   }
+
   bool operator!=(const Side& other) const {
     return !(*this == other);
   }
