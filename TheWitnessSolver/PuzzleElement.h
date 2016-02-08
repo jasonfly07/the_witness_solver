@@ -71,14 +71,14 @@ struct Path {
   Path() {}
 
   void AddNode(Node* node) {
-    visited.insert(node);
+    visitedNodes.insert(node);
     path.push_back(node);
     if (node->isEssential) visitedEssentialNodes.insert(node);
     if (node->isTail)      visitedTails.insert(node);
   }
 
-  bool HasVisited(Node* node) {
-    return visited.count(node) == 1 ? true : false;
+  bool HasVisitedNode(Node* node) {
+    return visitedNodes.count(node) == 1 ? true : false;
   }
 
   void Print() const {
@@ -88,7 +88,7 @@ struct Path {
     std::cout << std::endl;
   }
 
-  NodeSet visited;
+  NodeSet visitedNodes;
   NodeSet visitedTails;
   NodeSet visitedEssentialNodes;
   NodeVector path;

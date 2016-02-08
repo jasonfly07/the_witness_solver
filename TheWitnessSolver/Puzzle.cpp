@@ -319,7 +319,7 @@ void Puzzle::Solve() {
     // Iterate through neighbors of the end of path
     for (const auto& neighbor : currPath.path.back()->neighborSet) {
       Path newPath = currPath;
-      if (!currPath.HasVisited(neighbor)) {
+      if (!currPath.HasVisitedNode(neighbor)) {
         newPath.AddNode(neighbor);
         pathStack.push(newPath);
       }
