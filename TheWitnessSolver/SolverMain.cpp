@@ -123,5 +123,61 @@ int main() {
   }
   std::cout << "puzzleBW3 solved in " << ms.count() << " ms" << std::endl;
 
+  // Black & white separation
+  Puzzle puzzleBW4(4, 4);
+  puzzleBW4.AddHead(Vector2(3, 0));
+  puzzleBW4.AddTail(Vector2(0, 3));
+  puzzleBW4.SetBlockType(Vector2(0, 0), Black);
+  puzzleBW4.SetBlockType(Vector2(0, 1), Black);
+  puzzleBW4.SetBlockType(Vector2(0, 2), Black);
+  puzzleBW4.SetBlockType(Vector2(1, 0), Black);
+  puzzleBW4.SetBlockType(Vector2(1, 2), Black);
+  puzzleBW4.SetBlockType(Vector2(1, 1), White);
+  puzzleBW4.SetBlockType(Vector2(2, 0), White);
+  puzzleBW4.SetBlockType(Vector2(2, 1), White);
+  puzzleBW4.SetBlockType(Vector2(2, 2), White);
+  start = HighResClock::now();
+  puzzleBW4.Solve();
+  end = HighResClock::now();
+  ms = std::chrono::duration_cast<MilliSecond>(end - start);
+  if (puzzleBW4.GetPaths().size() != 2) {
+    std::cout << "solution mismatch" << std::endl;
+  }
+  std::cout << "puzzleBW4 solved in " << ms.count() << " ms" << std::endl;
+
+  // Black & white separation
+  Puzzle puzzleBW5(5, 5);
+  puzzleBW5.AddHead(Vector2(2, 2));
+  puzzleBW5.AddTail(Vector2(0, 4));
+  puzzleBW5.SetBlockType(Vector2(1, 1), Black);
+  puzzleBW5.SetBlockType(Vector2(1, 2), Black);
+  puzzleBW5.SetBlockType(Vector2(2, 1), Black);
+  puzzleBW5.SetBlockType(Vector2(2, 2), Black);
+  puzzleBW5.SetBlockType(Vector2(0, 0), White);
+  puzzleBW5.SetBlockType(Vector2(0, 1), White);
+  puzzleBW5.SetBlockType(Vector2(0, 2), White);
+  puzzleBW5.SetBlockType(Vector2(0, 3), White);
+  puzzleBW5.SetBlockType(Vector2(1, 3), White);
+  puzzleBW5.SetBlockType(Vector2(2, 3), White);
+  puzzleBW5.SetBlockType(Vector2(3, 3), White);
+  start = HighResClock::now();
+  puzzleBW5.Solve();
+  end = HighResClock::now();
+  ms = std::chrono::duration_cast<MilliSecond>(end - start);
+  //if (puzzleBW5.GetPaths().size() != 2) {
+  //  std::cout << "solution mismatch" << std::endl;
+  //}
+  std::cout << puzzleBW5.GetPaths().size() << std::endl;
+  std::cout << "puzzleBW5 solved in " << ms.count() << " ms" << std::endl;
+
+  for (auto& path : puzzleBW5.GetPaths()) {
+    std::cout << "start : " << std::endl;
+    for (auto& node : path.path) {
+      std::cout << node->coord << ", ";
+    }
+    std::cout << std::endl;
+  }
+
+
   return 0;
 }

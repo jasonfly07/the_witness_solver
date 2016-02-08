@@ -307,7 +307,6 @@ void Puzzle::Solve() {
       continue;
     }
 
-    //std::cout << m_Paths.size() << std::endl;
     // Iterate through neighbors of the end of path
     for (const auto& neighbor : currPath.path.back()->neighborSet) {
       Path newPath = currPath;
