@@ -396,3 +396,84 @@ bool Puzzle::HasValidBlackWhiteCount(const BlockSet& segment) {
   }
   return true;
 }
+
+void Puzzle::Print() {
+  DisplayMatrix display;
+  CreateDisplayMatrix(display);
+  // Drawing
+  for (int r = 0; r < display.size(); r++) {
+    for (int c = 0; c < display[0].size(); c++) {
+      std::cout << display[r][c];
+    }
+    std::cout << std::endl;
+  }
+}
+
+void Puzzle::Print(const Path& path) {
+  DisplayMatrix display;
+  CreateDisplayMatrix(display);
+
+  // Add path to display
+  for (int i = 0; i < path.path.size() - 1; i++) {
+    Vector2 p1Coord = path.path[i]->coord;
+    Vector2 p2Coord = path.path[i + 1]->coord;
+    if (p1Coord.r == p2Coord.r) {
+      display[p1Coord.r * 2][p1Coord.c + p2Coord.c] = '-';
+    }
+    else if (p1Coord.c == p2Coord.c) {
+      display[p1Coord.r + p2Coord.r][p1Coord.c * 2] = '|';
+    }
+  }
+
+  // Drawing
+  for (int r = 0; r < display.size(); r++) {
+    for (int c = 0; c < display[0].size(); c++) {
+      std::cout << display[r][c];
+    }
+    std::cout << std::endl;
+  }
+}
+
+void Puzzle::CreateDisplayMatrix(DisplayMatrix& display) {
+  display.clear();
+  display.resize(NodeRows() * 2 - 1, std::vector<char>(NodeCols() * 2 - 1));
+
+  for (int r = 0; r < display.size(); r++) {
+    for (int c = 0; c < display[0].size(); c++) {
+      display[r][c] = ' ';
+    }
+  }
+
+  // Heads & tails
+  for (const auto& head : m_NodeHeads) {
+    Vector2 hCoord = head->coord;
+    display[hCoord.r * 2][hCoord.c * 2] = 'H';
+  }
+  for (const auto& tail : m_NodeTails) {
+    Vector2 tCoord = tail->coord;
+    display[tCoord.r * 2][tCoord.c * 2] = 'T';
+  }
+
+  // Essential nodes
+  for (const auto& essentialNode : m_NodeEssentials) {
+    Vector2 eCoord = essentialNode->coord;
+    display[eCoord.r * 2][eCoord.c * 2] = 'e';
+  }
+
+  // Blocks
+  for (int r = 0; r < BlockRows(); r++) {
+    for (int c = 0; c < BlockCols(); c++) {
+      Block& currBlock = GetBlock(r, c);
+      if (currBlock.type == Black) {
+        display[r * 2 + 1][c * 2 + 1] = 'B';
+      }
+      else if (currBlock.type == White) {
+        display[r * 2 + 1][c * 2 + 1] = 'W';
+      }
+      else {
+        display[r * 2 + 1][c * 2 + 1] = 'O';
+      }
+    }
+  }
+}
+

@@ -72,6 +72,11 @@ public:
   // TODO: expand this function for more types of puzzle
   void Solve();
 
+  // Print the puzzle
+  void Print();
+  void Print(const Path& path);
+  void CreateDisplayMatrix(DisplayMatrix& display);
+
 private:
 
   // We need to check essential count if there are essential nodes

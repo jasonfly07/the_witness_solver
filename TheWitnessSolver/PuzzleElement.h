@@ -181,3 +181,6 @@ namespace std {
     }
   };
 }
+
+// This is for drawing the puzzle
+typedef std::vector<std::vector<char>> DisplayMatrix;

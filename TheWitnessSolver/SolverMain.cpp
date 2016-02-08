@@ -25,11 +25,10 @@ int main() {
   puzzleSimpleMaze1.Solve();
   end = HighResClock::now();
   auto ms = std::chrono::duration_cast<MilliSecond>(end - start);
+  std::cout << "puzzleSimpleMaze1 solved in " << ms.count() << " ms" << std::endl;
   if (puzzleSimpleMaze1.GetPaths().size() != 14) {
     std::cout << "solution mismatch" << std::endl;
   }
-  std::cout << "puzzleSimpleMaze1 solved in " << ms.count() << " ms" << std::endl;
-  // TODO: check if there're duplicated paths
 
   // Maze with essential nodes
   Puzzle puzzleEssential1(4, 4);
@@ -50,11 +49,10 @@ int main() {
   puzzleEssential1.Solve();
   end = HighResClock::now();
   ms = std::chrono::duration_cast<MilliSecond>(end - start);
+  std::cout << "puzzleEssential1 solved in " << ms.count() << " ms" << std::endl;
   if (puzzleEssential1.GetPaths().size() != 1) {
     std::cout << "solution mismatch" << std::endl;
   }
-  std::cout << "puzzleEssential1 solved in " << ms.count() << " ms" << std::endl;
-
 
   // Black & white separation
   Puzzle puzzleBW1(3, 3);
@@ -68,10 +66,10 @@ int main() {
   puzzleBW1.Solve();
   end = HighResClock::now();
   ms = std::chrono::duration_cast<MilliSecond>(end - start);
+  std::cout << "puzzleBW1 solved in " << ms.count() << " ms" << std::endl;
   if (puzzleBW1.GetPaths().size() != 1) {
     std::cout << "solution mismatch" << std::endl;
   }
-  std::cout << "puzzleBW1 solved in " << ms.count() << " ms" << std::endl;
 
   // Black & white separation
   Puzzle puzzleBW2(4, 4);
@@ -90,10 +88,10 @@ int main() {
   puzzleBW2.Solve();
   end = HighResClock::now();
   ms = std::chrono::duration_cast<MilliSecond>(end - start);
+  std::cout << "puzzleBW2 solved in " << ms.count() << " ms" << std::endl;
   if (puzzleBW2.GetPaths().size() != 1) {
     std::cout << "solution mismatch" << std::endl;
   }
-  std::cout << "puzzleBW2 solved in " << ms.count() << " ms" << std::endl;
 
   // Black & white separation
   Puzzle puzzleBW3(5, 5);
@@ -118,10 +116,10 @@ int main() {
   puzzleBW3.Solve();
   end = HighResClock::now();
   ms = std::chrono::duration_cast<MilliSecond>(end - start);
+  std::cout << "puzzleBW3 solved in " << ms.count() << " ms" << std::endl;
   if (puzzleBW3.GetPaths().size() != 2) {
     std::cout << "solution mismatch" << std::endl;
   }
-  std::cout << "puzzleBW3 solved in " << ms.count() << " ms" << std::endl;
 
   // Black & white separation
   Puzzle puzzleBW4(4, 4);
@@ -140,10 +138,10 @@ int main() {
   puzzleBW4.Solve();
   end = HighResClock::now();
   ms = std::chrono::duration_cast<MilliSecond>(end - start);
+  std::cout << "puzzleBW4 solved in " << ms.count() << " ms" << std::endl;
   if (puzzleBW4.GetPaths().size() != 2) {
     std::cout << "solution mismatch" << std::endl;
   }
-  std::cout << "puzzleBW4 solved in " << ms.count() << " ms" << std::endl;
 
   // Black & white separation
   Puzzle puzzleBW5(5, 5);
@@ -164,18 +162,9 @@ int main() {
   puzzleBW5.Solve();
   end = HighResClock::now();
   ms = std::chrono::duration_cast<MilliSecond>(end - start);
-  //if (puzzleBW5.GetPaths().size() != 2) {
-  //  std::cout << "solution mismatch" << std::endl;
-  //}
-  std::cout << puzzleBW5.GetPaths().size() << std::endl;
   std::cout << "puzzleBW5 solved in " << ms.count() << " ms" << std::endl;
-
-  for (auto& path : puzzleBW5.GetPaths()) {
-    std::cout << "start : " << std::endl;
-    for (auto& node : path.path) {
-      std::cout << node->coord << ", ";
-    }
-    std::cout << std::endl;
+  if (puzzleBW5.GetPaths().size() != 44) {
+    std::cout << "solution mismatch" << std::endl;
   }
 
 
