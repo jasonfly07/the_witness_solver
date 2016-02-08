@@ -81,6 +81,13 @@ struct Path {
     return visited.count(node) == 1 ? true : false;
   }
 
+  void Print() const {
+    for (const auto& node : path) {
+      std::cout << node->coord << " ";
+    }
+    std::cout << std::endl;
+  }
+
   NodeSet visited;
   NodeSet visitedTails;
   NodeSet visitedEssentialNodes;
