@@ -54,6 +54,24 @@ int main() {
     std::cout << "solution mismatch" << std::endl;
   }
 
+  // Maze with essential nodes
+  Puzzle puzzleEssential2(5, 5);
+  puzzleEssential2.AddHead(Vector2(2, 2));
+  puzzleEssential2.AddTail(Vector2(0, 4));
+  for (int r = 0; r < 5; r++) {
+    for (int c = 0; c < 5; c++) {
+      puzzleEssential2.AddEssentialNode(Vector2(r, c));
+    }
+  }
+  start = HighResClock::now();
+  puzzleEssential2.Solve();
+  end = HighResClock::now();
+  ms = std::chrono::duration_cast<MilliSecond>(end - start);
+  std::cout << "puzzleEssential2 solved in " << ms.count() << " ms" << std::endl;
+  if (puzzleEssential2.GetPaths().size() != 48) {
+    std::cout << "solution mismatch" << std::endl;
+  }
+
   // Black & white separation
   Puzzle puzzleBW1(3, 3);
   puzzleBW1.AddHead(Vector2(2, 0));
@@ -166,7 +184,6 @@ int main() {
   if (puzzleBW5.GetPaths().size() != 44) {
     std::cout << "solution mismatch" << std::endl;
   }
-
 
   return 0;
 }
