@@ -25,31 +25,35 @@ int main() {
   puzzleSimpleMaze1.Solve();
   end = HighResClock::now();
   auto ms = std::chrono::duration_cast<MilliSecond>(end - start);
-  assert(puzzleSimpleMaze1.GetPaths().size() == 14);
+  if (puzzleSimpleMaze1.GetPaths().size() != 14) {
+    std::cout << "solution mismatch" << std::endl;
+  }
   std::cout << "puzzleSimpleMaze1 solved in " << ms.count() << " ms" << std::endl;
   // TODO: check if there're duplicated paths
 
   // Maze with essential nodes
-  Puzzle puzzleMazeEssential1(4, 4);
-  puzzleMazeEssential1.AddHead(Vector2(1, 1));
-  puzzleMazeEssential1.AddHead(Vector2(2, 2));
-  puzzleMazeEssential1.AddTail(Vector2(1, 0));
-  puzzleMazeEssential1.AddNodeObstacle(Vector2(0, 0), Vector2(0, 1));
-  puzzleMazeEssential1.AddNodeObstacle(Vector2(0, 0), Vector2(1, 0));
-  puzzleMazeEssential1.AddNodeObstacle(Vector2(1, 2), Vector2(1, 3));
-  puzzleMazeEssential1.AddNodeObstacle(Vector2(2, 2), Vector2(3, 2));
-  puzzleMazeEssential1.AddEssentialNode(Vector2(2, 0));
-  puzzleMazeEssential1.AddEssentialNode(Vector2(2, 1));
-  puzzleMazeEssential1.AddEssentialNode(Vector2(0, 1));
-  puzzleMazeEssential1.AddEssentialNode(Vector2(1, 2));
-  puzzleMazeEssential1.AddEssentialNode(Vector2(1, 3));
-  puzzleMazeEssential1.AddEssentialNode(Vector2(3, 3));
+  Puzzle puzzleEssential1(4, 4);
+  puzzleEssential1.AddHead(Vector2(1, 1));
+  puzzleEssential1.AddHead(Vector2(2, 2));
+  puzzleEssential1.AddTail(Vector2(1, 0));
+  puzzleEssential1.AddNodeObstacle(Vector2(0, 0), Vector2(0, 1));
+  puzzleEssential1.AddNodeObstacle(Vector2(0, 0), Vector2(1, 0));
+  puzzleEssential1.AddNodeObstacle(Vector2(1, 2), Vector2(1, 3));
+  puzzleEssential1.AddNodeObstacle(Vector2(2, 2), Vector2(3, 2));
+  puzzleEssential1.AddEssentialNode(Vector2(2, 0));
+  puzzleEssential1.AddEssentialNode(Vector2(2, 1));
+  puzzleEssential1.AddEssentialNode(Vector2(0, 1));
+  puzzleEssential1.AddEssentialNode(Vector2(1, 2));
+  puzzleEssential1.AddEssentialNode(Vector2(1, 3));
+  puzzleEssential1.AddEssentialNode(Vector2(3, 3));
   start = HighResClock::now();
-  puzzleMazeEssential1.Solve();
+  puzzleEssential1.Solve();
   end = HighResClock::now();
   ms = std::chrono::duration_cast<MilliSecond>(end - start);
-  assert(puzzleMazeEssential1.GetPaths().size() == 1);
-  std::cout << "puzzleMazeEssential1 solved in " << ms.count() << " ms" << std::endl;
+  if (puzzleEssential1.GetPaths().size() != 1) {
+    std::cout << "solution mismatch" << std::endl;
+  }
+  std::cout << "puzzleEssential1 solved in " << ms.count() << " ms" << std::endl;
 
 
   // Black & white separation
@@ -64,7 +68,9 @@ int main() {
   puzzleBW1.Solve();
   end = HighResClock::now();
   ms = std::chrono::duration_cast<MilliSecond>(end - start);
-  assert(puzzleBW1.GetPaths().size() == 1);
+  if (puzzleBW1.GetPaths().size() != 1) {
+    std::cout << "solution mismatch" << std::endl;
+  }
   std::cout << "puzzleBW1 solved in " << ms.count() << " ms" << std::endl;
 
   // Black & white separation
@@ -84,7 +90,9 @@ int main() {
   puzzleBW2.Solve();
   end = HighResClock::now();
   ms = std::chrono::duration_cast<MilliSecond>(end - start);
-  assert(puzzleBW2.GetPaths().size() == 1);
+  if (puzzleBW2.GetPaths().size() != 1) {
+    std::cout << "solution mismatch" << std::endl;
+  }
   std::cout << "puzzleBW2 solved in " << ms.count() << " ms" << std::endl;
 
   // Black & white separation
@@ -110,7 +118,9 @@ int main() {
   puzzleBW3.Solve();
   end = HighResClock::now();
   ms = std::chrono::duration_cast<MilliSecond>(end - start);
-  std::cout << puzzleBW3.GetPaths().size() << std::endl;
+  if (puzzleBW3.GetPaths().size() != 2) {
+    std::cout << "solution mismatch" << std::endl;
+  }
   std::cout << "puzzleBW3 solved in " << ms.count() << " ms" << std::endl;
 
   return 0;
