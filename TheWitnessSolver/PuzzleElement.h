@@ -124,17 +124,28 @@ struct Side {
     node1 = n1;
     node2 = n2;
   }
-  bool operator==(const Side& other) {
+  bool operator==(const Side& other) const {
     if ((node1->coord == other.node1->coord && node2->coord == other.node2->coord) ||
         (node1->coord == other.node2->coord && node2->coord == other.node1->coord)) {
       return true;
     }
     else return false;
   }
-  bool operator!=(const Side& other) {
+  bool operator!=(const Side& other) const {
     return !(*this == other);
   }
 
   Node* node1;
   Node* node2;
 };
+typedef std::unordered_set<Side> SideSet;
+
+namespace std {
+  template <>
+  struct hash<Side> {
+    size_t operator()(const Side& side) const {
+      // Compute individual hash values for two data members and combine them using XOR and bit shifting
+      return ((hash<Node*>()(side.node1) ^ (hash<Node*>()(side.node2) << 1)) >> 1);
+    }
+  };
+}
