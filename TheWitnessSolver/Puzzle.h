@@ -49,6 +49,9 @@ public:
     return (r >= 0 && c >= 0 && r < BlockRows() && c < BlockCols()) ? true : false;
   }
 
+  // Check if a node is on the edge
+  bool IsOnEdge(const Node& node);
+
   // Add heads or tails to the puzzle
   void AddHead(const Vector2& vec);
   void AddTail(const Vector2& vec);

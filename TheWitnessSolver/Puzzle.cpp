@@ -111,6 +111,15 @@ void Puzzle::ResetBlockMatrixVisitHistory() {
   }
 }
 
+bool Puzzle::IsOnEdge(const Node& node) {
+  if (node.coord.r == 0 || node.coord.c == 0 ||
+      node.coord.r == NodeRows() - 1 || node.coord.c == NodeCols() - 1) {
+    return true;
+  }
+  else return false;
+}
+
+
 void Puzzle::AddHead(const Vector2& vec) {
   // If vec is already a head, no need to proceed
   if (GetNode(vec).isHead) return;
