@@ -3,13 +3,13 @@
 #include "Puzzle.h"
 #include <iostream>
 
-int main() {
+typedef std::chrono::high_resolution_clock HighResClock;
+typedef std::chrono::milliseconds MilliSecond;
 
-  typedef std::chrono::high_resolution_clock HighResClock;
-  typedef std::chrono::milliseconds MilliSecond;
+// Simple maze
+void PuzzleSimpleMaze1() {
   std::chrono::time_point<HighResClock> start, end;
 
-  // Simple maze
   Puzzle puzzleSimpleMaze1(5, 4);
   puzzleSimpleMaze1.AddHead(Vector2(4, 0));
   puzzleSimpleMaze1.AddTail(Vector2(0, 3));
@@ -21,6 +21,7 @@ int main() {
   puzzleSimpleMaze1.AddNodeObstacle(Vector2(0, 2), Vector2(1, 2));
   puzzleSimpleMaze1.AddNodeObstacle(Vector2(0, 2), Vector2(0, 3));
   puzzleSimpleMaze1.AddNodeObstacle(Vector2(0, 0), Vector2(0, 1));
+
   start = HighResClock::now();
   puzzleSimpleMaze1.Solve();
   end = HighResClock::now();
@@ -29,8 +30,12 @@ int main() {
   if (puzzleSimpleMaze1.GetPaths().size() != 14) {
     std::cout << "solution mismatch" << std::endl;
   }
+}
 
-  // Maze with essential nodes
+// Maze with essential nodes
+void PuzzleEssential1() {
+  std::chrono::time_point<HighResClock> start, end;
+
   Puzzle puzzleEssential1(4, 4);
   puzzleEssential1.AddHead(Vector2(1, 1));
   puzzleEssential1.AddHead(Vector2(2, 2));
@@ -45,16 +50,21 @@ int main() {
   puzzleEssential1.AddEssentialNode(Vector2(1, 2));
   puzzleEssential1.AddEssentialNode(Vector2(1, 3));
   puzzleEssential1.AddEssentialNode(Vector2(3, 3));
+
   start = HighResClock::now();
   puzzleEssential1.Solve();
   end = HighResClock::now();
-  ms = std::chrono::duration_cast<MilliSecond>(end - start);
+  auto ms = std::chrono::duration_cast<MilliSecond>(end - start);
   std::cout << "puzzleEssential1 solved in " << ms.count() << " ms" << std::endl;
   if (puzzleEssential1.GetPaths().size() != 1) {
     std::cout << "solution mismatch" << std::endl;
   }
+}
 
-  // Maze with essential nodes
+// Maze with essential nodes
+void PuzzleEssential2() {
+  std::chrono::time_point<HighResClock> start, end;
+
   Puzzle puzzleEssential2(5, 5);
   puzzleEssential2.AddHead(Vector2(2, 2));
   puzzleEssential2.AddTail(Vector2(0, 4));
@@ -63,16 +73,21 @@ int main() {
       puzzleEssential2.AddEssentialNode(Vector2(r, c));
     }
   }
+
   start = HighResClock::now();
   puzzleEssential2.Solve();
   end = HighResClock::now();
-  ms = std::chrono::duration_cast<MilliSecond>(end - start);
+  auto ms = std::chrono::duration_cast<MilliSecond>(end - start);
   std::cout << "puzzleEssential2 solved in " << ms.count() << " ms" << std::endl;
   if (puzzleEssential2.GetPaths().size() != 48) {
     std::cout << "solution mismatch" << std::endl;
   }
+}
 
-  // Black & white separation
+// Black & white separation
+void PuzzleBW1() {
+  std::chrono::time_point<HighResClock> start, end;
+
   Puzzle puzzleBW1(3, 3);
   puzzleBW1.AddHead(Vector2(2, 0));
   puzzleBW1.AddTail(Vector2(0, 2));
@@ -80,16 +95,21 @@ int main() {
   puzzleBW1.SetBlockType(Vector2(0, 1), Black);
   puzzleBW1.SetBlockType(Vector2(1, 0), Black);
   puzzleBW1.SetBlockType(Vector2(1, 1), White);
+
   start = HighResClock::now();
   puzzleBW1.Solve();
   end = HighResClock::now();
-  ms = std::chrono::duration_cast<MilliSecond>(end - start);
+  auto ms = std::chrono::duration_cast<MilliSecond>(end - start);
   std::cout << "puzzleBW1 solved in " << ms.count() << " ms" << std::endl;
   if (puzzleBW1.GetPaths().size() != 1) {
     std::cout << "solution mismatch" << std::endl;
   }
+}
 
-  // Black & white separation
+// Black & white separation
+void PuzzleBW2() {
+  std::chrono::time_point<HighResClock> start, end;
+
   Puzzle puzzleBW2(4, 4);
   puzzleBW2.AddHead(Vector2(3, 0));
   puzzleBW2.AddTail(Vector2(2, 0));
@@ -102,16 +122,21 @@ int main() {
   puzzleBW2.SetBlockType(Vector2(2, 0), White);
   puzzleBW2.SetBlockType(Vector2(2, 1), White);
   puzzleBW2.SetBlockType(Vector2(2, 2), White);
+
   start = HighResClock::now();
   puzzleBW2.Solve();
   end = HighResClock::now();
-  ms = std::chrono::duration_cast<MilliSecond>(end - start);
+  auto ms = std::chrono::duration_cast<MilliSecond>(end - start);
   std::cout << "puzzleBW2 solved in " << ms.count() << " ms" << std::endl;
   if (puzzleBW2.GetPaths().size() != 1) {
     std::cout << "solution mismatch" << std::endl;
   }
+}
 
-  // Black & white separation
+// Black & white separation
+void PuzzleBW3() {
+  std::chrono::time_point<HighResClock> start, end;
+
   Puzzle puzzleBW3(5, 5);
   puzzleBW3.AddHead(Vector2(4, 0));
   puzzleBW3.AddTail(Vector2(0, 1));
@@ -130,16 +155,21 @@ int main() {
   puzzleBW3.SetBlockType(Vector2(3, 0), White);
   puzzleBW3.SetBlockType(Vector2(3, 1), White);
   puzzleBW3.SetBlockType(Vector2(3, 2), White);
+
   start = HighResClock::now();
   puzzleBW3.Solve();
   end = HighResClock::now();
-  ms = std::chrono::duration_cast<MilliSecond>(end - start);
+  auto ms = std::chrono::duration_cast<MilliSecond>(end - start);
   std::cout << "puzzleBW3 solved in " << ms.count() << " ms" << std::endl;
   if (puzzleBW3.GetPaths().size() != 2) {
     std::cout << "solution mismatch" << std::endl;
   }
+}
 
-  // Black & white separation
+// Black & white separation
+void PuzzleBW4() {
+  std::chrono::time_point<HighResClock> start, end;
+
   Puzzle puzzleBW4(4, 4);
   puzzleBW4.AddHead(Vector2(3, 0));
   puzzleBW4.AddTail(Vector2(0, 3));
@@ -152,16 +182,21 @@ int main() {
   puzzleBW4.SetBlockType(Vector2(2, 0), White);
   puzzleBW4.SetBlockType(Vector2(2, 1), White);
   puzzleBW4.SetBlockType(Vector2(2, 2), White);
+
   start = HighResClock::now();
   puzzleBW4.Solve();
   end = HighResClock::now();
-  ms = std::chrono::duration_cast<MilliSecond>(end - start);
+  auto ms = std::chrono::duration_cast<MilliSecond>(end - start);
   std::cout << "puzzleBW4 solved in " << ms.count() << " ms" << std::endl;
   if (puzzleBW4.GetPaths().size() != 2) {
     std::cout << "solution mismatch" << std::endl;
   }
+}
 
-  // Black & white separation
+// Black & white separation
+void PuzzleBW5() {
+  std::chrono::time_point<HighResClock> start, end;
+
   Puzzle puzzleBW5(5, 5);
   puzzleBW5.AddHead(Vector2(2, 2));
   puzzleBW5.AddTail(Vector2(0, 4));
@@ -176,16 +211,21 @@ int main() {
   puzzleBW5.SetBlockType(Vector2(1, 3), White);
   puzzleBW5.SetBlockType(Vector2(2, 3), White);
   puzzleBW5.SetBlockType(Vector2(3, 3), White);
+
   start = HighResClock::now();
   puzzleBW5.Solve();
   end = HighResClock::now();
-  ms = std::chrono::duration_cast<MilliSecond>(end - start);
+  auto ms = std::chrono::duration_cast<MilliSecond>(end - start);
   std::cout << "puzzleBW5 solved in " << ms.count() << " ms" << std::endl;
   if (puzzleBW5.GetPaths().size() != 44) {
     std::cout << "solution mismatch" << std::endl;
   }
+}
 
-  // Black & white separation + essential nodes
+// Black & white separation + essential nodes
+void PuzzleEssentialBW1() {
+  std::chrono::time_point<HighResClock> start, end;
+
   Puzzle puzzleEssentialBW1(8, 8);
   puzzleEssentialBW1.AddHead(Vector2(7, 0));
   puzzleEssentialBW1.AddHead(Vector2(2, 4));
@@ -215,15 +255,29 @@ int main() {
   puzzleEssentialBW1.AddEssentialSide(Vector2(6, 0), Vector2(7, 0));
   puzzleEssentialBW1.AddEssentialSide(Vector2(7, 0), Vector2(7, 1));
   puzzleEssentialBW1.AddEssentialSide(Vector2(7, 5), Vector2(7, 6));
+
   start = HighResClock::now();
   puzzleEssentialBW1.Solve();
   end = HighResClock::now();
-  ms = std::chrono::duration_cast<MilliSecond>(end - start);
+  auto ms = std::chrono::duration_cast<MilliSecond>(end - start);
   std::cout << "puzzleEssentialBW1 solved in " << ms.count() << " ms" << std::endl;
   //if (puzzleEssentialBW1.GetPaths().size() != 44) {
   //  std::cout << "solution mismatch" << std::endl;
   //}
   std::cout << puzzleEssentialBW1.GetPaths().size() << std::endl;
+}
+
+int main() {
+
+  PuzzleSimpleMaze1();
+  PuzzleEssential1();
+  PuzzleEssential2();
+  PuzzleBW1();
+  PuzzleBW2();
+  PuzzleBW3();
+  PuzzleBW4();
+  PuzzleBW5();
+  //PuzzleEssentialBW1();
 
   return 0;
 }
