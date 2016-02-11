@@ -272,13 +272,15 @@ int main() {
 
   PuzzleSimpleMaze1();
   PuzzleEssential1();
-  PuzzleEssential2();
+  //PuzzleEssential2(); // a bit slow; disabled for now
   PuzzleBW1();
   PuzzleBW2();
   PuzzleBW3();
   PuzzleBW4();
   PuzzleBW5();
-  //PuzzleEssentialBW1();
+  //PuzzleEssentialBW1(); // toooooo slow; can't be solved until the new approach is done
+
+
   // Testing the new path segmentation mechanism
   Puzzle pSimple(4, 4);
   pSimple.AddHead(Vector2(3, 0));
