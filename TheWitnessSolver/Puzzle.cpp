@@ -1,3 +1,4 @@
+#include "Path.h"
 #include "Puzzle.h"
 
 #include <cstdlib>
@@ -265,7 +266,7 @@ void Puzzle::Solve() {
   // Create the stack for DFS
   std::stack<Path> pathStack;
   for (const auto& head : m_NodeHeads) {
-    Path path;
+    Path path(m_BlockMatrix);
     path.AddNode(head);
     pathStack.push(path);
   }

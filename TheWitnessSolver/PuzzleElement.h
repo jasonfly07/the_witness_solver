@@ -66,36 +66,6 @@ typedef std::unordered_set<Node*> NodeSet;
 typedef std::vector<Node*> NodeVector;
 typedef std::vector<std::vector<Node>> NodeMatrix;
 
-// A path object is used by the solver to record the history of searching
-// It contains all node visited, essential node counts, etc.
-struct Path {
-
-  Path() {}
-
-  void AddNode(Node* node) {
-    visitedNodes.insert(node);
-    path.push_back(node);
-    if (node->isEssential) visitedEssentialNodes.insert(node);
-    if (node->isTail)      visitedTails.insert(node);
-  }
-
-  bool HasVisitedNode(Node* node) {
-    return visitedNodes.count(node) == 1 ? true : false;
-  }
-
-  void Print() const {
-    for (const auto& node : path) {
-      std::cout << node->coord << " ";
-    }
-    std::cout << std::endl;
-  }
-
-  NodeSet visitedNodes;
-  NodeSet visitedTails;
-  NodeSet visitedEssentialNodes;
-  NodeVector path;
-};
-
 // Block type
 enum BlockType {
   Empty,

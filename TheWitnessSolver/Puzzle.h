@@ -4,6 +4,8 @@
 #include "PuzzleElement.h"
 #include <cassert>
 
+struct Path;
+
 // Generic object representing the puzzle
 class Puzzle {
 public:

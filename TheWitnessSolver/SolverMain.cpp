@@ -1,6 +1,7 @@
 #include "stdafx.h"
-
+#include "Path.h"
 #include "Puzzle.h"
+
 #include <iostream>
 
 typedef std::chrono::high_resolution_clock HighResClock;
@@ -278,6 +279,19 @@ int main() {
   PuzzleBW4();
   PuzzleBW5();
   //PuzzleEssentialBW1();
+  // Testing the new path segmentation mechanism
+  Puzzle pSimple(4, 4);
+  pSimple.AddHead(Vector2(3, 0));
+  pSimple.AddTail(Vector2(2, 3));
+  Path path(pSimple.GetBlockMatrix());
+
+  path.Print();
+  path.AddNode(&pSimple.GetNode(3, 0)); path.Print();
+  path.AddNode(&pSimple.GetNode(2, 0)); path.Print();
+  path.AddNode(&pSimple.GetNode(2, 1)); path.Print();
+  path.AddNode(&pSimple.GetNode(1, 1)); path.Print();
+  path.AddNode(&pSimple.GetNode(1, 0)); path.Print();
+  path.AddNode(&pSimple.GetNode(0, 0)); path.Print();
 
   return 0;
 }

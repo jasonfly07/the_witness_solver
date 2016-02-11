@@ -145,6 +145,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Path.h" />
     <ClInclude Include="Puzzle.h" />
     <ClInclude Include="PuzzleElement.h" />
     <ClInclude Include="stdafx.h" />
