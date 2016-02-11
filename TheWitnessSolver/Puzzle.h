@@ -37,6 +37,7 @@ public:
   Block& GetBlock(const Vector2& vec);
   inline size_t BlockRows() { return m_BlockMatrix.size(); }
   inline size_t BlockCols() { return m_BlockMatrix[0].size(); }
+  BlockMatrix& GetBlockMatrix() { return m_BlockMatrix; }
 
 
   // Check the validity of a node coordinate
@@ -110,11 +111,11 @@ private:
   // This should be done only once before solving
   void PreprocessBlackWhiteBlocks();
 
-  // Given a path, perform segmentation on the block map
+  // Given a path, perform segmentation on the block matrix
   // The output is list of BlockSet (segments)
-  // Since this operation will destroy the connectivity of block map,
+  // Since this operation will destroy the connectivity of block matrix,
   // we have to reset the connectivity at the end
-  void SegmentBlockMap(const Path& path, BlockSetVector& segments);
+  void SegmentBlockMatrix(const Path& path, BlockSetVector& segments);
 
   // Check if a path has visited all essential sides, as required by the
   // black/white blocks.

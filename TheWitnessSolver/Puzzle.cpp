@@ -299,7 +299,7 @@ void Puzzle::Solve() {
         // Perform segmentation on block matrix
         // For every segment, check if black/white count is correct
         BlockSetVector segments;
-        SegmentBlockMap(currPath, segments);
+        SegmentBlockMatrix(currPath, segments);
         bool everySegmentHasCorrectCount = true;
         for (auto& segment : segments) {
           for (auto& block : segment) {
@@ -315,7 +315,7 @@ void Puzzle::Solve() {
         }
       }
 
-      std::cout << "survived" << std::endl;
+      //std::cout << "survived" << std::endl;
       // If currPath survives all the checks above, include it in m_Paths
       m_Paths.push_back(currPath);
     }
@@ -379,7 +379,7 @@ bool Puzzle::PathHasTailLeft(const Path& path) {
   return path.visitedTails.size() == m_NodeTails.size() ? false : true;
 }
 
-void Puzzle::SegmentBlockMap(const Path& path, BlockSetVector& segments) {
+void Puzzle::SegmentBlockMatrix(const Path& path, BlockSetVector& segments) {
 
   for (int i = 0; i < path.path.size() - 1; i++) {
     const Node& node1 = *(path.path[i]);
@@ -412,7 +412,7 @@ void Puzzle::SegmentBlockMap(const Path& path, BlockSetVector& segments) {
     }
   }
 
-  // Reset the block map
+  // Reset the block matrix
   ResetBlockMatrixConnectivity();
   ResetBlockMatrixVisitHistory();
 }
