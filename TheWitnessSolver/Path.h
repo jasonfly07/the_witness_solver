@@ -20,6 +20,11 @@ struct Path {
       touchCount = 1;
     }
 
+    // Cut the tie between 2 blocks if necessary
+    if (path.size() > 0) {
+      AddBlockObstacle(*node, *(path.end()[-1]));
+    }
+
     // See if this step is leaving the edge
     if (path.size() > 0) {
       if (!(node->onEdge) && path.end()[-1]->onEdge) {
@@ -47,6 +52,31 @@ struct Path {
 
   bool HasVisitedNode(Node* node) {
     return visitedNodes.count(node) == 1 ? true : false;
+  }
+
+  void AddBlockObstacle(const Node& node1, const Node& node2) {
+
+    // No need to proceed if both nodes are on edge
+    if (node1.onEdge && node2.onEdge) return;
+
+    // Case 1: side is vertical
+    if (node1.coord.c == node2.coord.c) {
+      int R = std::min(node1.coord.r, node2.coord.r);
+      int C = node1.coord.c;
+      Block& block1 = blockMatrix[R][C - 1];
+      Block& block2 = blockMatrix[R][C];
+      block1.neighborSet.erase(&block2);
+      block2.neighborSet.erase(&block1);
+    }
+    // Case 2: side is horizontal
+    else if (node1.coord.r == node2.coord.r) {
+      int R = node1.coord.r;
+      int C = std::min(node1.coord.c, node2.coord.c);
+      Block& block1 = blockMatrix[R - 1][C];
+      Block& block2 = blockMatrix[R][C];
+      block1.neighborSet.erase(&block2);
+      block2.neighborSet.erase(&block1);
+    }
   }
 
   void Print() const {

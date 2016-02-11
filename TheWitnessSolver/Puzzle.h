@@ -86,7 +86,7 @@ public:
   void Print(const Path& path);
   void CreateDisplayMatrix(DisplayMatrix& display);
 
-private:
+//private:
 
   // We need to check essential count if there are essential nodes
   // in the puzzle

@@ -285,15 +285,18 @@ int main() {
   Puzzle pSimple(4, 4);
   pSimple.AddHead(Vector2(3, 0));
   pSimple.AddTail(Vector2(2, 3));
+  pSimple.SetBlockType(Vector2(1, 0), White);
+  pSimple.SetBlockType(Vector2(1, 1), Black);
+
   Path path(pSimple.GetBlockMatrix());
 
-  path.Print();
-  path.AddNode(&pSimple.GetNode(3, 0)); path.Print();
-  path.AddNode(&pSimple.GetNode(2, 0)); path.Print();
-  path.AddNode(&pSimple.GetNode(2, 1)); path.Print();
-  path.AddNode(&pSimple.GetNode(1, 1)); path.Print();
-  path.AddNode(&pSimple.GetNode(1, 0)); path.Print();
-  path.AddNode(&pSimple.GetNode(0, 0)); path.Print();
+  //path.Print();
+  //path.AddNode(&pSimple.GetNode(3, 0)); path.Print();
+  //path.AddNode(&pSimple.GetNode(2, 0)); path.Print();
+  //path.AddNode(&pSimple.GetNode(2, 1)); path.Print();
+  //path.AddNode(&pSimple.GetNode(1, 1)); path.Print();
+  //path.AddNode(&pSimple.GetNode(1, 0)); path.Print();
+  //path.AddNode(&pSimple.GetNode(0, 0)); path.Print();
 
   return 0;
 }
