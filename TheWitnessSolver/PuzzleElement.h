@@ -51,6 +51,7 @@ struct Node {
     isEssential = false;
     isHead = false;
     isTail = false;
+    onEdge = false;
     neighborSet.clear();
   }
 
@@ -59,6 +60,7 @@ struct Node {
   bool isEssential;
   bool isHead;
   bool isTail;
+  bool onEdge;
 };
 typedef std::unordered_set<Node*> NodeSet;
 typedef std::vector<Node*> NodeVector;

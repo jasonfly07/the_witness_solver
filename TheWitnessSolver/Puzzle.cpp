@@ -38,6 +38,9 @@ void Puzzle::ResetPuzzle(int nodeRow, int nodeCol) {
     for (int c = 0; c < NodeCols(); c++) {
       Node& currNode = m_NodeMatrix[r][c];
       currNode.coord = Vector2(r, c);
+      if (IsOnEdge(currNode)) {
+        currNode.onEdge = true;
+      }
     }
   }
 
