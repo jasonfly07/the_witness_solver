@@ -4,9 +4,10 @@
 #include "PuzzleElement.h"
 #include <cassert>
 
-struct Path;
-
-// Generic object representing the puzzle
+// This object contains all the information about a puzzle before solving.
+// A puzzle consists of a node matrix and a block matrix.
+// The goal of the puzzle is to find a path from one of the heads to one of the tails,
+// while also fulfilling specific requirements in the process.
 class Puzzle {
 public:
   Puzzle() {}
@@ -16,29 +17,22 @@ public:
 
   // Reset (& initialize) the puzzle
   void ResetPuzzle(int nodeRow, int nodeCol);
-
-  // Reset neighbors of nodes and blocks
   void ResetNodeMatrixConnectivity();
   void ResetBlockMatrixConnectivity();
-
-  // Reset the visited flags in block matrix
-  void ResetBlockMatrixVisitHistory();
 
   // Getters
   Node& GetNode(int r, int c);
   Node& GetNode(const Vector2& vec);
   inline size_t NodeRows() { return m_NodeMatrix.size(); }
   inline size_t NodeCols() { return m_NodeMatrix[0].size(); }
-  inline NodeSet& GetHeads() { return m_NodeHeads; }
-  inline NodeSet& GetTails() { return m_NodeTails; }
-  inline std::vector<Path>& GetPaths() { return m_Paths; }
+  inline NodePtrSet& GetHeads() { return m_NodeHeads; }
+  inline NodePtrSet& GetTails() { return m_NodeTails; }
 
   Block& GetBlock(int r, int c);
   Block& GetBlock(const Vector2& vec);
   inline size_t BlockRows() { return m_BlockMatrix.size(); }
   inline size_t BlockCols() { return m_BlockMatrix[0].size(); }
   BlockMatrix& GetBlockMatrix() { return m_BlockMatrix; }
-
 
   // Check the validity of a node coordinate
   inline bool ValidNodeCoord(const Vector2& v) { return ValidNodeCoord(v.r, v.c); }
@@ -51,9 +45,6 @@ public:
   inline bool ValidBlockCoord(int r, int c) {
     return (r >= 0 && c >= 0 && r < BlockRows() && c < BlockCols()) ? true : false;
   }
-
-  // Check if a node is on the edge
-  bool IsOnEdge(const Node& node);
 
   // Add heads or tails to the puzzle
   void AddHead(const Vector2& vec);
@@ -72,75 +63,22 @@ public:
   // Set the type of a block
   void SetBlockType(const Vector2& vec, BlockType type);
 
-  // Add an obstacle between 2 blocks
-  // This will remove block2 from block1's neighborSet and vice versa
-  void AddBlockObstacle(const Vector2& vec1, const Vector2& vec2);
-  void AddBlockObstacle(const Side& side);
+  // Check if a node is on the edge
+  bool IsOnEdge(const Node& node);
 
-  // Solve the puzzle & return a valid path from any head to any tail
-  // TODO: expand this function for more types of puzzle
-  void Solve();
-
-  // Print the puzzle
-  void Print();
-  void Print(const Path& path);
-  void CreateDisplayMatrix(DisplayMatrix& display);
-
-//private:
-
-  // We need to check essential count if there are essential nodes
-  // in the puzzle
-  bool PuzzleHasEssentialNode();
-
-  // Evaluate whether a path has collected all the essential nodes.
-  // Since the path is not allowed to step on the same node twice,
-  // we only have to check whether the number of collected essential nodes
-  // checks out
-  bool PathHasCollectedAllEssentialNodes(const Path& path);
-
-  // Check if the path has unvisited tails
-  bool PathHasTailLeft(const Path& path);
-
-  // Scan through the puzzle and see if there are black/white blocks to be solved.
-  // The result will be stored in m_HasBlackWhiteBlocks,
-  // so this should be done only once before solving
-  void CheckBlackWhiteBlocks();
-
-  // If m_HasBlackWhiteBlocks = true, we can apply some heuristics to
-  // the pathfinding (all sides between black & white must be visited)
-  // This should be done only once before solving
-  void PreprocessBlackWhiteBlocks();
-
-  // Given a path, perform segmentation on the block matrix
-  // The output is list of BlockSet (segments)
-  // Since this operation will destroy the connectivity of block matrix,
-  // we have to reset the connectivity at the end
-  void SegmentBlockMatrix(const Path& path, BlockSetVector& segments);
-
-  // Check if a path has visited all essential sides, as required by the
-  // black/white blocks.
-  // TODO: this could be optimzied in the same way as
-  // PathHasCollectedAllEssentialNodes().
-  bool PathHasCollectedAllEssentialSides(const Path& path);
-
-  // Check the black/white count of a segment.
-  // By the rule, a segment cannot have both white and black blocks
-  bool HasValidBlackWhiteCount(const BlockSet& segment);
-
-  // all paths returned by the solver
-  std::vector<Path> m_Paths;
+private:
 
   // 2 main matrices of the puzzle
   NodeMatrix  m_NodeMatrix;
   BlockMatrix m_BlockMatrix;
 
   // Heads & tails (starts & goals)
-  NodeSet m_NodeHeads;
-  NodeSet m_NodeTails;
+  NodePtrSet m_NodeHeads;
+  NodePtrSet m_NodeTails;
 
   // Essentials
-  NodeSet m_NodeEssentials;
-  SideSet m_SideEssentials;
+  NodePtrSet m_NodeEssentials;
+  SideSet    m_SideEssentials;
 
   bool m_HasBlackWhiteBlocks;
 };

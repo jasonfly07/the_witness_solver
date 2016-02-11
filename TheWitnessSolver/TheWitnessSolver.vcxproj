@@ -149,6 +149,7 @@
     <ClInclude Include="Puzzle.h" />
     <ClInclude Include="PuzzleElement.h" />
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="Vector2.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SolverMain.cpp" />
