@@ -1,105 +1,16 @@
 #include "Puzzle.h"
 
-Node& Puzzle::GetNode(int r, int c) {
-  assert(ValidNodeCoord(Vector2(r, c)));
-  return m_NodeMatrix[r][c];
-}
-
-Node& Puzzle::GetNode(const Vector2& vec) {
-  assert(ValidNodeCoord(vec));
-  return m_NodeMatrix[vec.r][vec.c];
-}
-
-Block& Puzzle::GetBlock(int r, int c) {
-  assert(ValidBlockCoord(Vector2(r, c)));
-  return m_BlockMatrix[r][c];
-}
-
-Block& Puzzle::GetBlock(const Vector2& vec) {
-  assert(ValidBlockCoord(vec));
-  return m_BlockMatrix[vec.r][vec.c];
-}
-
 void Puzzle::ResetPuzzle(int nodeRow, int nodeCol) {
-  // Since there's at least one block, the min size of node matrix is 2x2
   assert(nodeRow > 1 && nodeCol > 1);
 
-  // Set the size of node matrix
-  m_NodeMatrix.clear();
-  m_NodeMatrix.resize(nodeRow, std::vector<Node>(nodeCol));
-
-  // Set the size of block matrix
-  m_BlockMatrix.clear();
-  m_BlockMatrix.resize(nodeRow - 1, std::vector<Block>(nodeCol - 1));
-
-  // Initialize all the nodes
-  for (int r = 0; r < NodeRows(); r++) {
-    for (int c = 0; c < NodeCols(); c++) {
-      Node& currNode = m_NodeMatrix[r][c];
-      currNode.coord = Vector2(r, c);
-      if (IsOnEdge(currNode)) {
-        currNode.onEdge = true;
-      }
-    }
-  }
-
-  // Reset the neighbors of nodes & blocks
-  ResetNodeMatrixConnectivity();
-  ResetBlockMatrixConnectivity();
-
-  // Initialize all the blocks
-  for (int r = 0; r < nodeRow - 1; r++) {
-    for (int c = 0; c < nodeCol - 1; c++) {
-      Block& currBlock = m_BlockMatrix[r][c];
-      currBlock.coord = Vector2(r, c);
-    }
-  }
+  m_NodeMap.Reset(nodeRow, nodeCol);
+  m_BlockMap.Reset(nodeRow - 1, nodeCol - 1);
 
   // Reset all auxiliary containers
   m_NodeHeads.clear();
   m_NodeTails.clear();
   m_NodeEssentials.clear();
   m_SideEssentials.clear();
-
-  // Reset some flags
-}
-
-void Puzzle::ResetNodeMatrixConnectivity() {
-  for (int r = 0; r < NodeRows(); r++) {
-    for (int c = 0; c < NodeCols(); c++) {
-      Node& currNode = m_NodeMatrix[r][c];
-
-      // Set reachable neighbors
-      currNode.neighborSet.clear();
-      Vector2 lCoord(r, c - 1);
-      Vector2 rCoord(r, c + 1);
-      Vector2 tCoord(r - 1, c);
-      Vector2 bCoord(r + 1, c);
-      if (ValidNodeCoord(lCoord)) currNode.neighborSet.insert(&GetNode(lCoord));
-      if (ValidNodeCoord(rCoord)) currNode.neighborSet.insert(&GetNode(rCoord));
-      if (ValidNodeCoord(tCoord)) currNode.neighborSet.insert(&GetNode(tCoord));
-      if (ValidNodeCoord(bCoord)) currNode.neighborSet.insert(&GetNode(bCoord));
-    }
-  }
-}
-
-void Puzzle::ResetBlockMatrixConnectivity() {
-  for (int r = 0; r < BlockRows(); r++) {
-    for (int c = 0; c < BlockCols(); c++) {
-      Block& currBlock = m_BlockMatrix[r][c];
-
-      // Set reachable neighbors
-      currBlock.neighborSet.clear();
-      Vector2 lCoord(r, c - 1);
-      Vector2 rCoord(r, c + 1);
-      Vector2 tCoord(r - 1, c);
-      Vector2 bCoord(r + 1, c);
-      if (ValidBlockCoord(lCoord)) currBlock.neighborSet.insert(&GetBlock(lCoord));
-      if (ValidBlockCoord(rCoord)) currBlock.neighborSet.insert(&GetBlock(rCoord));
-      if (ValidBlockCoord(tCoord)) currBlock.neighborSet.insert(&GetBlock(tCoord));
-      if (ValidBlockCoord(bCoord)) currBlock.neighborSet.insert(&GetBlock(bCoord));
-    }
-  }
 }
 
 void Puzzle::AddHead(const Vector2& vec) {
@@ -125,18 +36,7 @@ void Puzzle::AddTail(const Vector2& vec) {
 }
 
 void Puzzle::AddNodeObstacle(const Vector2& vec1, const Vector2& vec2) {
-  Node& node1 = GetNode(vec1);
-  Node& node2 = GetNode(vec2);
-
-  // Check if node1 & node2 are adjacent
-  // TODO: this is probably unnecessary
-  if (node1.neighborSet.count(&node2) == 0 ||
-    node2.neighborSet.count(&node1) == 0) {
-    return;
-  }
-
-  node1.neighborSet.erase(&node2);
-  node2.neighborSet.erase(&node1);
+  m_NodeMap.CutTie(vec1, vec2);
 }
 
 void Puzzle::AddEssentialNode(const Vector2& vec) {
@@ -150,14 +50,5 @@ void Puzzle::AddEssentialSide(const Vector2& vec1, const Vector2& vec2) {
 }
 
 void Puzzle::SetBlockType(const Vector2& vec, BlockType type) {
-  Block& block = GetBlock(vec);
-  block.type = type;
-}
-
-bool Puzzle::IsOnEdge(const Node& node) {
-  if (node.coord.r == 0 || node.coord.c == 0 ||
-    node.coord.r == NodeRows() - 1 || node.coord.c == NodeCols() - 1) {
-    return true;
-  }
-  else return false;
+  m_BlockMap.SetType(vec, type);
 }

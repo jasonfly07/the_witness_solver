@@ -19,13 +19,16 @@ public:
   inline size_t Cols() const { return m_NodeMatrix[0].size(); }
 
   // Check the validity of a node coordinate
-  inline bool ValidCoord(const Vector2& v) { return ValidCoord(v.r, v.c); }
-  inline bool ValidCoord(int r, int c) {
+  inline bool ValidCoord(const Vector2& v) const { return ValidCoord(v.r, v.c); }
+  inline bool ValidCoord(int r, int c) const {
     return (r >= 0 && c >= 0 && r < Rows() && c < Cols()) ? true : false;
   }
 
   // Set a node to be essential, which means the path has to pass through it
   void AddEssential(const Vector2& vec);
+
+  // This will remove node2 from node1's neighborSet and vice versa
+  void CutTie(const Vector2& vec1, const Vector2& vec2);
 
 private:
 

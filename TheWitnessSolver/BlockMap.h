@@ -15,17 +15,20 @@ public:
   // Getters
   Block& GetBlock(int r, int c);
   Block& GetBlock(const Vector2& vec);
-  inline size_t Rows() { return m_BlockMatrix.size(); }
-  inline size_t Cols() { return m_BlockMatrix[0].size(); }
+  inline size_t Rows() const { return m_BlockMatrix.size(); }
+  inline size_t Cols() const { return m_BlockMatrix[0].size(); }
 
   // Check the validity of a block coordinate
-  inline bool ValidCoord(const Vector2& v) { return ValidCoord(v.r, v.c); }
-  inline bool ValidCoord(int r, int c) {
+  inline bool ValidCoord(const Vector2& v) const { return ValidCoord(v.r, v.c); }
+  inline bool ValidCoord(int r, int c) const {
     return (r >= 0 && c >= 0 && r < Rows() && c < Cols()) ? true : false;
   }
 
   // Set the type of a block
-  void SetBlockType(const Vector2& vec, BlockType type);
+  void SetType(const Vector2& vec, BlockType type);
+
+  // This will remove block2 from block1's neighborSet and vice versa
+  void CutTie(const Vector2& vec1, const Vector2& vec2);
 
 private:
 

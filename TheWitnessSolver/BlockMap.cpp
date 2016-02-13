@@ -49,7 +49,22 @@ void BlockMap::ResetConnectivity() {
   }
 }
 
-void BlockMap::SetBlockType(const Vector2& vec, BlockType type) {
+void BlockMap::SetType(const Vector2& vec, BlockType type) {
   Block& block = GetBlock(vec);
   block.type = type;
+}
+
+void BlockMap::CutTie(const Vector2& vec1, const Vector2& vec2) {
+  Block& block1 = GetBlock(vec1);
+  Block& block2 = GetBlock(vec2);
+
+  // Check if block1 & block2 are adjacent
+  // TODO: this is probably unnecessary
+  if (block1.neighborSet.count(&block2) == 0 ||
+    block2.neighborSet.count(&block1) == 0) {
+    return;
+  }
+
+  block1.neighborSet.erase(&block2);
+  block2.neighborSet.erase(&block1);
 }

@@ -1,11 +1,13 @@
 #pragma once
 #include "stdafx.h"
 
+#include "BlockMap.h"
+#include "NodeMap.h"
 #include "PuzzleElement.h"
-#include <cassert>
+
 
 // This object contains all the information about a puzzle before solving.
-// A puzzle consists of a node matrix and a block matrix.
+// A puzzle consists of a node map and a block map.
 // The goal of the puzzle is to find a path from one of the heads to one of the tails,
 // while also fulfilling specific requirements in the process.
 class Puzzle {
@@ -17,34 +19,25 @@ public:
 
   // Reset (& initialize) the puzzle
   void ResetPuzzle(int nodeRow, int nodeCol);
-  void ResetNodeMatrixConnectivity();
-  void ResetBlockMatrixConnectivity();
 
   // Getters
-  Node& GetNode(int r, int c);
-  Node& GetNode(const Vector2& vec);
-  inline size_t NodeRows() { return m_NodeMatrix.size(); }
-  inline size_t NodeCols() { return m_NodeMatrix[0].size(); }
+  inline Node& GetNode(int r, int c)       { return m_NodeMap.GetNode(r, c); }
+  inline Node& GetNode(const Vector2& vec) { return m_NodeMap.GetNode(vec);  }
+  inline size_t NodeRows() const { return m_NodeMap.Rows(); }
+  inline size_t NodeCols() const { return m_NodeMap.Cols(); }
   inline NodePtrSet& GetHeads() { return m_NodeHeads; }
   inline NodePtrSet& GetTails() { return m_NodeTails; }
 
-  Block& GetBlock(int r, int c);
-  Block& GetBlock(const Vector2& vec);
-  inline size_t BlockRows() { return m_BlockMatrix.size(); }
-  inline size_t BlockCols() { return m_BlockMatrix[0].size(); }
-  BlockMatrix& GetBlockMatrix() { return m_BlockMatrix; }
+  inline Block& GetBlock(int r, int c)       { return m_BlockMap.GetBlock(r, c); }
+  inline Block& GetBlock(const Vector2& vec) { return m_BlockMap.GetBlock(vec); }
+  inline size_t BlockRows() const { return m_BlockMap.Rows(); }
+  inline size_t BlockCols() const { return m_BlockMap.Cols(); }
 
-  // Check the validity of a node coordinate
-  inline bool ValidNodeCoord(const Vector2& v) { return ValidNodeCoord(v.r, v.c); }
-  inline bool ValidNodeCoord(int r, int c) {
-    return (r >= 0 && c >= 0 && r < NodeRows() && c < NodeCols()) ? true : false;
-  }
-
-  // Check the validity of a block coordinate
-  inline bool ValidBlockCoord(const Vector2& v) { return ValidBlockCoord(v.r, v.c); }
-  inline bool ValidBlockCoord(int r, int c) {
-    return (r >= 0 && c >= 0 && r < BlockRows() && c < BlockCols()) ? true : false;
-  }
+  // Check the validity of coordinates
+  inline bool ValidNodeCoord(const Vector2& v) const  { return m_NodeMap.ValidCoord(v);     }
+  inline bool ValidNodeCoord(int r, int c) const      { return m_NodeMap.ValidCoord(r, c);  }
+  inline bool ValidBlockCoord(const Vector2& v) const { return m_BlockMap.ValidCoord(v);    }
+  inline bool ValidBlockCoord(int r, int c) const     { return m_BlockMap.ValidCoord(r, c); }
 
   // Add heads or tails to the puzzle
   void AddHead(const Vector2& vec);
@@ -63,14 +56,11 @@ public:
   // Set the type of a block
   void SetBlockType(const Vector2& vec, BlockType type);
 
-  // Check if a node is on the edge
-  bool IsOnEdge(const Node& node);
-
 private:
 
-  // 2 main matrices of the puzzle
-  NodeMatrix  m_NodeMatrix;
-  BlockMatrix m_BlockMatrix;
+  // 2 main maps of the puzzle
+  NodeMap  m_NodeMap;
+  BlockMap m_BlockMap;
 
   // Heads & tails (starts & goals)
   NodePtrSet m_NodeHeads;
