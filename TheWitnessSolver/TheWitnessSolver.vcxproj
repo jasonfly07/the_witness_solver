@@ -156,6 +156,7 @@
   <ItemGroup>
     <ClCompile Include="BlockMap.cpp" />
     <ClCompile Include="NodeMap.cpp" />
+    <ClCompile Include="Path.cpp" />
     <ClCompile Include="SolverMain.cpp" />
     <ClCompile Include="Puzzle.cpp" />
   </ItemGroup>
