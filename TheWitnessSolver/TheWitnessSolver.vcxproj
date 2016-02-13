@@ -145,6 +145,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BlockMap.h" />
     <ClInclude Include="NodeMap.h" />
     <ClInclude Include="Path.h" />
     <ClInclude Include="Puzzle.h" />
@@ -153,6 +154,7 @@
     <ClInclude Include="Vector2.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="BlockMap.cpp" />
     <ClCompile Include="NodeMap.cpp" />
     <ClCompile Include="SolverMain.cpp" />
     <ClCompile Include="Puzzle.cpp" />

@@ -5,6 +5,8 @@
 
 class NodeMap {
 
+public:
+
   // Reset everything
   void Reset(int row, int col);
   // Reset the neighbors of nodes
@@ -24,8 +26,6 @@ class NodeMap {
 
   // Set a node to be essential, which means the path has to pass through it
   void AddEssential(const Vector2& vec);
-
-
 
 private:
 
