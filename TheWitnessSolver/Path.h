@@ -47,3 +47,4 @@ private:
   // & segment as the path grows
   BlockMap m_BlockMap;
 };
+typedef std::vector<Path> PathVector;
