@@ -7,9 +7,26 @@
 class Path {
 public:
 
-  // A path is always initialized by specifying its "parent" puzzle
-  Path(Puzzle& puzzle) {
-    m_PuzzlePtr = &puzzle;
+  // A path is initialized by specifying its "parent" puzzle
+  Path(Puzzle* puzzle) {
+    m_PuzzlePtr = puzzle;
+    m_TouchCount = 0;
+    m_LeaveCount = 0;
+    m_BlockMap = puzzle->GetBlockMap();
+  }
+
+  // Copy constructor
+  Path(const Path& other) {
+    m_PuzzlePtr = other.m_PuzzlePtr;
+    m_TouchCount = other.m_TouchCount;
+    m_LeaveCount = other.m_LeaveCount;
+
+    m_VisitedNodes = other.m_VisitedNodes;
+    m_VisitedTails = other.m_VisitedTails;
+    m_VisitedEssentialNodes = other.m_VisitedEssentialNodes;
+
+    m_Path = other.m_Path;
+    m_BlockMap = other.m_BlockMap;
   }
 
   // Add a node to the path & update various containers
@@ -19,10 +36,20 @@ public:
     return m_VisitedNodes.count(node) == 1 ? true : false;
   }
 
+  bool HasCollectedAllEssentialNodes() {
+    return m_PuzzlePtr->GetEssentialNodes().size() == m_VisitedEssentialNodes.size();
+  }
+
+  bool HasTailLeft() {
+    return m_PuzzlePtr->GetTails().size() == m_VisitedTails.size() ? false : true;
+  }
+
+  NodePtrVector& GetPath() { return m_Path; }
+
   // Print the path in sequence
   void Print() const;
 
-private:
+// private:
 
   // Same as BlockMap::CutTie(), but the inputs are 2 adjacent nodes
   // This utility is used by the path to update its own copy of block map
@@ -33,9 +60,9 @@ private:
   int m_LeaveCount;
 
   // Containers for the history of exploring
-  NodePtrSet    m_VisitedNodes;
-  NodePtrSet    m_VisitedTails;
-  NodePtrSet    m_VisitedEssentialNodes;
+  NodePtrSet m_VisitedNodes;
+  NodePtrSet m_VisitedTails;
+  NodePtrSet m_VisitedEssentialNodes;
 
   // Stores all the visited nodes in sequence
   NodePtrVector m_Path;

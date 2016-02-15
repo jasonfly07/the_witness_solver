@@ -16,11 +16,11 @@ void BlockMap::Reset(int row, int col) {
 
   // Set the size of block matrix
   m_BlockMatrix.clear();
-  m_BlockMatrix.resize(row - 1, std::vector<Block>(col - 1));
+  m_BlockMatrix.resize(row, std::vector<Block>(col));
 
   // Initialize all the blocks
-  for (int r = 0; r < row - 1; r++) {
-    for (int c = 0; c < col - 1; c++) {
+  for (int r = 0; r < row; r++) {
+    for (int c = 0; c < col; c++) {
       Block& currBlock = m_BlockMatrix[r][c];
       currBlock.coord = Vector2(r, c);
     }
