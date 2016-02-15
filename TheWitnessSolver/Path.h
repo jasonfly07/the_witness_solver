@@ -13,6 +13,7 @@ public:
     m_TouchCount = 0;
     m_LeaveCount = 0;
     m_BlockMap = puzzle->GetBlockMap();
+    m_Segmenting = false;
   }
 
   // Copy constructor
@@ -20,6 +21,7 @@ public:
     m_PuzzlePtr = other.m_PuzzlePtr;
     m_TouchCount = other.m_TouchCount;
     m_LeaveCount = other.m_LeaveCount;
+    m_Segmenting = other.m_Segmenting;
 
     m_VisitedNodes = other.m_VisitedNodes;
     m_VisitedTails = other.m_VisitedTails;
@@ -49,15 +51,20 @@ public:
   // Print the path in sequence
   void Print() const;
 
-// private:
+ private:
 
   // Same as BlockMap::CutTie(), but the inputs are 2 adjacent nodes
   // This utility is used by the path to update its own copy of block map
   void CutBlockTie(const Node& node1, const Node& node2);
 
+  // This is a subroutine in AddNode();
+  // once a segment is formed, segment it out and process it
+  //void ProcessSegment();
+
   // Records the number of times the path touching/leaving the edge
   int m_TouchCount;
   int m_LeaveCount;
+  bool m_Segmenting;
 
   // Containers for the history of exploring
   NodePtrSet m_VisitedNodes;

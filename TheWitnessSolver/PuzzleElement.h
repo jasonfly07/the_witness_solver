@@ -70,7 +70,7 @@ typedef std::vector<std::vector<Block>> BlockMatrix;
 
 // A side is a line connecting 2 adjacent nodes
 // When initialized, the order of node1 & node2 is rearranged
-// ex. [1, 2] comes before [2, 5]
+// ex. [1, 2] comes before [2, 2]
 // ex. [1, 2] comes before [1, 3]
 struct Side {
   Side() {}
@@ -93,6 +93,15 @@ struct Side {
       node1 = n2;
       node2 = n1;
     }
+
+    // Make sure the 2 nodes are indeed adjacent
+    Vector2 diff = node2->coord - node1->coord;
+    assert(diff == Vector2(0, 1) || diff == Vector2(1, 0));
+  }
+
+  // The side is vertical if not horizontal
+  bool IsHorizontal() const {
+    return node1->coord.r == node2->coord.r;
   }
 
   // TODO: we only need to check the first case now

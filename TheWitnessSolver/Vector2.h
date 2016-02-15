@@ -14,6 +14,9 @@ struct Vector2 {
   Vector2 operator-(const Vector2& other) {
     return Vector2(r - other.r, c - other.c);
   }
+  Vector2 operator*(int mul) {
+    return Vector2(r * mul, c * mul);
+  }
   void operator=(const Vector2& other) {
     r = other.r;
     c = other.c;
