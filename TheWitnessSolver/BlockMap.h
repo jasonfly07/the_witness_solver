@@ -30,6 +30,12 @@ public:
   // This will remove block2 from block1's neighborSet and vice versa
   void CutTie(const Vector2& vec1, const Vector2& vec2);
 
+  // Given a seed block, return all the connected blocks as a single segment
+  void Segment(Block& seed, BlockPtrSet& segment);
+  void Segment(const Vector2& v, BlockPtrSet& segment) {
+    Segment(GetBlock(v), segment);
+  }
+
 private:
 
   BlockMatrix m_BlockMatrix;

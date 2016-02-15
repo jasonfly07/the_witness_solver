@@ -51,15 +51,11 @@ public:
   // Print the path in sequence
   void Print() const;
 
- private:
+ //private:
 
   // Same as BlockMap::CutTie(), but the inputs are 2 adjacent nodes
   // This utility is used by the path to update its own copy of block map
   void CutBlockTie(const Node& node1, const Node& node2);
-
-  // This is a subroutine in AddNode();
-  // once a segment is formed, segment it out and process it
-  //void ProcessSegment();
 
   // Records the number of times the path touching/leaving the edge
   int m_TouchCount;

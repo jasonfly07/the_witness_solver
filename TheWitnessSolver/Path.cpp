@@ -44,6 +44,14 @@ void Path::AddNode(Node* node) {
       }
     }
     std::cout << "a segment is formed with block seed " << seedBlockCoord << std::endl;
+
+    BlockPtrSet segment;
+    m_BlockMap.Segment(seedBlockCoord, segment);
+    std::cout << "current segment is :" << std::endl;
+    for (auto& b : segment) {
+      std::cout << b->coord << ", ";
+    }
+    std::cout << std::endl;
   }
 
   // Cut the tie between 2 blocks if necessary
@@ -82,10 +90,6 @@ void Path::Print() const {
   }
   std::cout << std::endl;
 }
-
-//void Path::ProcessSegment() {
-//
-//}
 
 void Path::CutBlockTie(const Node& node1, const Node& node2) {
 

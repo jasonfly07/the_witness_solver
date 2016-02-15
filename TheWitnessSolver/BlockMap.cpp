@@ -68,3 +68,22 @@ void BlockMap::CutTie(const Vector2& vec1, const Vector2& vec2) {
   block1.neighborSet.erase(&block2);
   block2.neighborSet.erase(&block1);
 }
+
+void BlockMap::Segment(Block& seed, BlockPtrSet& segment) {
+  std::stack<Block*> blockStack;
+  blockStack.push(&seed);
+  while (!blockStack.empty()) {
+    Block& currBlock = *(blockStack.top());
+    blockStack.pop();
+
+    currBlock.visited = true;
+    segment.insert(&currBlock);
+    for (auto& neighbor : currBlock.neighborSet) {
+      //std::cout << "inspecting " << neighbor->coord << std::endl;
+      if (!neighbor->visited) {
+        blockStack.push(neighbor);
+      }
+    }
+  }
+}
+

@@ -53,15 +53,15 @@ struct Block {
   void InitBlock(int r, int c) {
     coord = Vector2(r, c);
     type = Empty;
-    clusterID = -1;
     neighborSet.clear();
+    passed = false;
     visited = false;
   }
 
   std::unordered_set<Block*> neighborSet;
   BlockType type;
   Vector2 coord;
-  int clusterID;
+  bool passed;  // marked true if the whole segment passes every available check
   bool visited; // used by segmentation
 };
 typedef std::unordered_set<Block*>      BlockPtrSet;

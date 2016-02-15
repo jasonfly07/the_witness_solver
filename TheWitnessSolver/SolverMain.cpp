@@ -92,9 +92,34 @@ void PuzzleEssential2() {
 
 int main() {
 
-  PuzzleSimpleMaze1();
-  PuzzleEssential1();
-  PuzzleEssential2();
+  //PuzzleSimpleMaze1();
+  //PuzzleEssential1();
+  //PuzzleEssential2();
+
+  Puzzle p(4, 5);
+  p.AddHead(Vector2(1, 1));
+  p.AddTail(Vector2(3, 3));
+  Path path(&p);
+  path.AddNode(&p.GetNode(1, 1)); path.Print();
+  path.AddNode(&p.GetNode(1, 0)); path.Print();
+  path.AddNode(&p.GetNode(2, 0)); path.Print();
+  path.AddNode(&p.GetNode(2, 1)); path.Print();
+  path.AddNode(&p.GetNode(3, 1)); path.Print();
+  path.AddNode(&p.GetNode(3, 2)); path.Print();
+  path.AddNode(&p.GetNode(2, 2)); path.Print();
+  path.AddNode(&p.GetNode(1, 2)); path.Print();
+  path.AddNode(&p.GetNode(0, 2)); path.Print();
+  path.AddNode(&p.GetNode(0, 3)); path.Print();
+  path.AddNode(&p.GetNode(1, 3)); path.Print();
+  path.AddNode(&p.GetNode(2, 3)); path.Print();
+  path.AddNode(&p.GetNode(2, 4)); path.Print();
+  path.AddNode(&p.GetNode(3, 4)); path.Print();
+  path.AddNode(&p.GetNode(3, 3)); path.Print();
+
+  std::cout << "herp derp" << std::endl;
+  for (auto& t : path.m_BlockMap.GetBlock(0, 0).neighborSet) {
+    std::cout << t->coord << std::endl;
+  }
 
   return 0;
 }
