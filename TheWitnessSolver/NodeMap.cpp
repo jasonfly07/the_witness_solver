@@ -39,15 +39,15 @@ void NodeMap::ResetConnectivity() {
       Node& currNode = m_NodeMatrix[r][c];
 
       // Set reachable neighbors
-      currNode.neighborSet.clear();
-      Vector2 lCoord(r, c - 1);
-      Vector2 rCoord(r, c + 1);
-      Vector2 tCoord(r - 1, c);
-      Vector2 bCoord(r + 1, c);
-      if (ValidCoord(lCoord)) currNode.neighborSet.insert(&GetNode(lCoord));
-      if (ValidCoord(rCoord)) currNode.neighborSet.insert(&GetNode(rCoord));
-      if (ValidCoord(tCoord)) currNode.neighborSet.insert(&GetNode(tCoord));
-      if (ValidCoord(bCoord)) currNode.neighborSet.insert(&GetNode(bCoord));
+      currNode.neighborOffsets.clear();
+      Vector2 lOffset( 0, -1);
+      Vector2 rOffset( 0,  1);
+      Vector2 tOffset(-1,  0);
+      Vector2 bOffset( 1,  0);
+      if (ValidCoord(currNode.coord + lOffset)) currNode.neighborOffsets.insert(lOffset);
+      if (ValidCoord(currNode.coord + rOffset)) currNode.neighborOffsets.insert(rOffset);
+      if (ValidCoord(currNode.coord + tOffset)) currNode.neighborOffsets.insert(tOffset);
+      if (ValidCoord(currNode.coord + bOffset)) currNode.neighborOffsets.insert(bOffset);
     }
   }
 }
@@ -71,12 +71,18 @@ void NodeMap::CutTie(const Vector2& vec1, const Vector2& vec2) {
   Node& node2 = GetNode(vec2);
 
   // Check if node1 & node2 are adjacent
-  // TODO: this is probably unnecessary
-  if (node1.neighborSet.count(&node2) == 0 ||
-    node2.neighborSet.count(&node1) == 0) {
+  if (node1.coord.DistTo(node2.coord) != 1) {
     return;
   }
 
-  node1.neighborSet.erase(&node2);
-  node2.neighborSet.erase(&node1);
+  // HACK: use a side to re-arrange the order of nodes
+  Side tempSide(&node1, &node2);
+  if (tempSide.IsHorizontal()) {
+    node1.neighborOffsets.erase(Vector2(0,  1));
+    node2.neighborOffsets.erase(Vector2(0, -1));
+  }
+  else {
+    node1.neighborOffsets.erase(Vector2( 1, 0));
+    node2.neighborOffsets.erase(Vector2(-1, 0));
+  }
 }

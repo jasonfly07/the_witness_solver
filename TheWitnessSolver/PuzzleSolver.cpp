@@ -54,28 +54,31 @@ void PuzzleSolver::Solve() {
     // If 2 or 3 of them are (unvisited) essential sides, this path is screwed
     int currEssentialSideCount = 0;
     Node& currNode = *(currPath.GetPath().back());
-    for (const auto& neighbor : currPath.GetPath().back()->neighborSet) {
-      if (!currPath.HasVisitedNode(neighbor)) {
-        if (m_PuzzlePtr->GetEssentialSides().count(Side(&currNode, neighbor)) == 1) {
+    for (const auto& neighborCoord : currPath.GetPath().back()->GetNeighborCoords()) {
+      Node& neighbor = m_PuzzlePtr->GetNode(neighborCoord);
+      if (!currPath.HasVisitedNode(&neighbor)) {
+        if (m_PuzzlePtr->GetEssentialSides().count(Side(&currNode, &neighbor)) == 1) {
           currEssentialSideCount++;
         }
       }
     }
     if (currEssentialSideCount == 0) {
-      for (const auto& neighbor : currPath.GetPath().back()->neighborSet) {
-        if (!currPath.HasVisitedNode(neighbor)) {
+      for (const auto& neighborCoord : currPath.GetPath().back()->GetNeighborCoords()) {
+        Node& neighbor = m_PuzzlePtr->GetNode(neighborCoord);
+        if (!currPath.HasVisitedNode(&neighbor)) {
           Path newPath(currPath);
-          newPath.AddNode(neighbor);
+          newPath.AddNode(&neighbor);
           pathStack.push(newPath);
         }
       }
     }
     else if (currEssentialSideCount == 1) {
-      for (const auto& neighbor : currPath.GetPath().back()->neighborSet) {
-        if (!currPath.HasVisitedNode(neighbor)) {
-          if (m_PuzzlePtr->GetEssentialSides().count(Side(&currNode, neighbor)) == 1) {
+      for (const auto& neighborCoord : currPath.GetPath().back()->GetNeighborCoords()) {
+        Node& neighbor = m_PuzzlePtr->GetNode(neighborCoord);
+        if (!currPath.HasVisitedNode(&neighbor)) {
+          if (m_PuzzlePtr->GetEssentialSides().count(Side(&currNode, &neighbor)) == 1) {
             Path newPath(currPath);
-            newPath.AddNode(neighbor);
+            newPath.AddNode(&neighbor);
             pathStack.push(newPath);
           }
         }

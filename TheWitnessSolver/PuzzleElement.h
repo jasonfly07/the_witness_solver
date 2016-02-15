@@ -21,11 +21,18 @@ struct Node {
     isHead = false;
     isTail = false;
     onEdge = false;
-    neighborSet.clear();
+    neighborOffsets.clear();
+  }
+  Vector2Set GetNeighborCoords() {
+    Vector2Set neighborCoords;
+    for (const auto& offset : neighborOffsets) {
+      neighborCoords.insert(coord + offset);
+    }
+    return neighborCoords;
   }
 
   Vector2 coord;
-  std::unordered_set<Node*> neighborSet;
+  Vector2Set neighborOffsets;
   bool isEssential;
   bool isHead;
   bool isTail;
@@ -53,14 +60,21 @@ struct Block {
   void InitBlock(int r, int c) {
     coord = Vector2(r, c);
     type = Empty;
-    neighborSet.clear();
+    neighborOffsets.clear();
     passed = false;
     visited = false;
   }
+  Vector2Set GetNeighborCoords() {
+    Vector2Set neighborCoords;
+    for (const auto& offset : neighborOffsets) {
+      neighborCoords.insert(coord + offset);
+    }
+    return neighborCoords;
+  }
 
-  std::unordered_set<Block*> neighborSet;
-  BlockType type;
   Vector2 coord;
+  Vector2Set neighborOffsets;
+  BlockType type;
   bool passed;  // marked true if the whole segment passes every available check
   bool visited; // used by segmentation
 };
@@ -75,6 +89,9 @@ typedef std::vector<std::vector<Block>> BlockMatrix;
 struct Side {
   Side() {}
   Side(Node* n1, Node* n2) {
+    // Make sure the 2 nodes are adjacent
+    assert(n1->coord.DistTo(n2->coord) == 1);
+
     if (n1->coord.r < n2->coord.r) {
       node1 = n1;
       node2 = n2;
@@ -93,10 +110,6 @@ struct Side {
       node1 = n2;
       node2 = n1;
     }
-
-    // Make sure the 2 nodes are indeed adjacent
-    Vector2 diff = node2->coord - node1->coord;
-    assert(diff == Vector2(0, 1) || diff == Vector2(1, 0));
   }
 
   // The side is vertical if not horizontal

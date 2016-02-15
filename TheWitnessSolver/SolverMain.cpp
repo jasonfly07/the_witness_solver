@@ -117,8 +117,8 @@ int main() {
   path.AddNode(&p.GetNode(3, 3)); path.Print();
 
   std::cout << "herp derp" << std::endl;
-  for (auto& t : path.m_BlockMap.GetBlock(0, 0).neighborSet) {
-    std::cout << t->coord << std::endl;
+  for (const auto& c : path.m_BlockMap.GetBlock(0, 0).GetNeighborCoords()) {
+    std::cout << c << std::endl;
   }
 
   return 0;

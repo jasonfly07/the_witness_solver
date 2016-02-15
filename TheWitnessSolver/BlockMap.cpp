@@ -36,15 +36,15 @@ void BlockMap::ResetConnectivity() {
       Block& currBlock = m_BlockMatrix[r][c];
 
       // Set reachable neighbors
-      currBlock.neighborSet.clear();
-      Vector2 lCoord(r, c - 1);
-      Vector2 rCoord(r, c + 1);
-      Vector2 tCoord(r - 1, c);
-      Vector2 bCoord(r + 1, c);
-      if (ValidCoord(lCoord)) currBlock.neighborSet.insert(&GetBlock(lCoord));
-      if (ValidCoord(rCoord)) currBlock.neighborSet.insert(&GetBlock(rCoord));
-      if (ValidCoord(tCoord)) currBlock.neighborSet.insert(&GetBlock(tCoord));
-      if (ValidCoord(bCoord)) currBlock.neighborSet.insert(&GetBlock(bCoord));
+      currBlock.neighborOffsets.clear();
+      Vector2 lOffset(0, -1);
+      Vector2 rOffset(0, 1);
+      Vector2 tOffset(-1, 0);
+      Vector2 bOffset(1, 0);
+      if (ValidCoord(currBlock.coord + lOffset)) currBlock.neighborOffsets.insert(lOffset);
+      if (ValidCoord(currBlock.coord + rOffset)) currBlock.neighborOffsets.insert(rOffset);
+      if (ValidCoord(currBlock.coord + tOffset)) currBlock.neighborOffsets.insert(tOffset);
+      if (ValidCoord(currBlock.coord + bOffset)) currBlock.neighborOffsets.insert(bOffset);
     }
   }
 }
@@ -55,18 +55,26 @@ void BlockMap::SetType(const Vector2& vec, BlockType type) {
 }
 
 void BlockMap::CutTie(const Vector2& vec1, const Vector2& vec2) {
-  Block& block1 = GetBlock(vec1);
-  Block& block2 = GetBlock(vec2);
-
-  // Check if block1 & block2 are adjacent
-  // TODO: this is probably unnecessary
-  if (block1.neighborSet.count(&block2) == 0 ||
-    block2.neighborSet.count(&block1) == 0) {
+  // Check if vec1 & vec2 are adjacent
+  if (vec1.DistTo(vec2) != 1) {
     return;
   }
 
-  block1.neighborSet.erase(&block2);
-  block2.neighborSet.erase(&block1);
+  Block* blockPtr1 = &GetBlock(vec1);
+  Block* blockPtr2 = &GetBlock(vec2);
+  if (vec1.r > vec2.r || vec1.c > vec2.c) {
+    blockPtr1 = &GetBlock(vec2);
+    blockPtr2 = &GetBlock(vec1);
+  }
+
+  if (blockPtr1->coord.r == blockPtr2->coord.r) {
+    blockPtr1->neighborOffsets.erase(Vector2(0, 1));
+    blockPtr2->neighborOffsets.erase(Vector2(0, -1));
+  }
+  else {
+    blockPtr1->neighborOffsets.erase(Vector2(1, 0));
+    blockPtr2->neighborOffsets.erase(Vector2(-1, 0));
+  }
 }
 
 void BlockMap::Segment(Block& seed, BlockPtrSet& segment) {
@@ -78,10 +86,10 @@ void BlockMap::Segment(Block& seed, BlockPtrSet& segment) {
 
     currBlock.visited = true;
     segment.insert(&currBlock);
-    for (auto& neighbor : currBlock.neighborSet) {
-      //std::cout << "inspecting " << neighbor->coord << std::endl;
-      if (!neighbor->visited) {
-        blockStack.push(neighbor);
+    for (const auto& neighborCoord : currBlock.GetNeighborCoords()) {
+      Block& neighbor = GetBlock(neighborCoord);
+      if (!neighbor.visited) {
+        blockStack.push(&neighbor);
       }
     }
   }

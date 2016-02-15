@@ -105,8 +105,7 @@ void Path::CutBlockTie(const Node& node1, const Node& node2) {
     int C = node1.coord.c;
     Block& block1 = m_BlockMap.GetBlock(R, C - 1);
     Block& block2 = m_BlockMap.GetBlock(R, C);
-    block1.neighborSet.erase(&block2);
-    block2.neighborSet.erase(&block1);
+    m_BlockMap.CutTie(block1.coord, block2.coord);
   }
   // Case 2: side is horizontal
   else if (node1.coord.r == node2.coord.r) {
@@ -114,7 +113,6 @@ void Path::CutBlockTie(const Node& node1, const Node& node2) {
     int C = std::min(node1.coord.c, node2.coord.c);
     Block& block1 = m_BlockMap.GetBlock(R - 1, C);
     Block& block2 = m_BlockMap.GetBlock(R, C);
-    block1.neighborSet.erase(&block2);
-    block2.neighborSet.erase(&block1);
+    m_BlockMap.CutTie(block1.coord, block2.coord);
   }
 }
