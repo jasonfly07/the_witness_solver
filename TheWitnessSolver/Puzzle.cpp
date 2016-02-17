@@ -11,6 +11,8 @@ void Puzzle::ResetPuzzle(int nodeRow, int nodeCol) {
   m_NodeTails.clear();
   m_NodeEssentials.clear();
   m_SideEssentials.clear();
+
+  m_HasBlackWhiteBlocks = false;
 }
 
 void Puzzle::AddHead(const Vector2& vec) {
@@ -58,10 +60,13 @@ bool Puzzle::CheckBlackWhiteBlocks() {
     for (int c = 0; c < BlockCols(); c++) {
       const Block& currBlock = GetBlock(r, c);
       if ((currBlock.type == Black) || (currBlock.type == White)) {
+        m_HasBlackWhiteBlocks = true;
         return true;
       }
     }
   }
+
+  m_HasBlackWhiteBlocks = false;
   return false;
 }
 

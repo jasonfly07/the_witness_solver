@@ -12,7 +12,6 @@ void Path::AddNode(Node* node) {
     m_TouchCount = 1;
   }
 
-  // TODO:
   // If leaveCount >= 1, and touchCount = leaveCount + 1
   // in the next step, a segment will be created
   if (m_Segmenting && m_LeaveCount >= 1 && m_TouchCount == m_LeaveCount + 1) {
@@ -43,15 +42,18 @@ void Path::AddNode(Node* node) {
         seedBlockCoord = seedSide.node1->coord - Vector2(0, 1);
       }
     }
-    std::cout << "a segment is formed with block seed " << seedBlockCoord << std::endl;
 
+    // Perform segmentation with the seed
     BlockPtrSet segment;
     m_BlockMap.Segment(seedBlockCoord, segment);
-    std::cout << "current segment is :" << std::endl;
-    for (auto& b : segment) {
-      std::cout << b->coord << ", ";
-    }
-    std::cout << std::endl;
+    //std::cout << "current segment is :" << std::endl;
+    //for (auto& b : segment) {
+    //  std::cout << b->coord << ", ";
+    //}
+    //std::cout << std::endl;
+
+    // Evalute this segment
+    //EvaluateSegment(segment);
   }
 
   // Cut the tie between 2 blocks if necessary
@@ -115,4 +117,48 @@ void Path::CutBlockTie(const Node& node1, const Node& node2) {
     Block& block2 = m_BlockMap.GetBlock(R, C);
     m_BlockMap.CutTie(block1.coord, block2.coord);
   }
+}
+
+bool Path::EvaluateSegment(const BlockPtrSet& segment) {
+  // Find all the unvisited nodes in segment
+  NodePtrSet unvisitedNodes;
+  for (const auto& blockPtr : segment) {
+    Vector2 blockCoord = blockPtr->coord;
+    for (Vector2 offset : {Vector2(0, 0), Vector2(0, 1), Vector2(1, 0), Vector2(1, 1)}) {
+      Vector2 nodeCoord = blockCoord + offset;
+      if (!HasVisitedNode(nodeCoord)) {
+        unvisitedNodes.insert(&m_PuzzlePtr->GetNode(nodeCoord));
+      }
+    }
+  }
+
+  // Are there unvisited essential nodes?
+  // If yes, return false immediately
+  for (const auto& nodePtr : unvisitedNodes) {
+    if (nodePtr->isEssential) {
+      return false;
+    }
+  }
+
+  // Are there black & white blocks mixed together?
+  // If yes, return false immediately
+  if (m_PuzzlePtr->HasBlackWhite()) {
+    bool hasWhite = false;
+    bool hasBlack = false;
+    for (const auto& block : segment) {
+      if (block->type == White) {
+        hasWhite = true;
+      }
+      else if (block->type == Black) {
+        hasBlack = true;
+      }
+      if (hasWhite && hasBlack) {
+        return false;
+      }
+    }
+  }
+
+
+  // Return true if it survives all the way to the end
+  return true;
 }

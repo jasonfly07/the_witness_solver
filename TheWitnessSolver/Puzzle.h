@@ -62,8 +62,10 @@ public:
 
   // Check if the puzzle has black & white puzzles
   // Expensive, so this should only be called once before solving
+  // When this function is run, we'll update m_HasBlackWhiteBlocks
   bool CheckBlackWhiteBlocks();
   void PreprocessBlackWhiteBlocks();
+  bool HasBlackWhite() const { return m_HasBlackWhiteBlocks; }
 
   bool HasEssentialNode() {
     return m_NodeEssentials.size() > 0;

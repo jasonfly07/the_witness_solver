@@ -34,15 +34,18 @@ public:
   // Add a node to the path & update various containers
   void AddNode(Node* node);
 
-  inline bool HasVisitedNode(Node* node) {
+  inline bool HasVisitedNode(Node* node) const {
     return m_VisitedNodes.count(node) == 1 ? true : false;
   }
+  inline bool HasVisitedNode(Vector2 coord) const {
+    return m_VisitedNodes.count(&m_PuzzlePtr->GetNode(coord)) == 1 ? true : false;
+  }
 
-  bool HasCollectedAllEssentialNodes() {
+  bool HasCollectedAllEssentialNodes() const {
     return m_PuzzlePtr->GetEssentialNodes().size() == m_VisitedEssentialNodes.size();
   }
 
-  bool HasTailLeft() {
+  bool HasTailLeft() const {
     return m_PuzzlePtr->GetTails().size() == m_VisitedTails.size() ? false : true;
   }
 
@@ -56,6 +59,9 @@ public:
   // Same as BlockMap::CutTie(), but the inputs are 2 adjacent nodes
   // This utility is used by the path to update its own copy of block map
   void CutBlockTie(const Node& node1, const Node& node2);
+
+  // Evaluate a segment
+  bool EvaluateSegment(const BlockPtrSet& segment);
 
   // Records the number of times the path touching/leaving the edge
   int m_TouchCount;
