@@ -14,6 +14,7 @@ public:
     m_LeaveCount = 0;
     m_BlockMap = puzzle->GetBlockMap();
     m_Segmenting = false;
+    m_MissedTailCount = 0;
   }
 
   // Copy constructor
@@ -22,23 +23,30 @@ public:
     m_TouchCount = other.m_TouchCount;
     m_LeaveCount = other.m_LeaveCount;
     m_Segmenting = other.m_Segmenting;
+    m_MissedTailCount = other.m_MissedTailCount;
 
     m_VisitedNodes = other.m_VisitedNodes;
     m_VisitedTails = other.m_VisitedTails;
     m_VisitedEssentialNodes = other.m_VisitedEssentialNodes;
+    m_VisitedSides = other.m_VisitedSides;
 
     m_Path = other.m_Path;
     m_BlockMap = other.m_BlockMap;
   }
 
   // Add a node to the path & update various containers
-  void AddNode(Node* node);
+  // The return value is a boolean indicating whether the current path is valid or not
+  bool AddNode(Node* node);
 
   inline bool HasVisitedNode(Node* node) const {
     return m_VisitedNodes.count(node) == 1 ? true : false;
   }
   inline bool HasVisitedNode(Vector2 coord) const {
     return m_VisitedNodes.count(&m_PuzzlePtr->GetNode(coord)) == 1 ? true : false;
+  }
+
+  inline bool HasVisitedSide(Side side) const {
+    return m_VisitedSides.count(side) == 1 ? true : false;
   }
 
   bool HasCollectedAllEssentialNodes() const {
@@ -72,6 +80,8 @@ public:
   NodePtrSet m_VisitedNodes;
   NodePtrSet m_VisitedTails;
   NodePtrSet m_VisitedEssentialNodes;
+  SideSet    m_VisitedSides;
+  int m_MissedTailCount;
 
   // Stores all the visited nodes in sequence
   NodePtrVector m_Path;

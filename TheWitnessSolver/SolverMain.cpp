@@ -89,37 +89,71 @@ void PuzzleEssential2() {
   }
 }
 
+// Black & white separation
+void PuzzleBW1() {
+  std::chrono::time_point<HighResClock> start, end;
+
+  Puzzle p(3, 3);
+  p.AddHead(Vector2(2, 0));
+  p.AddTail(Vector2(0, 2));
+  p.SetBlockType(Vector2(0, 0), Black);
+  p.SetBlockType(Vector2(0, 1), Black);
+  p.SetBlockType(Vector2(1, 0), Black);
+  p.SetBlockType(Vector2(1, 1), White);
+
+  start = HighResClock::now();
+  PuzzleSolver ps(p);
+  ps.Solve();
+  end = HighResClock::now();
+  auto ms = std::chrono::duration_cast<MilliSecond>(end - start);
+  std::cout << "PuzzleBW1 solved in " << ms.count() << " ms" << std::endl;
+  if (ps.GetPaths().size() != 1) {
+    std::cout << "solution mismatch" << std::endl;
+  }
+}
+
+// Black & white separation
+void PuzzleBW3() {
+  std::chrono::time_point<HighResClock> start, end;
+
+  Puzzle p(5, 5);
+  p.AddHead(Vector2(4, 0));
+  p.AddTail(Vector2(0, 1));
+  p.SetBlockType(Vector2(0, 0), Black);
+  p.SetBlockType(Vector2(0, 3), Black);
+  p.SetBlockType(Vector2(1, 0), Black);
+  p.SetBlockType(Vector2(1, 1), Black);
+  p.SetBlockType(Vector2(1, 2), Black);
+  p.SetBlockType(Vector2(1, 3), Black);
+  p.SetBlockType(Vector2(2, 0), Black);
+  p.SetBlockType(Vector2(2, 2), Black);
+  p.SetBlockType(Vector2(2, 3), Black);
+  p.SetBlockType(Vector2(3, 3), Black);
+  p.SetBlockType(Vector2(0, 2), White);
+  p.SetBlockType(Vector2(2, 1), White);
+  p.SetBlockType(Vector2(3, 0), White);
+  p.SetBlockType(Vector2(3, 1), White);
+  p.SetBlockType(Vector2(3, 2), White);
+
+  start = HighResClock::now();
+  PuzzleSolver ps(p);
+  ps.Solve();
+  end = HighResClock::now();
+  auto ms = std::chrono::duration_cast<MilliSecond>(end - start);
+  std::cout << "PuzzleBW3 solved in " << ms.count() << " ms" << std::endl;
+  if (ps.GetPaths().size() != 2) {
+    std::cout << "solution mismatch" << std::endl;
+  }
+}
 
 int main() {
 
-  //PuzzleSimpleMaze1();
-  //PuzzleEssential1();
-  //PuzzleEssential2();
+  PuzzleSimpleMaze1();
+  PuzzleEssential1();
+  PuzzleEssential2();
+  //PuzzleBW1();
+  //PuzzleBW3();
 
-  Puzzle p(4, 5);
-  p.AddHead(Vector2(1, 1));
-  p.AddTail(Vector2(3, 3));
-  Path path(&p);
-  path.AddNode(&p.GetNode(1, 1)); path.Print();
-  path.AddNode(&p.GetNode(1, 0)); path.Print();
-  path.AddNode(&p.GetNode(2, 0)); path.Print();
-  path.AddNode(&p.GetNode(2, 1)); path.Print();
-  path.AddNode(&p.GetNode(3, 1)); path.Print();
-  path.AddNode(&p.GetNode(3, 2)); path.Print();
-  path.AddNode(&p.GetNode(2, 2)); path.Print();
-  path.AddNode(&p.GetNode(1, 2)); path.Print();
-  path.AddNode(&p.GetNode(0, 2)); path.Print();
-  path.AddNode(&p.GetNode(0, 3)); path.Print();
-  path.AddNode(&p.GetNode(1, 3)); path.Print();
-  path.AddNode(&p.GetNode(2, 3)); path.Print();
-  path.AddNode(&p.GetNode(2, 4)); path.Print();
-  path.AddNode(&p.GetNode(3, 4)); path.Print();
-  path.AddNode(&p.GetNode(3, 3)); path.Print();
-
-  std::cout << "herp derp" << std::endl;
-  for (const auto& c : path.m_BlockMap.GetBlock(0, 0).GetNeighborCoords()) {
-    std::cout << c << std::endl;
-  }
 
   return 0;
 }

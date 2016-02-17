@@ -70,6 +70,9 @@ public:
   bool HasEssentialNode() {
     return m_NodeEssentials.size() > 0;
   }
+  bool HasEssentialSide() {
+    return m_SideEssentials.size() > 0;
+  }
 
 private:
 

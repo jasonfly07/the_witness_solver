@@ -1,6 +1,6 @@
 #include "Path.h"
 
-void Path::AddNode(Node* node) {
+bool Path::AddNode(Node* node) {
   // The first node HAS to be a head
   if (m_Path.size() == 0) {
     assert(node->isHead);
@@ -46,14 +46,10 @@ void Path::AddNode(Node* node) {
     // Perform segmentation with the seed
     BlockPtrSet segment;
     m_BlockMap.Segment(seedBlockCoord, segment);
-    //std::cout << "current segment is :" << std::endl;
-    //for (auto& b : segment) {
-    //  std::cout << b->coord << ", ";
-    //}
-    //std::cout << std::endl;
 
     // Evalute this segment
-    //EvaluateSegment(segment);
+    bool validPath = EvaluateSegment(segment);
+    if (!validPath) return false;
   }
 
   // Cut the tie between 2 blocks if necessary
@@ -71,16 +67,20 @@ void Path::AddNode(Node* node) {
 
   // See if this step is touching the edge
   if (m_Path.size() > 0) {
-    if (node->onEdge && !(m_Path.end()[-1]->onEdge)) {
+    if (node->onEdge && !(m_Path.back()->onEdge)) {
       m_TouchCount++;
     }
   }
 
   // Finally, insert the node into relevant containers
   m_VisitedNodes.insert(node);
+  if (m_Path.size() > 0) {
+    m_VisitedSides.insert(Side(node, m_Path.back()));
+  }
   m_Path.push_back(node);
   if (node->isEssential) m_VisitedEssentialNodes.insert(node);
   if (node->isTail)      m_VisitedTails.insert(node);
+  return true;
 }
 
 void Path::Print() const {
@@ -120,26 +120,6 @@ void Path::CutBlockTie(const Node& node1, const Node& node2) {
 }
 
 bool Path::EvaluateSegment(const BlockPtrSet& segment) {
-  // Find all the unvisited nodes in segment
-  NodePtrSet unvisitedNodes;
-  for (const auto& blockPtr : segment) {
-    Vector2 blockCoord = blockPtr->coord;
-    for (Vector2 offset : {Vector2(0, 0), Vector2(0, 1), Vector2(1, 0), Vector2(1, 1)}) {
-      Vector2 nodeCoord = blockCoord + offset;
-      if (!HasVisitedNode(nodeCoord)) {
-        unvisitedNodes.insert(&m_PuzzlePtr->GetNode(nodeCoord));
-      }
-    }
-  }
-
-  // Are there unvisited essential nodes?
-  // If yes, return false immediately
-  for (const auto& nodePtr : unvisitedNodes) {
-    if (nodePtr->isEssential) {
-      return false;
-    }
-  }
-
   // Are there black & white blocks mixed together?
   // If yes, return false immediately
   if (m_PuzzlePtr->HasBlackWhite()) {
@@ -158,6 +138,76 @@ bool Path::EvaluateSegment(const BlockPtrSet& segment) {
     }
   }
 
+  // Find all the unvisited nodes in segment
+  // TODO: right now we always perform this search,
+  // but it's probably better to only run this if necessary
+  NodePtrSet unvisitedNodes;
+  for (const auto& blockPtr : segment) {
+    Vector2 blockCoord = blockPtr->coord;
+    for (Vector2 offset : {Vector2(0, 0), Vector2(0, 1), Vector2(1, 0), Vector2(1, 1)}) {
+      Vector2 nodeCoord = blockCoord + offset;
+      if (!HasVisitedNode(nodeCoord)) {
+        unvisitedNodes.insert(&m_PuzzlePtr->GetNode(nodeCoord));
+      }
+    }
+  }
+
+  // Are there unvisited essential nodes?
+  // If yes, return false immediately
+  if (m_PuzzlePtr->HasEssentialNode()) {
+    for (const auto& nodePtr : unvisitedNodes) {
+      if (nodePtr->isEssential) {
+        return false;
+      }
+    }
+  }
+
+  // Are there unvisited tails & no tail up ahead?
+  // If both true, return false immediately
+  // TODO: verify that this check works
+  if (m_PuzzlePtr->HasEssentialNode()) {
+    for (const auto& nodePtr : unvisitedNodes) {
+      if (nodePtr->isTail) {
+        m_MissedTailCount++;
+      }
+      if ((m_MissedTailCount + m_VisitedTails.size()) >= m_PuzzlePtr->GetTails().size()) {
+        return false;
+      }
+    }
+  }
+
+  // Find all the unvisited sides in segment if needed
+  // TODO: add conditions
+  if (m_PuzzlePtr->HasEssentialSide()) {
+    SideSet unvisitedSides;
+    for (const auto& blockPtr : segment) {
+      Vector2 blockCoord = blockPtr->coord;
+      Node& corner1 = m_PuzzlePtr->GetNode(blockCoord);
+      Node& corner2 = m_PuzzlePtr->GetNode(blockCoord + Vector2(0, 1));
+      Node& corner3 = m_PuzzlePtr->GetNode(blockCoord + Vector2(1, 1));
+      Node& corner4 = m_PuzzlePtr->GetNode(blockCoord + Vector2(1, 0));
+      Side side1(&corner1, &corner2);
+      Side side2(&corner2, &corner3);
+      Side side3(&corner3, &corner4);
+      Side side4(&corner4, &corner1);
+
+      for (auto& side : {side1, side2, side3, side4}) {
+        if (!HasVisitedSide(side)) {
+          unvisitedSides.insert(side);
+        }
+      }
+    }
+
+    // Are there unvisited essential sides?
+    // If yes, return false immediately
+    if (m_PuzzlePtr->HasEssentialSide()) {
+      for (const auto& side : unvisitedSides) {
+        if (m_PuzzlePtr->GetEssentialSides().count(side) == 1) {
+          return false;
+        }
+      }
+    }
+  }
 
   // Return true if it survives all the way to the end
   return true;

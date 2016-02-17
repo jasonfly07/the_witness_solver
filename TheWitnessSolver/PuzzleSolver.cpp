@@ -67,8 +67,9 @@ void PuzzleSolver::Solve() {
         Node& neighbor = m_PuzzlePtr->GetNode(neighborCoord);
         if (!currPath.HasVisitedNode(&neighbor)) {
           Path newPath(currPath);
-          newPath.AddNode(&neighbor);
-          pathStack.push(newPath);
+          if(newPath.AddNode(&neighbor)) {
+            pathStack.push(newPath);
+          }
         }
       }
     }
@@ -78,8 +79,9 @@ void PuzzleSolver::Solve() {
         if (!currPath.HasVisitedNode(&neighbor)) {
           if (m_PuzzlePtr->GetEssentialSides().count(Side(&currNode, &neighbor)) == 1) {
             Path newPath(currPath);
-            newPath.AddNode(&neighbor);
-            pathStack.push(newPath);
+            if (newPath.AddNode(&neighbor)) {
+              pathStack.push(newPath);
+            }
           }
         }
       }
