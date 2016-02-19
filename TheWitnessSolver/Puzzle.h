@@ -37,6 +37,10 @@ public:
 
   inline BlockMap& GetBlockMap() { return m_BlockMap; }
 
+  inline void SetName(const std::string& name) { m_Name = name; }
+  inline std::string GetName() { return m_Name; }
+
+
   // Check the validity of coordinates
   inline bool ValidNodeCoord(const Vector2& v) const  { return m_NodeMap.ValidCoord(v);     }
   inline bool ValidNodeCoord(int r, int c) const      { return m_NodeMap.ValidCoord(r, c);  }
@@ -87,6 +91,9 @@ private:
   // Essentials
   NodePtrSet m_NodeEssentials;
   SideSet    m_SideEssentials;
+
+  // Name of puzzle
+  std::string m_Name;
 
   bool m_HasBlackWhiteBlocks;
 };

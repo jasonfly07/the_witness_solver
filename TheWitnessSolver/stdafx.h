@@ -7,5 +7,6 @@
 #include <ctime>
 #include <iostream>
 #include <stack>
+#include <string>
 #include <unordered_set>
 #include <vector>
