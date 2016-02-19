@@ -59,6 +59,12 @@ public:
 
   NodePtrVector& GetPath() { return m_Path; }
 
+  // Deal with all unprocessed segments.
+  // Once reaching a tail, a path would have either 1 or 2 unprocessed segments;
+  // this method is for cleaning them up.
+  // Don't run this until reaching a tail.
+  bool ProcessRemainingSegments();
+
   // Print the path in sequence
   void Print() const;
 

@@ -28,17 +28,30 @@ void PuzzleSolver::Solve() {
     // Perform additional evaluation if the current path
     // has reached a goal (tail)
     if (currPath.GetPath().back()->isTail) {
-      // Essential nodes evaluation
-      if (m_PuzzlePtr->HasEssentialNode()) {
-        // Give up on this path if it has insufficient essential node count
-        if (!currPath.HasCollectedAllEssentialNodes()) {
-          continue;
+
+      // Make a copy, since a path can still continue exploring after reaching a tail
+      Path endPath = currPath;
+
+      // At this point there would be 1 - 2 unprocessed segments.
+      // Find them and process them.
+      bool validEndPath = endPath.ProcessRemainingSegments();
+
+      if (validEndPath) {
+        // Additional essential nodes evaluation
+        if (m_PuzzlePtr->HasEssentialNode()) {
+          // Give up on this path if it has insufficient essential node count
+          if (!endPath.HasCollectedAllEssentialNodes()) {
+            continue;
+          }
+        }
+
+        // If currPath survives all the checks above, include it in m_Paths
+        //std::cout << "survived" << std::endl;
+        m_Paths.push_back(endPath);
+        if (m_MaxNumSolutions != -1 && m_Paths.size() == m_MaxNumSolutions) {
+          return;
         }
       }
-
-      // std::cout << "survived" << std::endl;
-      // If currPath survives all the checks above, include it in m_Paths
-      m_Paths.push_back(currPath);
     }
 
     // If the current path has no exit left, there's no need to further explore it

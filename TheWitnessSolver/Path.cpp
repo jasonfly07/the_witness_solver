@@ -212,3 +212,21 @@ bool Path::EvaluateSegment(const BlockPtrSet& segment) {
   // Return true if it survives all the way to the end
   return true;
 }
+
+bool Path::ProcessRemainingSegments() {
+  // Look for unvisited block
+  for (int r = 0; r < m_BlockMap.Rows(); r++) {
+    for (int c = 0; c < m_BlockMap.Cols(); c++) {
+      Block& block = m_BlockMap.GetBlock(r, c);
+      // Once found, form a segment & evaluate it
+      if (!block.visited) {
+        BlockPtrSet segment;
+        m_BlockMap.Segment(Vector2(r, c), segment);
+        bool currResult = EvaluateSegment(segment);
+        if (!currResult) return false;
+      }
+    }
+  }
+  return true;
+}
+
