@@ -68,6 +68,9 @@ public:
   // Print the path in sequence
   void Print() const;
 
+  // Drawing
+  void Draw();
+
  //private:
 
   // Same as BlockMap::CutTie(), but the inputs are 2 adjacent nodes

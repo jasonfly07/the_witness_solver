@@ -78,6 +78,10 @@ public:
     return m_SideEssentials.size() > 0;
   }
 
+  // Drawing
+  void CreateDisplayMatrix(DisplayMatrix& display);
+  void Draw();
+
 private:
 
   // 2 main maps of the puzzle
