@@ -1,18 +1,18 @@
 #include "NodeMap.h"
 
 Node& NodeMap::GetNode(int r, int c) {
-  assert(ValidCoord(Vector2(r, c)));
+  ASSERT(ValidCoord(Vector2(r, c)));
   return m_NodeMatrix[r][c];
 }
 
 Node& NodeMap::GetNode(const Vector2& vec) {
-  assert(ValidCoord(vec));
+  ASSERT(ValidCoord(vec));
   return m_NodeMatrix[vec.r][vec.c];
 }
 
 void NodeMap::Reset(int row, int col) {
   // The min size of node matrix is 2x2
-  assert(row > 1 && col > 1);
+  ASSERT(row > 1 && col > 1);
 
   // Set the size of node matrix
   m_NodeMatrix.clear();

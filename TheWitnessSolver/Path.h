@@ -9,7 +9,8 @@ public:
 
   // A path is initialized by specifying its "parent" puzzle
   Path(Puzzle* puzzle) {
-    m_PuzzlePtr = puzzle;
+    ASSERT(puzzle != NULL);
+
     m_TouchCount = 0;
     m_LeaveCount = 0;
     m_BlockMap = puzzle->GetBlockMap();
@@ -19,6 +20,7 @@ public:
 
   // Copy constructor
   Path(const Path& other) {
+    ASSERT(other.m_PuzzlePtr != NULL);
     m_PuzzlePtr = other.m_PuzzlePtr;
     m_TouchCount = other.m_TouchCount;
     m_LeaveCount = other.m_LeaveCount;
@@ -42,6 +44,7 @@ public:
     return m_VisitedNodes.count(node) == 1 ? true : false;
   }
   inline bool HasVisitedNode(Vector2 coord) const {
+    ASSERT(m_PuzzlePtr != NULL);
     return m_VisitedNodes.count(&m_PuzzlePtr->GetNode(coord)) == 1 ? true : false;
   }
 
@@ -50,10 +53,12 @@ public:
   }
 
   bool HasCollectedAllEssentialNodes() const {
+    ASSERT(m_PuzzlePtr != NULL);
     return m_PuzzlePtr->GetEssentialNodes().size() == m_VisitedEssentialNodes.size();
   }
 
   bool HasTailLeft() const {
+    ASSERT(m_PuzzlePtr != NULL);
     return m_PuzzlePtr->GetTails().size() == m_VisitedTails.size() ? false : true;
   }
 

@@ -90,7 +90,7 @@ struct Side {
   Side() {}
   Side(Node* n1, Node* n2) {
     // Make sure the 2 nodes are adjacent
-    assert(n1->coord.DistTo(n2->coord) == 1);
+    ASSERT(n1->coord.DistTo(n2->coord) == 1);
 
     if (n1->coord.r < n2->coord.r) {
       node1 = n1;

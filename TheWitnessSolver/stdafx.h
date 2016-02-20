@@ -10,3 +10,6 @@
 #include <string>
 #include <unordered_set>
 #include <vector>
+
+#define ASSERT(X) if (!X) { throw std::exception(); }
+

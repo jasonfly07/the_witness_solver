@@ -1,18 +1,18 @@
 #include "BlockMap.h"
 
 Block& BlockMap::GetBlock(int r, int c) {
-  assert(ValidCoord(Vector2(r, c)));
+  ASSERT(ValidCoord(Vector2(r, c)));
   return m_BlockMatrix[r][c];
 }
 
 Block& BlockMap::GetBlock(const Vector2& vec) {
-  assert(ValidCoord(vec));
+  ASSERT(ValidCoord(vec));
   return m_BlockMatrix[vec.r][vec.c];
 }
 
 void BlockMap::Reset(int row, int col) {
   // The min size of node matrix is 1x1
-  assert(row > 0 && col > 0);
+  ASSERT((row > 0 && col > 0));
 
   // Set the size of block matrix
   m_BlockMatrix.clear();

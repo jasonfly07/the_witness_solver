@@ -1,9 +1,10 @@
 #include "Path.h"
 
 bool Path::AddNode(Node* node) {
+  ASSERT(m_PuzzlePtr != NULL);
   // The first node HAS to be a head
   if (m_Path.size() == 0) {
-    assert(node->isHead);
+    ASSERT(node->isHead);
   }
 
   // There're 2 cases at start: head is on edge & not on edge
@@ -92,6 +93,7 @@ void Path::Print() const {
 }
 
 void Path::CutBlockTie(const Node& node1, const Node& node2) {
+  ASSERT(m_PuzzlePtr != NULL);
 
   // No need to proceed if side is on the border
   if (node1.coord.r == 0 && node2.coord.r == 0) return;
@@ -118,6 +120,8 @@ void Path::CutBlockTie(const Node& node1, const Node& node2) {
 }
 
 bool Path::EvaluateSegment(const BlockPtrSet& segment) {
+  ASSERT(m_PuzzlePtr != NULL);
+
   // Are there black & white blocks mixed together?
   // If yes, return false immediately
   if (m_PuzzlePtr->HasBlackWhite()) {
@@ -229,6 +233,8 @@ bool Path::ProcessRemainingSegments() {
 }
 
 void Path::Draw() {
+  ASSERT(m_PuzzlePtr != NULL);
+
   DisplayMatrix display;
   m_PuzzlePtr->CreateDisplayMatrix(display);
 

@@ -1,7 +1,7 @@
 #include "Puzzle.h"
 
 void Puzzle::ResetPuzzle(int nodeRow, int nodeCol) {
-  assert(nodeRow > 1 && nodeCol > 1);
+  ASSERT(nodeRow > 1 && nodeCol > 1);
 
   m_NodeMap.Reset(nodeRow, nodeCol);
   m_BlockMap.Reset(nodeRow - 1, nodeCol - 1);
