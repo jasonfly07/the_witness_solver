@@ -13,9 +13,17 @@ public:
 
     m_TouchCount = 0;
     m_LeaveCount = 0;
-    m_BlockMap = puzzle->GetBlockMap();
     m_Segmenting = false;
+
+    m_VisitedNodes.clear();
+    m_VisitedTails.clear();
+    m_VisitedEssentialNodes.clear();
+    m_VisitedSides.clear();
     m_MissedTailCount = 0;
+
+    m_Path.clear();
+    m_PuzzlePtr = puzzle;
+    m_BlockMap = puzzle->GetBlockMap();
   }
 
   // Copy constructor
@@ -76,7 +84,7 @@ public:
   // Drawing
   void Draw();
 
- //private:
+ private:
 
   // Same as BlockMap::CutTie(), but the inputs are 2 adjacent nodes
   // This utility is used by the path to update its own copy of block map
