@@ -30,7 +30,7 @@ void PuzzleSolver::Solve() {
     if (currPath.GetPath().back()->isTail) {
 
       // Make a copy, since a path can still continue exploring after reaching a tail
-      Path endPath = currPath;
+      Path endPath(currPath);
 
       // At this point there would be 1 - 2 unprocessed segments.
       // Find them and process them.
