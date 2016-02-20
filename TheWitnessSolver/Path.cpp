@@ -84,9 +84,7 @@ bool Path::AddNode(Node* node) {
 }
 
 void Path::Print() const {
-  std::cout << "touch = " << m_TouchCount;
-  std::cout << ", leave = " << m_LeaveCount << std::endl;
-  std::cout << "path : ";
+  std::cout << "Path : ";
   for (const auto& node : m_Path) {
     std::cout << node->coord << " ";
   }
