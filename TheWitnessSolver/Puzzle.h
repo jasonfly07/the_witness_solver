@@ -25,15 +25,22 @@ public:
   inline Node& GetNode(const Vector2& vec) { return m_NodeMap.GetNode(vec);  }
   inline size_t NodeRows() const { return m_NodeMap.Rows(); }
   inline size_t NodeCols() const { return m_NodeMap.Cols(); }
-  inline NodePtrSet& GetHeads() { return m_NodeHeads; }
-  inline NodePtrSet& GetTails() { return m_NodeTails; }
-  inline NodePtrSet& GetEssentialNodes() { return m_NodeEssentials; }
-  inline SideSet& GetEssentialSides() { return m_SideEssentials; }
 
   inline Block& GetBlock(int r, int c)       { return m_BlockMap.GetBlock(r, c); }
   inline Block& GetBlock(const Vector2& vec) { return m_BlockMap.GetBlock(vec); }
   inline size_t BlockRows() const { return m_BlockMap.Rows(); }
   inline size_t BlockCols() const { return m_BlockMap.Cols(); }
+
+  inline NodePtrSet& GetHeads() { return m_NodeHeads; }
+  inline NodePtrSet& GetTails() { return m_NodeTails; }
+  inline NodePtrSet& GetEssentialNodes() { return m_NodeEssentials; }
+  inline SideSet& GetEssentialSides() { return m_SideEssentials; }
+
+  inline size_t HeadCount() const { return m_NodeHeads.size(); }
+  inline size_t TailCount() const { return m_NodeTails.size(); }
+  inline size_t EssentialNodeCount() const { return m_NodeEssentials.size(); }
+  inline size_t EssentialSideCount() const { return m_SideEssentials.size(); }
+
 
   inline BlockMap& GetBlockMap() { return m_BlockMap; }
 
