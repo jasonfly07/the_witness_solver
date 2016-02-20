@@ -167,14 +167,12 @@ bool Path::EvaluateSegment(const BlockPtrSet& segment) {
   // Are there unvisited tails & no tail up ahead?
   // If both true, return false immediately
   // TODO: verify that this check works
-  //if (m_PuzzlePtr->HasEssentialNode()) {
-  //  for (const auto& nodePtr : unvisitedNodes) {
-  //    if (nodePtr->isTail) {
-  //      m_MissedTailCount++;
-  //    }
-  //    if ((m_MissedTailCount + m_VisitedTails.size()) >= m_PuzzlePtr->GetTails().size()) {
-  //      return false;
-  //    }
+  //for (const auto& nodePtr : unvisitedNodes) {
+  //  if (nodePtr->isTail) {
+  //    m_MissedTailCount++;
+  //  }
+  //  if ((m_MissedTailCount + m_VisitedTails.size()) >= m_PuzzlePtr->GetTails().size()) {
+  //    return false;
   //  }
   //}
 
