@@ -9,21 +9,17 @@ typedef std::chrono::high_resolution_clock HighResClock;
 typedef std::chrono::milliseconds MilliSecond;
 
 // Utility for run solver and profiling
-static void SolvePuzzle(Puzzle& p, int numSol) {
+static void SolvePuzzle(Puzzle& p) {
   std::chrono::time_point<HighResClock> start, end;
   start = HighResClock::now();
-  PuzzleSolver ps(p);
+  PuzzleSolver ps(p, 1);
   ps.Solve();
   end = HighResClock::now();
   auto ms = std::chrono::duration_cast<MilliSecond>(end - start);
-  std::cout << p.GetName() << " solved in " << ms.count() << " ms, ";
-  std::cout << "found " << ps.GetPaths().size() << " / " << numSol << " solutions. ";
-  if (ps.GetPaths().size() != numSol) {
-    std::cout << "Mismatch!" << std::endl;
-  }
-  else {
-    std::cout << std::endl;
-  }
+  std::cout << p.GetName() << " solved in " << ms.count() << " ms" << std::endl;
+
+  // Draw the first solution
+  ps.GetPaths()[0].Draw();
 }
 
 // Simple maze
@@ -41,7 +37,7 @@ void PuzzleSimpleMaze1() {
   p.AddNodeObstacle(Vector2(0, 2), Vector2(0, 3));
   p.AddNodeObstacle(Vector2(0, 0), Vector2(0, 1));
 
-  SolvePuzzle(p, 14);
+  SolvePuzzle(p);
 }
 
 // Maze with essential nodes
@@ -62,7 +58,7 @@ void PuzzleEssential1() {
   p.AddEssentialNode(Vector2(1, 3));
   p.AddEssentialNode(Vector2(3, 3));
 
-  SolvePuzzle(p, 1);
+  SolvePuzzle(p);
 }
 
 // Maze with essential nodes
@@ -77,7 +73,7 @@ void PuzzleEssential2() {
     }
   }
 
-  SolvePuzzle(p, 48);
+  SolvePuzzle(p);
 }
 
 // Black & white separation
@@ -91,7 +87,7 @@ void PuzzleBW1() {
   p.SetBlockType(Vector2(1, 0), Black);
   p.SetBlockType(Vector2(1, 1), White);
 
-  SolvePuzzle(p, 1);
+  SolvePuzzle(p);
 }
 
 // Black & white separation
@@ -110,7 +106,7 @@ void PuzzleBW2() {
   p.SetBlockType(Vector2(2, 1), White);
   p.SetBlockType(Vector2(2, 2), White);
 
-  SolvePuzzle(p, 1);
+  SolvePuzzle(p);
 }
 
 // Black & white separation
@@ -135,7 +131,7 @@ void PuzzleBW3() {
   p.SetBlockType(Vector2(3, 1), White);
   p.SetBlockType(Vector2(3, 2), White);
 
-  SolvePuzzle(p, 2);
+  SolvePuzzle(p);
 }
 
 // Black & white separation
@@ -154,7 +150,7 @@ void PuzzleBW4() {
   p.SetBlockType(Vector2(2, 1), White);
   p.SetBlockType(Vector2(2, 2), White);
 
-  SolvePuzzle(p, 2);
+  SolvePuzzle(p);
 }
 
 // Black & white separation
@@ -175,7 +171,7 @@ void PuzzleBW5() {
   p.SetBlockType(Vector2(2, 3), White);
   p.SetBlockType(Vector2(3, 3), White);
 
-  SolvePuzzle(p, 44);
+  SolvePuzzle(p);
 }
 
 // Black & white separation + essential nodes
@@ -211,7 +207,7 @@ void PuzzleEssentialBW1() {
   p.AddEssentialSide(Vector2(7, 0), Vector2(7, 1));
   p.AddEssentialSide(Vector2(7, 5), Vector2(7, 6));
 
-  SolvePuzzle(p, 1);
+  SolvePuzzle(p);
 }
 
 
@@ -226,7 +222,6 @@ int main() {
   PuzzleBW4();
   PuzzleBW5();
   PuzzleEssentialBW1();
-
 
   return 0;
 }
