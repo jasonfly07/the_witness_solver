@@ -17,8 +17,11 @@ public:
     ResetPuzzle(nodeRow, nodeCol);
   }
 
-  // Reset (& initialize) the puzzle
+  // Reset the puzzle & clear all containers
   void ResetPuzzle(int nodeRow, int nodeCol);
+
+  // Regenerate the puzzle using current containers & flags
+  void Regenerate();
 
   // Getters
   inline Node& GetNode(int r, int c)       { return m_NodeMap.GetNode(r, c); }
@@ -54,28 +57,14 @@ public:
   inline bool ValidBlockCoord(const Vector2& v) const { return m_BlockMap.ValidCoord(v);    }
   inline bool ValidBlockCoord(int r, int c) const     { return m_BlockMap.ValidCoord(r, c); }
 
-  // Add heads or tails to the puzzle
+  // Adders for various puzzle elements
   void AddHead(const Vector2& vec);
   void AddTail(const Vector2& vec);
-
-  // Add an obstacle between 2 adjacent nodes
-  // This will remove node2 from node1's neighborSet and vice versa
-  void AddNodeObstacle(const Vector2& vec1, const Vector2& vec2);
-
-  // Set a node to be essential, which means the path has to pass through it
+  void AddObstacleSide(const Vector2& vec1, const Vector2& vec2);
   void AddEssentialNode(const Vector2& vec);
-
-  // Set a side to be essential
   void AddEssentialSide(const Vector2& vec1, const Vector2& vec2);
+  void AddSpecialBlock(const Vector2& vec, BlockType type);
 
-  // Set the type of a block
-  void SetBlockType(const Vector2& vec, BlockType type);
-
-  // Check if the puzzle has black & white puzzles
-  // Expensive, so this should only be called once before solving
-  // When this function is run, we'll update m_HasBlackWhiteBlocks
-  bool CheckBlackWhiteBlocks();
-  void PreprocessBlackWhiteBlocks();
   bool HasBlackWhite() const { return m_HasBlackWhiteBlocks; }
 
   bool HasEssentialNode() {
@@ -91,6 +80,10 @@ public:
 
 private:
 
+  // Utility for Regenerate();
+  bool CheckBlackWhiteBlocks();
+  void ConvertBlackWhiteToEssentialSides();
+
   // 2 main maps of the puzzle
   NodeMap  m_NodeMap;
   BlockMap m_BlockMap;
@@ -102,6 +95,12 @@ private:
   // Essentials
   NodePtrSet m_NodeEssentials;
   SideSet    m_SideEssentials;
+
+  // Side obstacles
+  SideSet m_SideObstacles;
+
+  // Special blocks
+  BlockPtrHashMap m_SpecialBlocks;
 
   // Name of puzzle
   std::string m_Name;

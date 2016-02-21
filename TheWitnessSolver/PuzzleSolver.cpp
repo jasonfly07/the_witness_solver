@@ -5,13 +5,6 @@ void PuzzleSolver::Solve() {
   // Clear the solution container
   m_Paths.clear();
 
-  // Check if there're black/white blocks to solve
-  // If yes, convert BW blocks pair to essential nodes
-  m_HasBlackWhite = m_PuzzlePtr->CheckBlackWhiteBlocks();
-  if (m_HasBlackWhite) {
-    m_PuzzlePtr->PreprocessBlackWhiteBlocks();
-  }
-
   // Create the stack for DFS
   std::stack<Path> pathStack;
   for (const auto& head : m_PuzzlePtr->GetHeads()) {

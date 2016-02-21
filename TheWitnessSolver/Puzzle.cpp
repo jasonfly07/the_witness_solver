@@ -6,53 +6,84 @@ void Puzzle::ResetPuzzle(int nodeRow, int nodeCol) {
   m_NodeMap.Reset(nodeRow, nodeCol);
   m_BlockMap.Reset(nodeRow - 1, nodeCol - 1);
 
-  // Reset all auxiliary containers
+  // Reset all containers & flags
   m_NodeHeads.clear();
   m_NodeTails.clear();
   m_NodeEssentials.clear();
   m_SideEssentials.clear();
-
+  m_SideObstacles.clear();
+  m_SpecialBlocks.clear();
+  m_Name = "";
   m_HasBlackWhiteBlocks = false;
 }
 
+void Puzzle::Regenerate() {
+  // Set heads & tails
+  for (auto& nodePtr : m_NodeHeads) { nodePtr->isHead = true; }
+  for (auto& nodePtr : m_NodeTails) { nodePtr->isTail = true; }
+
+  // Set essentials
+  for (auto& nodePtr : m_NodeEssentials) { nodePtr->isEssential = true; }
+
+  // Set obstacles
+  for (auto& side : m_SideObstacles) {
+    m_NodeMap.CutTie(side.node1->coord, side.node2->coord);
+  }
+
+  // Set blocks
+  for (auto& blockTypePair : m_SpecialBlocks) {
+    m_BlockMap.SetType(blockTypePair.first->coord, blockTypePair.second);
+  }
+
+  // Check if there are black & white block
+  // If yes, dump all sides that touch B & W on both sides to m_SideEssentials
+  m_HasBlackWhiteBlocks = CheckBlackWhiteBlocks();
+  if (m_HasBlackWhiteBlocks) {
+    ConvertBlackWhiteToEssentialSides();
+  }
+}
+
 void Puzzle::AddHead(const Vector2& vec) {
-  // If vec is already a head, no need to proceed
-  if (GetNode(vec).isHead) return;
-
   // If vec is already a tail, remove it from m_NodeTails first
-  if (GetNode(vec).isTail) m_NodeTails.erase(&GetNode(vec));
-
+  if (m_NodeTails.count(&GetNode(vec)) == 1) {
+    m_NodeTails.erase(&GetNode(vec));
+  }
   m_NodeHeads.insert(&GetNode(vec));
-  GetNode(vec).isHead = true;
 }
 
 void Puzzle::AddTail(const Vector2& vec) {
-  // If vec is already a tail, no need to proceed
-  if (GetNode(vec).isTail) return;
-
   // If vec is already a head, remove it from m_NodeHeads first
-  if (GetNode(vec).isHead) m_NodeHeads.erase(&GetNode(vec));
-
+  if (m_NodeHeads.count(&GetNode(vec)) == 1) {
+    m_NodeHeads.erase(&GetNode(vec));
+  }
   m_NodeTails.insert(&GetNode(vec));
-  GetNode(vec).isTail = true;
 }
 
-void Puzzle::AddNodeObstacle(const Vector2& vec1, const Vector2& vec2) {
-  m_NodeMap.CutTie(vec1, vec2);
+void Puzzle::AddObstacleSide(const Vector2& vec1, const Vector2& vec2) {
+  // If side is already essential, remove it from m_SideEssentials first
+  Side currSide(&GetNode(vec1), &GetNode(vec2));
+  if (m_SideEssentials.count(currSide) == 1) {
+    m_SideEssentials.erase(currSide);
+  }
+  m_SideObstacles.insert(currSide);
 }
 
 void Puzzle::AddEssentialNode(const Vector2& vec) {
-  Node& node = GetNode(vec);
-  node.isEssential = true;
-  m_NodeEssentials.insert(&node);
+  m_NodeEssentials.insert(&GetNode(vec));
 }
 
 void Puzzle::AddEssentialSide(const Vector2& vec1, const Vector2& vec2) {
-  m_SideEssentials.insert(Side(&GetNode(vec1), &GetNode(vec2)));
+  // If side is already an obstacle, remove it from m_SideObstacles first
+  Side currSide(&GetNode(vec1), &GetNode(vec2));
+  if (m_SideObstacles.count(currSide) == 1) {
+    m_SideObstacles.erase(currSide);
+  }
+  m_SideEssentials.insert(currSide);
 }
 
-void Puzzle::SetBlockType(const Vector2& vec, BlockType type) {
-  m_BlockMap.SetType(vec, type);
+void Puzzle::AddSpecialBlock(const Vector2& vec, BlockType type) {
+  m_SpecialBlocks.erase(&GetBlock(vec));
+  m_SpecialBlocks.insert({ &GetBlock(vec), type });
 }
 
 bool Puzzle::CheckBlackWhiteBlocks() {
@@ -60,17 +91,14 @@ bool Puzzle::CheckBlackWhiteBlocks() {
     for (int c = 0; c < BlockCols(); c++) {
       const Block& currBlock = GetBlock(r, c);
       if ((currBlock.type == Black) || (currBlock.type == White)) {
-        m_HasBlackWhiteBlocks = true;
         return true;
       }
     }
   }
-
-  m_HasBlackWhiteBlocks = false;
   return false;
 }
 
-void Puzzle::PreprocessBlackWhiteBlocks() {
+void Puzzle::ConvertBlackWhiteToEssentialSides() {
   // For every block [r, c], process the sides (if valid):
   // 1. between [r, c] and [r, c + 1]
   // 2. between [r, c] and [r + 1, c]

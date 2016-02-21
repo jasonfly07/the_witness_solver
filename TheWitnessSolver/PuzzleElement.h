@@ -78,9 +78,10 @@ struct Block {
   bool passed;  // marked true if the whole segment passes every available check
   bool visited; // used by segmentation
 };
-typedef std::unordered_set<Block*>      BlockPtrSet;
-typedef std::vector<BlockPtrSet>        BlockPtrSetVector;
-typedef std::vector<std::vector<Block>> BlockMatrix;
+typedef std::unordered_set<Block*>            BlockPtrSet;
+typedef std::unordered_map<Block*, BlockType> BlockPtrHashMap;
+typedef std::vector<BlockPtrSet>              BlockPtrSetVector;
+typedef std::vector<std::vector<Block>>       BlockMatrix;
 
 // A side is a line connecting 2 adjacent nodes
 // When initialized, the order of node1 & node2 is rearranged
