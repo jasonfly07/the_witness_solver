@@ -1,7 +1,7 @@
 #include "Puzzle.h"
 
 void Puzzle::ResetPuzzle(int nodeRow, int nodeCol) {
-  ASSERT(nodeRow > 1 && nodeCol > 1);
+  ASSERT((nodeRow > 1 && nodeCol > 1));
 
   m_NodeMap.Reset(nodeRow, nodeCol);
   m_BlockMap.Reset(nodeRow - 1, nodeCol - 1);
@@ -137,10 +137,24 @@ void Puzzle::CreateDisplayMatrix(DisplayMatrix& display) {
     }
   }
 
+  // Obstacles
+  for (const auto& obstacleSide : m_SideObstacles) {
+    Vector2 coord1 = obstacleSide.node1->coord;
+    Vector2 coord2 = obstacleSide.node2->coord;
+    display[(coord1 + coord2).r][(coord1 + coord2).c] = 'x';
+  }
+
   // Essential nodes
   for (const auto& essentialNode : m_NodeEssentials) {
     Vector2 eCoord = essentialNode->coord;
     display[eCoord.r * 2][eCoord.c * 2] = 'e';
+  }
+
+  // Essential sides
+  for (const auto& obstacleSide : m_SideEssentials) {
+    Vector2 coord1 = obstacleSide.node1->coord;
+    Vector2 coord2 = obstacleSide.node2->coord;
+    display[(coord1 + coord2).r][(coord1 + coord2).c] = 'e';
   }
 
   // Heads & tails
