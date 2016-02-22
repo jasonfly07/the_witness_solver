@@ -42,6 +42,7 @@ struct Vector2 {
   int c;
 };
 typedef std::unordered_set<Vector2> Vector2Set;
+typedef std::vector<Vector2> Vector2List;
 
 namespace std {
   template <>

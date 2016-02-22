@@ -38,6 +38,9 @@
     <ClInclude Include="PuzzleSolver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Tetris.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SolverMain.cpp">

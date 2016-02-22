@@ -152,6 +152,7 @@
     <ClInclude Include="PuzzleElement.h" />
     <ClInclude Include="PuzzleSolver.h" />
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="Tetris.h" />
     <ClInclude Include="Vector2.h" />
   </ItemGroup>
   <ItemGroup>

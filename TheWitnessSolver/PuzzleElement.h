@@ -44,9 +44,22 @@ typedef std::vector<std::vector<Node>> NodeMatrix;
 
 // Block type
 enum BlockType {
+  // Default
   Empty,
+
+  // Black & white separation
   White,
-  Black
+  Black,
+
+  // Tetris (Oriented)
+  // Angles are counter-clockwise
+  Square1x1, Square2x2,
+  Line1x2, Line2x1,
+  Line1x3, Line3x1,
+  Line1x4, Line4x1,
+  L2x2_0, L2x2_90, L2x2_180, L2x2_270,
+  L3x2_0, L3x2_90, L3x2_180, L3x2_270,
+  L2x3_0, L2x3_90, L2x3_180, L2x3_270,
 };
 
 // A block on the block matrix.
