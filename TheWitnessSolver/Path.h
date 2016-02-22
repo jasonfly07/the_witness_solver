@@ -1,102 +1,118 @@
 #pragma once
 #include "PuzzleElement.h"
+#include "Puzzle.h"
 
 // A path object is used by the solver to record the history of searching
 // It contains all node visited, essential node counts, etc.
-struct Path {
+class Path {
+public:
 
-  // Since we're gonna maintain a block matrix for every path, we have to specify it
-  // when initializing a path
-  Path(const BlockMatrix& blockMat) {
-    blockMatrix = blockMat;
-    touchCount = 0;
-    leaveCount = 0;
+  // A path is initialized by specifying its "parent" puzzle
+  Path(Puzzle* puzzle) {
+    ASSERT(puzzle != NULL);
+
+    m_TouchCount = 0;
+    m_LeaveCount = 0;
+    m_Segmenting = false;
+
+    m_VisitedNodes.clear();
+    m_VisitedTails.clear();
+    m_VisitedEssentialNodes.clear();
+    m_VisitedSides.clear();
+    m_MissedTailCount = 0;
+
+    m_Path.clear();
+    m_PuzzlePtr = puzzle;
+    m_BlockMap = puzzle->GetBlockMap();
   }
 
-  void AddNode(Node* node) {
-    // There're 2 cases at start: head is on edge & not on edge
-    // if the head is on edge, set touchCount to 1
-    if (path.size() == 0 && node->isHead) {
-      touchCount = 1;
-    }
+  // Copy constructor
+  Path(const Path& other) {
+    ASSERT(other.m_PuzzlePtr != NULL);
+    m_PuzzlePtr = other.m_PuzzlePtr;
+    m_TouchCount = other.m_TouchCount;
+    m_LeaveCount = other.m_LeaveCount;
+    m_Segmenting = other.m_Segmenting;
+    m_MissedTailCount = other.m_MissedTailCount;
 
-    // Cut the tie between 2 blocks if necessary
-    if (path.size() > 0) {
-      AddBlockObstacle(*node, *(path.end()[-1]));
-    }
+    m_VisitedNodes = other.m_VisitedNodes;
+    m_VisitedTails = other.m_VisitedTails;
+    m_VisitedEssentialNodes = other.m_VisitedEssentialNodes;
+    m_VisitedSides = other.m_VisitedSides;
 
-    // See if this step is leaving the edge
-    if (path.size() > 0) {
-      if (!(node->onEdge) && path.end()[-1]->onEdge) {
-        leaveCount++;
-      }
-    }
-
-    // See if this step is touching the edge
-    if (path.size() > 0) {
-      if (node->onEdge && !(path.end()[-1]->onEdge)) {
-        touchCount++;
-      }
-    }
-
-    // TODO:
-    // If leaveCount >= 1, and touchCount = leaveCount + 1
-    // in the next step, a segment will be created
-
-    // Finally, insert the node into relevant containers
-    visitedNodes.insert(node);
-    path.push_back(node);
-    if (node->isEssential) visitedEssentialNodes.insert(node);
-    if (node->isTail)      visitedTails.insert(node);
+    m_Path = other.m_Path;
+    m_BlockMap = other.m_BlockMap;
   }
 
-  bool HasVisitedNode(Node* node) {
-    return visitedNodes.count(node) == 1 ? true : false;
+  // Add a node to the path & update various containers
+  // The return value is a boolean indicating whether the current path is valid or not
+  bool AddNode(Node* node);
+
+  inline bool HasVisitedNode(Node* node) const {
+    return m_VisitedNodes.count(node) == 1 ? true : false;
+  }
+  inline bool HasVisitedNode(Vector2 coord) const {
+    ASSERT(m_PuzzlePtr != NULL);
+    return m_VisitedNodes.count(&m_PuzzlePtr->GetNode(coord)) == 1 ? true : false;
   }
 
-  void AddBlockObstacle(const Node& node1, const Node& node2) {
-
-    // No need to proceed if both nodes are on edge
-    if (node1.onEdge && node2.onEdge) return;
-
-    // Case 1: side is vertical
-    if (node1.coord.c == node2.coord.c) {
-      int R = std::min(node1.coord.r, node2.coord.r);
-      int C = node1.coord.c;
-      Block& block1 = blockMatrix[R][C - 1];
-      Block& block2 = blockMatrix[R][C];
-      block1.neighborSet.erase(&block2);
-      block2.neighborSet.erase(&block1);
-    }
-    // Case 2: side is horizontal
-    else if (node1.coord.r == node2.coord.r) {
-      int R = node1.coord.r;
-      int C = std::min(node1.coord.c, node2.coord.c);
-      Block& block1 = blockMatrix[R - 1][C];
-      Block& block2 = blockMatrix[R][C];
-      block1.neighborSet.erase(&block2);
-      block2.neighborSet.erase(&block1);
-    }
+  inline bool HasVisitedSide(Side side) const {
+    return m_VisitedSides.count(side) == 1 ? true : false;
   }
 
-  void Print() const {
-    std::cout << "touch = " << touchCount;
-    std::cout << ", leave = " << leaveCount << std::endl;
-    std::cout << "path : ";
-    for (const auto& node : path) {
-      std::cout << node->coord << " ";
-    }
-    std::cout << std::endl;
+  bool HasCollectedAllEssentialNodes() const {
+    ASSERT(m_PuzzlePtr != NULL);
+    return m_PuzzlePtr->GetEssentialNodes().size() == m_VisitedEssentialNodes.size();
   }
+
+  bool HasTailLeft() const {
+    ASSERT(m_PuzzlePtr != NULL);
+    return m_PuzzlePtr->GetTails().size() == m_VisitedTails.size() ? false : true;
+  }
+
+  NodePtrVector& GetPath() { return m_Path; }
+
+  // Deal with all unprocessed segments.
+  // Once reaching a tail, a path would have either 1 or 2 unprocessed segments;
+  // this method is for cleaning them up.
+  // Don't run this until reaching a tail.
+  bool ProcessRemainingSegments();
+
+  // Print the path in sequence
+  void Print() const;
+
+  // Drawing
+  void Draw();
+
+ private:
+
+  // Same as BlockMap::CutTie(), but the inputs are 2 adjacent nodes
+  // This utility is used by the path to update its own copy of block map
+  void CutBlockTie(const Node& node1, const Node& node2);
+
+  // Evaluate a segment
+  bool EvaluateSegment(const BlockPtrSet& segment);
 
   // Records the number of times the path touching/leaving the edge
-  int touchCount;
-  int leaveCount;
+  int m_TouchCount;
+  int m_LeaveCount;
+  bool m_Segmenting;
 
-  NodeSet visitedNodes;
-  NodeSet visitedTails;
-  NodeSet visitedEssentialNodes;
-  NodeVector path;
+  // Containers for the history of exploring
+  NodePtrSet m_VisitedNodes;
+  NodePtrSet m_VisitedTails;
+  NodePtrSet m_VisitedEssentialNodes;
+  SideSet    m_VisitedSides;
+  int m_MissedTailCount;
 
-  BlockMatrix blockMatrix;
+  // Stores all the visited nodes in sequence
+  NodePtrVector m_Path;
+
+  // This is the puzzle on which the path operates
+  Puzzle* m_PuzzlePtr;
+
+  // The path has its own copy of block map, so it can update the connectivity
+  // & segment as the path grows
+  BlockMap m_BlockMap;
 };
+typedef std::vector<Path> PathVector;

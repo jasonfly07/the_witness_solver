@@ -1,41 +1,10 @@
 #pragma once
 #include "stdafx.h"
 
+#include "Vector2.h"
 #include <iostream>
 #include <unordered_set>
 #include <vector>
-
-// A 2d vector.
-struct Vector2 {
-  Vector2() {}
-  Vector2(int r, int c) : r(r), c(c) {}
-
-  Vector2 operator+(const Vector2& other) {
-    return Vector2(r + other.r, c + other.c);
-  }
-  Vector2 operator-(const Vector2& other) {
-    return Vector2(r - other.r, c - other.c);
-  }
-  void operator=(const Vector2& other) {
-    r = other.r;
-    c = other.c;
-    return;
-  }
-  bool operator==(const Vector2& other) {
-    return (r == other.r) && (c == other.c);
-  }
-  bool operator!=(const Vector2& other) {
-    return !(*this == other);
-  }
-  friend std::ostream& operator<< (std::ostream &out, const Vector2& vec) {
-    out << "[" << vec.r << ", " << vec.c << "]";
-    return out;
-  }
-
-  int r;
-  int c;
-};
-typedef std::vector<Vector2> Vector2List;
 
 // A node on the node matrix.
 // Contains coordinates, its reachable naighbors, and some extra info.
@@ -52,18 +21,25 @@ struct Node {
     isHead = false;
     isTail = false;
     onEdge = false;
-    neighborSet.clear();
+    neighborOffsets.clear();
+  }
+  Vector2Set GetNeighborCoords() {
+    Vector2Set neighborCoords;
+    for (const auto& offset : neighborOffsets) {
+      neighborCoords.insert(coord + offset);
+    }
+    return neighborCoords;
   }
 
   Vector2 coord;
-  std::unordered_set<Node*> neighborSet;
+  Vector2Set neighborOffsets;
   bool isEssential;
   bool isHead;
   bool isTail;
   bool onEdge;
 };
-typedef std::unordered_set<Node*> NodeSet;
-typedef std::vector<Node*> NodeVector;
+typedef std::unordered_set<Node*> NodePtrSet;
+typedef std::vector<Node*>        NodePtrVector;
 typedef std::vector<std::vector<Node>> NodeMatrix;
 
 // Block type
@@ -83,29 +59,39 @@ struct Block {
   }
   void InitBlock(int r, int c) {
     coord = Vector2(r, c);
-    type  = Empty;
-    clusterID = -1;
-    neighborSet.clear();
+    type = Empty;
+    neighborOffsets.clear();
+    passed = false;
     visited = false;
   }
+  Vector2Set GetNeighborCoords() {
+    Vector2Set neighborCoords;
+    for (const auto& offset : neighborOffsets) {
+      neighborCoords.insert(coord + offset);
+    }
+    return neighborCoords;
+  }
 
-  std::unordered_set<Block*> neighborSet;
-  BlockType type;
   Vector2 coord;
-  int clusterID;
+  Vector2Set neighborOffsets;
+  BlockType type;
+  bool passed;  // marked true if the whole segment passes every available check
   bool visited; // used by segmentation
 };
+typedef std::unordered_set<Block*>      BlockPtrSet;
+typedef std::vector<BlockPtrSet>        BlockPtrSetVector;
 typedef std::vector<std::vector<Block>> BlockMatrix;
-typedef std::unordered_set<Block*> BlockSet;
-typedef std::vector<BlockSet> BlockSetVector;
 
 // A side is a line connecting 2 adjacent nodes
 // When initialized, the order of node1 & node2 is rearranged
-// ex. [1, 2] comes before [2, 5]
+// ex. [1, 2] comes before [2, 2]
 // ex. [1, 2] comes before [1, 3]
 struct Side {
   Side() {}
   Side(Node* n1, Node* n2) {
+    // Make sure the 2 nodes are adjacent
+    ASSERT(n1->coord.DistTo(n2->coord) == 1);
+
     if (n1->coord.r < n2->coord.r) {
       node1 = n1;
       node2 = n2;
@@ -126,10 +112,15 @@ struct Side {
     }
   }
 
+  // The side is vertical if not horizontal
+  bool IsHorizontal() const {
+    return node1->coord.r == node2->coord.r;
+  }
+
   // TODO: we only need to check the first case now
   bool operator==(const Side& other) const {
     if ((node1->coord == other.node1->coord && node2->coord == other.node2->coord) ||
-        (node1->coord == other.node2->coord && node2->coord == other.node1->coord)) {
+      (node1->coord == other.node2->coord && node2->coord == other.node1->coord)) {
       return true;
     }
     else return false;
