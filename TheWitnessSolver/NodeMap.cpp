@@ -12,7 +12,7 @@ Node& NodeMap::GetNode(const Vector2& vec) {
 
 void NodeMap::Reset(int row, int col) {
   // The min size of node matrix is 2x2
-  ASSERT(row > 1 && col > 1);
+  ASSERT((row > 1 && col > 1));
 
   // Set the size of node matrix
   m_NodeMatrix.clear();
