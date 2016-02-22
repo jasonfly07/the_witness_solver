@@ -28,14 +28,15 @@ void PuzzleSimpleMaze1() {
   p.SetName("PuzzleSimpleMaze1");
   p.AddHead(Vector2(4, 0));
   p.AddTail(Vector2(0, 3));
-  p.AddNodeObstacle(Vector2(3, 0), Vector2(4, 0));
-  p.AddNodeObstacle(Vector2(3, 1), Vector2(4, 1));
-  p.AddNodeObstacle(Vector2(1, 1), Vector2(2, 1));
-  p.AddNodeObstacle(Vector2(1, 2), Vector2(2, 2));
-  p.AddNodeObstacle(Vector2(1, 3), Vector2(2, 3));
-  p.AddNodeObstacle(Vector2(0, 2), Vector2(1, 2));
-  p.AddNodeObstacle(Vector2(0, 2), Vector2(0, 3));
-  p.AddNodeObstacle(Vector2(0, 0), Vector2(0, 1));
+  p.AddObstacleSide(Vector2(3, 0), Vector2(4, 0));
+  p.AddObstacleSide(Vector2(3, 1), Vector2(4, 1));
+  p.AddObstacleSide(Vector2(1, 1), Vector2(2, 1));
+  p.AddObstacleSide(Vector2(1, 2), Vector2(2, 2));
+  p.AddObstacleSide(Vector2(1, 3), Vector2(2, 3));
+  p.AddObstacleSide(Vector2(0, 2), Vector2(1, 2));
+  p.AddObstacleSide(Vector2(0, 2), Vector2(0, 3));
+  p.AddObstacleSide(Vector2(0, 0), Vector2(0, 1));
+  p.Regenerate();
 
   SolvePuzzle(p);
 }
@@ -47,16 +48,17 @@ void PuzzleEssential1() {
   p.AddHead(Vector2(1, 1));
   p.AddHead(Vector2(2, 2));
   p.AddTail(Vector2(1, 0));
-  p.AddNodeObstacle(Vector2(0, 0), Vector2(0, 1));
-  p.AddNodeObstacle(Vector2(0, 0), Vector2(1, 0));
-  p.AddNodeObstacle(Vector2(1, 2), Vector2(1, 3));
-  p.AddNodeObstacle(Vector2(2, 2), Vector2(3, 2));
+  p.AddObstacleSide(Vector2(0, 0), Vector2(0, 1));
+  p.AddObstacleSide(Vector2(0, 0), Vector2(1, 0));
+  p.AddObstacleSide(Vector2(1, 2), Vector2(1, 3));
+  p.AddObstacleSide(Vector2(2, 2), Vector2(3, 2));
   p.AddEssentialNode(Vector2(2, 0));
   p.AddEssentialNode(Vector2(2, 1));
   p.AddEssentialNode(Vector2(0, 1));
   p.AddEssentialNode(Vector2(1, 2));
   p.AddEssentialNode(Vector2(1, 3));
   p.AddEssentialNode(Vector2(3, 3));
+  p.Regenerate();
 
   SolvePuzzle(p);
 }
@@ -72,6 +74,7 @@ void PuzzleEssential2() {
       p.AddEssentialNode(Vector2(r, c));
     }
   }
+  p.Regenerate();
 
   SolvePuzzle(p);
 }
@@ -82,10 +85,11 @@ void PuzzleBW1() {
   p.SetName("PuzzleBW1");
   p.AddHead(Vector2(2, 0));
   p.AddTail(Vector2(0, 2));
-  p.SetBlockType(Vector2(0, 0), Black);
-  p.SetBlockType(Vector2(0, 1), Black);
-  p.SetBlockType(Vector2(1, 0), Black);
-  p.SetBlockType(Vector2(1, 1), White);
+  p.AddSpecialBlock(Vector2(0, 0), Black);
+  p.AddSpecialBlock(Vector2(0, 1), Black);
+  p.AddSpecialBlock(Vector2(1, 0), Black);
+  p.AddSpecialBlock(Vector2(1, 1), White);
+  p.Regenerate();
 
   SolvePuzzle(p);
 }
@@ -96,15 +100,16 @@ void PuzzleBW2() {
   p.SetName("puzzleBW2");
   p.AddHead(Vector2(3, 0));
   p.AddTail(Vector2(2, 0));
-  p.SetBlockType(Vector2(0, 0), Black);
-  p.SetBlockType(Vector2(0, 1), Black);
-  p.SetBlockType(Vector2(0, 2), Black);
-  p.SetBlockType(Vector2(1, 0), Black);
-  p.SetBlockType(Vector2(1, 2), Black);
-  p.SetBlockType(Vector2(1, 1), White);
-  p.SetBlockType(Vector2(2, 0), White);
-  p.SetBlockType(Vector2(2, 1), White);
-  p.SetBlockType(Vector2(2, 2), White);
+  p.AddSpecialBlock(Vector2(0, 0), Black);
+  p.AddSpecialBlock(Vector2(0, 1), Black);
+  p.AddSpecialBlock(Vector2(0, 2), Black);
+  p.AddSpecialBlock(Vector2(1, 0), Black);
+  p.AddSpecialBlock(Vector2(1, 2), Black);
+  p.AddSpecialBlock(Vector2(1, 1), White);
+  p.AddSpecialBlock(Vector2(2, 0), White);
+  p.AddSpecialBlock(Vector2(2, 1), White);
+  p.AddSpecialBlock(Vector2(2, 2), White);
+  p.Regenerate();
 
   SolvePuzzle(p);
 }
@@ -115,21 +120,22 @@ void PuzzleBW3() {
   p.SetName("PuzzleBW3");
   p.AddHead(Vector2(4, 0));
   p.AddTail(Vector2(0, 1));
-  p.SetBlockType(Vector2(0, 0), Black);
-  p.SetBlockType(Vector2(0, 3), Black);
-  p.SetBlockType(Vector2(1, 0), Black);
-  p.SetBlockType(Vector2(1, 1), Black);
-  p.SetBlockType(Vector2(1, 2), Black);
-  p.SetBlockType(Vector2(1, 3), Black);
-  p.SetBlockType(Vector2(2, 0), Black);
-  p.SetBlockType(Vector2(2, 2), Black);
-  p.SetBlockType(Vector2(2, 3), Black);
-  p.SetBlockType(Vector2(3, 3), Black);
-  p.SetBlockType(Vector2(0, 2), White);
-  p.SetBlockType(Vector2(2, 1), White);
-  p.SetBlockType(Vector2(3, 0), White);
-  p.SetBlockType(Vector2(3, 1), White);
-  p.SetBlockType(Vector2(3, 2), White);
+  p.AddSpecialBlock(Vector2(0, 0), Black);
+  p.AddSpecialBlock(Vector2(0, 3), Black);
+  p.AddSpecialBlock(Vector2(1, 0), Black);
+  p.AddSpecialBlock(Vector2(1, 1), Black);
+  p.AddSpecialBlock(Vector2(1, 2), Black);
+  p.AddSpecialBlock(Vector2(1, 3), Black);
+  p.AddSpecialBlock(Vector2(2, 0), Black);
+  p.AddSpecialBlock(Vector2(2, 2), Black);
+  p.AddSpecialBlock(Vector2(2, 3), Black);
+  p.AddSpecialBlock(Vector2(3, 3), Black);
+  p.AddSpecialBlock(Vector2(0, 2), White);
+  p.AddSpecialBlock(Vector2(2, 1), White);
+  p.AddSpecialBlock(Vector2(3, 0), White);
+  p.AddSpecialBlock(Vector2(3, 1), White);
+  p.AddSpecialBlock(Vector2(3, 2), White);
+  p.Regenerate();
 
   SolvePuzzle(p);
 }
@@ -140,15 +146,16 @@ void PuzzleBW4() {
   p.SetName("puzzleBW4");
   p.AddHead(Vector2(3, 0));
   p.AddTail(Vector2(0, 3));
-  p.SetBlockType(Vector2(0, 0), Black);
-  p.SetBlockType(Vector2(0, 1), Black);
-  p.SetBlockType(Vector2(0, 2), Black);
-  p.SetBlockType(Vector2(1, 0), Black);
-  p.SetBlockType(Vector2(1, 2), Black);
-  p.SetBlockType(Vector2(1, 1), White);
-  p.SetBlockType(Vector2(2, 0), White);
-  p.SetBlockType(Vector2(2, 1), White);
-  p.SetBlockType(Vector2(2, 2), White);
+  p.AddSpecialBlock(Vector2(0, 0), Black);
+  p.AddSpecialBlock(Vector2(0, 1), Black);
+  p.AddSpecialBlock(Vector2(0, 2), Black);
+  p.AddSpecialBlock(Vector2(1, 0), Black);
+  p.AddSpecialBlock(Vector2(1, 2), Black);
+  p.AddSpecialBlock(Vector2(1, 1), White);
+  p.AddSpecialBlock(Vector2(2, 0), White);
+  p.AddSpecialBlock(Vector2(2, 1), White);
+  p.AddSpecialBlock(Vector2(2, 2), White);
+  p.Regenerate();
 
   SolvePuzzle(p);
 }
@@ -159,17 +166,18 @@ void PuzzleBW5() {
   p.SetName("puzzleBW5");
   p.AddHead(Vector2(2, 2));
   p.AddTail(Vector2(0, 4));
-  p.SetBlockType(Vector2(1, 1), Black);
-  p.SetBlockType(Vector2(1, 2), Black);
-  p.SetBlockType(Vector2(2, 1), Black);
-  p.SetBlockType(Vector2(2, 2), Black);
-  p.SetBlockType(Vector2(0, 0), White);
-  p.SetBlockType(Vector2(0, 1), White);
-  p.SetBlockType(Vector2(0, 2), White);
-  p.SetBlockType(Vector2(0, 3), White);
-  p.SetBlockType(Vector2(1, 3), White);
-  p.SetBlockType(Vector2(2, 3), White);
-  p.SetBlockType(Vector2(3, 3), White);
+  p.AddSpecialBlock(Vector2(1, 1), Black);
+  p.AddSpecialBlock(Vector2(1, 2), Black);
+  p.AddSpecialBlock(Vector2(2, 1), Black);
+  p.AddSpecialBlock(Vector2(2, 2), Black);
+  p.AddSpecialBlock(Vector2(0, 0), White);
+  p.AddSpecialBlock(Vector2(0, 1), White);
+  p.AddSpecialBlock(Vector2(0, 2), White);
+  p.AddSpecialBlock(Vector2(0, 3), White);
+  p.AddSpecialBlock(Vector2(1, 3), White);
+  p.AddSpecialBlock(Vector2(2, 3), White);
+  p.AddSpecialBlock(Vector2(3, 3), White);
+  p.Regenerate();
 
   SolvePuzzle(p);
 }
@@ -185,19 +193,19 @@ void PuzzleEssentialBW1() {
   p.AddTail(Vector2(0, 0));
   p.AddTail(Vector2(0, 7));
   p.AddTail(Vector2(7, 7));
-  p.SetBlockType(Vector2(0, 0), Black);
-  p.SetBlockType(Vector2(0, 5), Black);
-  p.SetBlockType(Vector2(1, 3), Black);
-  p.SetBlockType(Vector2(1, 4), Black);
-  p.SetBlockType(Vector2(5, 6), Black);
-  p.SetBlockType(Vector2(6, 6), Black);
-  p.SetBlockType(Vector2(0, 1), White);
-  p.SetBlockType(Vector2(1, 0), White);
-  p.SetBlockType(Vector2(0, 6), White);
-  p.SetBlockType(Vector2(2, 3), White);
-  p.SetBlockType(Vector2(2, 4), White);
-  p.SetBlockType(Vector2(5, 2), White);
-  p.SetBlockType(Vector2(6, 5), White);
+  p.AddSpecialBlock(Vector2(0, 0), Black);
+  p.AddSpecialBlock(Vector2(0, 5), Black);
+  p.AddSpecialBlock(Vector2(1, 3), Black);
+  p.AddSpecialBlock(Vector2(1, 4), Black);
+  p.AddSpecialBlock(Vector2(5, 6), Black);
+  p.AddSpecialBlock(Vector2(6, 6), Black);
+  p.AddSpecialBlock(Vector2(0, 1), White);
+  p.AddSpecialBlock(Vector2(1, 0), White);
+  p.AddSpecialBlock(Vector2(0, 6), White);
+  p.AddSpecialBlock(Vector2(2, 3), White);
+  p.AddSpecialBlock(Vector2(2, 4), White);
+  p.AddSpecialBlock(Vector2(5, 2), White);
+  p.AddSpecialBlock(Vector2(6, 5), White);
   p.AddEssentialSide(Vector2(0, 6), Vector2(0, 7));
   p.AddEssentialSide(Vector2(1, 7), Vector2(0, 7));
   p.AddEssentialSide(Vector2(3, 7), Vector2(4, 7));
@@ -206,6 +214,7 @@ void PuzzleEssentialBW1() {
   p.AddEssentialSide(Vector2(6, 0), Vector2(7, 0));
   p.AddEssentialSide(Vector2(7, 0), Vector2(7, 1));
   p.AddEssentialSide(Vector2(7, 5), Vector2(7, 6));
+  p.Regenerate();
 
   SolvePuzzle(p);
 }
