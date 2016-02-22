@@ -197,6 +197,7 @@ void PuzzleEssentialBW1() {
   p.AddSpecialBlock(Vector2(0, 5), Black);
   p.AddSpecialBlock(Vector2(1, 3), Black);
   p.AddSpecialBlock(Vector2(1, 4), Black);
+  p.AddSpecialBlock(Vector2(4, 2), Black);
   p.AddSpecialBlock(Vector2(5, 6), Black);
   p.AddSpecialBlock(Vector2(6, 6), Black);
   p.AddSpecialBlock(Vector2(0, 1), White);
