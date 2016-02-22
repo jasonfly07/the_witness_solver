@@ -168,17 +168,24 @@ void Puzzle::CreateDisplayMatrix(DisplayMatrix& display) {
   }
 
   // Blocks
+  // For simplicity, all tetris blocks are 't'
   for (int r = 0; r < BlockRows(); r++) {
     for (int c = 0; c < BlockCols(); c++) {
       Block& currBlock = GetBlock(r, c);
-      if (currBlock.type == Black) {
-        display[r * 2 + 1][c * 2 + 1] = 'B';
-      }
-      else if (currBlock.type == White) {
-        display[r * 2 + 1][c * 2 + 1] = 'W';
-      }
-      else {
+      switch (currBlock.type) {
+      case Empty:
         display[r * 2 + 1][c * 2 + 1] = 'O';
+        break;
+      case Black:
+        display[r * 2 + 1][c * 2 + 1] = 'B';
+        break;
+      case White:
+        display[r * 2 + 1][c * 2 + 1] = 'W';
+        break;
+      // The rest are tetris pieces
+      default:
+        display[r * 2 + 1][c * 2 + 1] = 't';
+        break;
       }
     }
   }
