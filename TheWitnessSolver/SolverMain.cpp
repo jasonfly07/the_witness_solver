@@ -62,8 +62,6 @@ void PuzzleEssential1() {
 
   SolvePuzzle(p);
 }
-
-// Maze with essential nodes
 void PuzzleEssential2() {
   Puzzle p(5, 5);
   p.SetName("PuzzleEssential2");
@@ -93,8 +91,6 @@ void PuzzleBW1() {
 
   SolvePuzzle(p);
 }
-
-// Black & white separation
 void PuzzleBW2() {
   Puzzle p(4, 4);
   p.SetName("puzzleBW2");
@@ -113,8 +109,6 @@ void PuzzleBW2() {
 
   SolvePuzzle(p);
 }
-
-// Black & white separation
 void PuzzleBW3() {
   Puzzle p(5, 5);
   p.SetName("PuzzleBW3");
@@ -139,8 +133,6 @@ void PuzzleBW3() {
 
   SolvePuzzle(p);
 }
-
-// Black & white separation
 void PuzzleBW4() {
   Puzzle p(4, 4);
   p.SetName("puzzleBW4");
@@ -159,8 +151,6 @@ void PuzzleBW4() {
 
   SolvePuzzle(p);
 }
-
-// Black & white separation
 void PuzzleBW5() {
   Puzzle p(5, 5);
   p.SetName("puzzleBW5");
@@ -220,6 +210,17 @@ void PuzzleEssentialBW1() {
   SolvePuzzle(p);
 }
 
+// Tetris (Oriented)
+void PuzzleTetrisOriented1() {
+  Puzzle p(3, 3);
+  p.SetName("PuzzleTetrisOriented1");
+  p.AddHead(Vector2(2, 0));
+  p.AddTail(Vector2(0, 2));
+  p.AddSpecialBlock(Vector2(1, 0), L2x2_0);
+  p.Regenerate();
+
+  p.Draw();
+}
 
 int main() {
 
@@ -232,6 +233,8 @@ int main() {
   PuzzleBW4();
   PuzzleBW5();
   PuzzleEssentialBW1();
+  PuzzleTetrisOriented1();
+
 
   return 0;
 }
