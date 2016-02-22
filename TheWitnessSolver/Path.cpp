@@ -141,43 +141,30 @@ bool Path::EvaluateSegment(const BlockPtrSet& segment) {
   }
 
   // Find all the unvisited nodes in segment
-  // TODO: right now we always perform this search,
-  // but it's probably better to only run this if necessary
-  NodePtrSet unvisitedNodes;
-  for (const auto& blockPtr : segment) {
-    Vector2 blockCoord = blockPtr->coord;
-    for (Vector2 offset : {Vector2(0, 0), Vector2(0, 1), Vector2(1, 0), Vector2(1, 1)}) {
-      Vector2 nodeCoord = blockCoord + offset;
-      if (!HasVisitedNode(nodeCoord)) {
-        unvisitedNodes.insert(&m_PuzzlePtr->GetNode(nodeCoord));
-      }
-    }
-  }
-
-  // Are there unvisited essential nodes?
-  // If yes, return false immediately
   if (m_PuzzlePtr->HasEssentialNode()) {
-    for (const auto& nodePtr : unvisitedNodes) {
-      if (nodePtr->isEssential) {
-        return false;
+    NodePtrSet unvisitedNodes;
+    for (const auto& blockPtr : segment) {
+      Vector2 blockCoord = blockPtr->coord;
+      for (Vector2 offset : {Vector2(0, 0), Vector2(0, 1), Vector2(1, 0), Vector2(1, 1)}) {
+        Vector2 nodeCoord = blockCoord + offset;
+        if (!HasVisitedNode(nodeCoord)) {
+          unvisitedNodes.insert(&m_PuzzlePtr->GetNode(nodeCoord));
+        }
+      }
+    }
+
+    // Are there unvisited essential nodes?
+    // If yes, return false immediately
+    if (m_PuzzlePtr->HasEssentialNode()) {
+      for (const auto& nodePtr : unvisitedNodes) {
+        if (nodePtr->isEssential) {
+          return false;
+        }
       }
     }
   }
-
-  // Are there unvisited tails & no tail up ahead?
-  // If both true, return false immediately
-  // TODO: verify that this check works
-  //for (const auto& nodePtr : unvisitedNodes) {
-  //  if (nodePtr->isTail) {
-  //    m_MissedTailCount++;
-  //  }
-  //  if ((m_MissedTailCount + m_VisitedTails.size()) >= m_PuzzlePtr->GetTails().size()) {
-  //    return false;
-  //  }
-  //}
 
   // Find all the unvisited sides in segment if needed
-  // TODO: add conditions
   if (m_PuzzlePtr->HasEssentialSide()) {
     SideSet unvisitedSides;
     for (const auto& blockPtr : segment) {
