@@ -134,6 +134,7 @@ bool Path::EvaluateSegment(const BlockPtrSet& segment) {
       else if (block->type == Black) {
         hasBlack = true;
       }
+
       if (hasWhite && hasBlack) {
         return false;
       }

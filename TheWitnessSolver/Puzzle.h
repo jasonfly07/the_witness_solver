@@ -65,12 +65,13 @@ public:
   void AddEssentialSide(const Vector2& vec1, const Vector2& vec2);
   void AddSpecialBlock(const Vector2& vec, BlockType type);
 
-  bool HasBlackWhite() const { return m_HasBlackWhiteBlocks; }
+  inline bool HasBlackWhite() const { return m_HasBlackWhite; }
+  inline bool HasTetris() const { return m_HasTetris; }
 
-  bool HasEssentialNode() {
+  inline bool HasEssentialNode() {
     return m_NodeEssentials.size() > 0;
   }
-  bool HasEssentialSide() {
+  inline bool HasEssentialSide() {
     return m_SideEssentials.size() > 0;
   }
 
@@ -81,7 +82,8 @@ public:
 private:
 
   // Utility for Regenerate();
-  bool CheckBlackWhiteBlocks();
+  bool CheckBlackWhite();
+  bool CheckTetris();
   void ConvertBlackWhiteToEssentialSides();
 
   // 2 main maps of the puzzle
@@ -105,5 +107,7 @@ private:
   // Name of puzzle
   std::string m_Name;
 
-  bool m_HasBlackWhiteBlocks;
+  // Additional flags
+  bool m_HasBlackWhite;
+  bool m_HasTetris;
 };

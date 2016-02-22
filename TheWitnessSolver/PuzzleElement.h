@@ -53,6 +53,8 @@ enum BlockType {
 
   // Tetris (Oriented)
   // Angles are counter-clockwise
+  // TODO: all BlockTypes >= 3 are tetris for now;
+  // this is subject to change when more  non-tetris types are added
   Square1x1, Square2x2,
   Line1x2, Line2x1,
   Line1x3, Line3x1,

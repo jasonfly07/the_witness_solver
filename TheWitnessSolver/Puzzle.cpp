@@ -14,7 +14,7 @@ void Puzzle::ResetPuzzle(int nodeRow, int nodeCol) {
   m_SideObstacles.clear();
   m_SpecialBlocks.clear();
   m_Name = "";
-  m_HasBlackWhiteBlocks = false;
+  m_HasBlackWhite = false;
 }
 
 void Puzzle::Regenerate() {
@@ -35,12 +35,15 @@ void Puzzle::Regenerate() {
     m_BlockMap.SetType(blockTypePair.first->coord, blockTypePair.second);
   }
 
-  // Check if there are black & white block
+  // Check if there are black & white blocks
   // If yes, dump all sides that touch B & W on both sides to m_SideEssentials
-  m_HasBlackWhiteBlocks = CheckBlackWhiteBlocks();
-  if (m_HasBlackWhiteBlocks) {
+  m_HasBlackWhite = CheckBlackWhite();
+  if (m_HasBlackWhite) {
     ConvertBlackWhiteToEssentialSides();
   }
+
+  // Check if there are tetris blocks
+  m_HasTetris = CheckTetris();
 }
 
 void Puzzle::AddHead(const Vector2& vec) {
@@ -86,7 +89,7 @@ void Puzzle::AddSpecialBlock(const Vector2& vec, BlockType type) {
   m_SpecialBlocks.insert({ &GetBlock(vec), type });
 }
 
-bool Puzzle::CheckBlackWhiteBlocks() {
+bool Puzzle::CheckBlackWhite() {
   for (int r = 0; r < BlockRows(); r++) {
     for (int c = 0; c < BlockCols(); c++) {
       const Block& currBlock = GetBlock(r, c);
@@ -97,6 +100,19 @@ bool Puzzle::CheckBlackWhiteBlocks() {
   }
   return false;
 }
+
+bool Puzzle::CheckTetris() {
+  for (int r = 0; r < BlockRows(); r++) {
+    for (int c = 0; c < BlockCols(); c++) {
+      const Block& currBlock = GetBlock(r, c);
+      if ((int)currBlock.type >= 3) {
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
 
 void Puzzle::ConvertBlackWhiteToEssentialSides() {
   // For every block [r, c], process the sides (if valid):
