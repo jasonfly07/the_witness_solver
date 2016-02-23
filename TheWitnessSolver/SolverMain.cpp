@@ -220,6 +220,30 @@ void PuzzleTetrisOriented1() {
 
   SolvePuzzle(p);
 }
+void PuzzleTetrisOriented2() {
+  Puzzle p(4, 4);
+  p.SetName("PuzzleTetrisOriented2");
+  p.AddHead(Vector2(3, 0));
+  p.AddTail(Vector2(0, 3));
+  p.AddObstacleSide(Vector2(1, 2), Vector2(1, 3));
+  p.AddObstacleSide(Vector2(2, 1), Vector2(2, 2));
+  p.AddObstacleSide(Vector2(3, 2), Vector2(3, 3));
+  p.AddSpecialBlock(Vector2(1, 1), Square2x2);
+  p.Regenerate();
+
+  SolvePuzzle(p);
+}
+void PuzzleTetrisOriented3() {
+  Puzzle p(4, 4);
+  p.SetName("PuzzleTetrisOriented3");
+  p.AddHead(Vector2(3, 0));
+  p.AddTail(Vector2(0, 3));
+  p.AddSpecialBlock(Vector2(0, 0), Line1x2);
+  p.AddSpecialBlock(Vector2(2, 0), Square2x2);
+  p.Regenerate();
+
+  SolvePuzzle(p);
+}
 
 int main() {
 
@@ -233,6 +257,8 @@ int main() {
   //PuzzleBW5();
   //PuzzleEssentialBW1();
   PuzzleTetrisOriented1();
+  PuzzleTetrisOriented2();
+  PuzzleTetrisOriented3();
 
   return 0;
 }
