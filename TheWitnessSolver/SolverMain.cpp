@@ -239,7 +239,36 @@ void PuzzleTetrisOriented3() {
   p.AddHead(Vector2(3, 0));
   p.AddTail(Vector2(0, 3));
   p.AddSpecialBlock(Vector2(0, 0), Line1x2);
-  p.AddSpecialBlock(Vector2(2, 0), Square2x2);
+  p.AddSpecialBlock(Vector2(2, 2), Square2x2);
+  p.Regenerate();
+
+  SolvePuzzle(p);
+}
+void PuzzleTetrisOriented4() {
+  Puzzle p(6, 6);
+  p.SetName("PuzzleTetrisOriented4");
+  p.AddHead(Vector2(5, 0));
+  p.AddTail(Vector2(0, 5));
+  p.AddObstacleSide(Vector2(0, 2), Vector2(1, 2));
+  p.AddObstacleSide(Vector2(0, 4), Vector2(1, 4));
+  p.AddObstacleSide(Vector2(0, 5), Vector2(1, 5));
+  p.AddObstacleSide(Vector2(2, 0), Vector2(3, 0));
+  p.AddObstacleSide(Vector2(4, 1), Vector2(4, 2));
+  p.AddObstacleSide(Vector2(5, 4), Vector2(5, 5));
+  p.AddSpecialBlock(Vector2(2, 2), L2x3_270);
+  p.Regenerate();
+
+  SolvePuzzle(p);
+}
+void PuzzleTetrisOriented5() {
+  Puzzle p(5, 5);
+  p.SetName("PuzzleTetrisOriented5");
+  p.AddHead(Vector2(4, 0));
+  p.AddTail(Vector2(0, 4));
+  p.AddObstacleSide(Vector2(1, 3), Vector2(2, 3));
+  p.AddSpecialBlock(Vector2(1, 0), Line1x4);
+  p.AddSpecialBlock(Vector2(3, 1), Line3x1);
+  p.AddSpecialBlock(Vector2(3, 2), Line3x1);
   p.Regenerate();
 
   SolvePuzzle(p);
@@ -247,18 +276,22 @@ void PuzzleTetrisOriented3() {
 
 int main() {
 
-  //PuzzleSimpleMaze1();
-  //PuzzleEssential1();
-  //PuzzleEssential2();
-  //PuzzleBW1();
-  //PuzzleBW2();
-  //PuzzleBW3();
-  //PuzzleBW4();
-  //PuzzleBW5();
-  //PuzzleEssentialBW1();
+  PuzzleSimpleMaze1();
+  PuzzleEssential1();
+  PuzzleEssential2();
+
+  PuzzleBW1();
+  PuzzleBW2();
+  PuzzleBW3();
+  PuzzleBW4();
+  PuzzleBW5();
+  PuzzleEssentialBW1();
+
   PuzzleTetrisOriented1();
   PuzzleTetrisOriented2();
   PuzzleTetrisOriented3();
+  PuzzleTetrisOriented4();
+  PuzzleTetrisOriented5();
 
   return 0;
 }
