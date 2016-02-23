@@ -1,6 +1,7 @@
 #pragma once
 #include "PuzzleElement.h"
 #include "Puzzle.h"
+#include "Tetris.h"
 
 // A path object is used by the solver to record the history of searching
 // It contains all node visited, essential node counts, etc.
@@ -92,6 +93,13 @@ public:
 
   // Evaluate a segment
   bool EvaluateSegment(const BlockPtrSet& segment);
+
+  // Given a list of segment coords & a list of tetris pieces,
+  // evaluate whether the pieces form the segment.
+  // This utility is used by EvaluateSegment() as part of its tetris evaluation.
+  // Before calling this function, the area of segment is ensured to equal
+  // that of the sum of tetris pieces.
+  bool FitSegmentWithTetris(const Vector2Set& segmentCoords, const TetrisVector& tetrisVector);
 
   // Records the number of times the path touching/leaving the edge
   int m_TouchCount;

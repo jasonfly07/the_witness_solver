@@ -1,5 +1,4 @@
 #include "Path.h"
-#include "Tetris.h"
 
 bool Path::AddNode(Node* node) {
   ASSERT(m_PuzzlePtr != NULL);
@@ -205,9 +204,11 @@ bool Path::EvaluateSegment(const BlockPtrSet& segment) {
     // Sum of area has to match the current segment
     size_t tetrisAreaSum = 0;
     const size_t segmentArea = segment.size();
+    bool hasTetris = false;
     for (const auto& blockPtr : segment) {
       // TODO: update 3
       if (blockPtr->type >= 3) {
+        hasTetris = true;
         Tetris tetris(blockPtr->type);
         tetrisAreaSum += tetris.area;
         if (tetrisAreaSum > segmentArea) {
@@ -216,16 +217,68 @@ bool Path::EvaluateSegment(const BlockPtrSet& segment) {
         tetrisVector.push_back(tetris);
       }
     }
-    if (tetrisAreaSum != 0 && tetrisAreaSum != segmentArea) {
+    if (hasTetris && tetrisAreaSum != segmentArea) {
       return false;
     }
 
-    // TODO: Check if all the pieces fit inside this segment
+    // Process if current segment has tetris pieces
+    if (hasTetris) {
+      // Create a bag of coords in segment for the next part
+      Vector2Set segmentCoords;
+      segmentCoords.reserve(segmentArea);
+      for (const auto& blockPtr : segment) {
+        segmentCoords.insert(blockPtr->coord);
+      }
+
+      // Check if all the pieces fit inside this segment
+      if (!FitSegmentWithTetris(segmentCoords, tetrisVector)) {
+        return false;
+      }
+    }
   }
 
   // Return true if it survives all the way to the end
   return true;
 }
+
+bool Path::FitSegmentWithTetris(const Vector2Set& segmentCoords, const TetrisVector& tetrisVector) {
+  // Base case
+  if (segmentCoords.size() == 0 && tetrisVector.size() == 0) {
+    return true;
+  }
+
+  // Recursive case
+  // For every block, see if we can fit & grow a tetris piece on it
+  // We always pick the last piece of tetrisVector (easier to remove)
+  for (const auto& segmentCoord : segmentCoords) {
+    const Tetris& tetris = tetrisVector.back();
+    bool canFit = true;
+    for (const auto& tetrisCoordOffset : tetris.shape) {
+      Vector2 tetrisCoord = segmentCoord + tetrisCoordOffset;
+      if (segmentCoords.count(tetrisCoord) != 1) {
+        canFit = false;
+        break;
+      }
+    }
+
+    // If it fits, we remove tetris from tetrisVector, associated coords from
+    // segmentCoords, and continue the recursion
+    if (canFit) {
+      auto segmentCoordsReduced = segmentCoords;
+      auto tetrisVectorReduced = tetrisVector;
+      for (const auto& tetrisCoordOffset : tetris.shape) {
+        Vector2 tetrisCoord = segmentCoord + tetrisCoordOffset;
+        segmentCoordsReduced.erase(tetrisCoord);
+      }
+      tetrisVectorReduced.pop_back();
+      return FitSegmentWithTetris(segmentCoordsReduced, tetrisVectorReduced);
+    }
+  }
+
+  // Reaching this line means tetris cannot fit into current segment
+  return false;
+}
+
 
 bool Path::ProcessRemainingSegments() {
   // Look for unvisited block
