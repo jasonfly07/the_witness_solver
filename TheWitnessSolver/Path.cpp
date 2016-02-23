@@ -1,4 +1,5 @@
 #include "Path.h"
+#include "Tetris.h"
 
 bool Path::AddNode(Node* node) {
   ASSERT(m_PuzzlePtr != NULL);
@@ -197,7 +198,35 @@ bool Path::EvaluateSegment(const BlockPtrSet& segment) {
     }
   }
 
+  // Are there tetris blocks & does the current segment satisfy them?
+  if (m_PuzzlePtr->HasTetris()) {
+    TetrisVector tetrisVector;
+
+    // Sum of area has to match the current segment
+    std::cout << std::endl;
+    Print();
+    size_t tetrisAreaSum = 0;
+    const size_t segmentArea = segment.size();
+    for (const auto& blockPtr : segment) {
+      // TODO: update 3
+      if (blockPtr->type >= 3) {
+        Tetris tetris(blockPtr->type);
+        tetrisAreaSum += tetris.area;
+        if (tetrisAreaSum > segmentArea) {
+          return false;
+        }
+        tetrisVector.push_back(tetris);
+      }
+    }
+    if (tetrisAreaSum != 0 && tetrisAreaSum != segmentArea) {
+      return false;
+    }
+
+    // TODO: Check if all the pieces fit inside this segment
+  }
+
   // Return true if it survives all the way to the end
+  std::cout << "survived segment evaluation" << std::endl;
   return true;
 }
 

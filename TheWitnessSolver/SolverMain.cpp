@@ -218,20 +218,20 @@ void PuzzleTetrisOriented1() {
   p.AddSpecialBlock(Vector2(1, 0), L2x2_0);
   p.Regenerate();
 
-  p.Draw();
+  SolvePuzzle(p);
 }
 
 int main() {
 
-  PuzzleSimpleMaze1();
-  PuzzleEssential1();
-  PuzzleEssential2();
-  PuzzleBW1();
-  PuzzleBW2();
-  PuzzleBW3();
-  PuzzleBW4();
-  PuzzleBW5();
-  PuzzleEssentialBW1();
+  //PuzzleSimpleMaze1();
+  //PuzzleEssential1();
+  //PuzzleEssential2();
+  //PuzzleBW1();
+  //PuzzleBW2();
+  //PuzzleBW3();
+  //PuzzleBW4();
+  //PuzzleBW5();
+  //PuzzleEssentialBW1();
   PuzzleTetrisOriented1();
 
   return 0;

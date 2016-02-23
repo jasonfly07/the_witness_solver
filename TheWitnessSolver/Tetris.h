@@ -233,3 +233,4 @@ struct Tetris {
   // farthest reach in the beginning, so we don't waste time growing the shape block-by-block
   Vector2List shape;
 };
+typedef std::vector<Tetris> TetrisVector;
