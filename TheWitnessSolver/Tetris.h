@@ -192,6 +192,36 @@ struct Tetris {
     }
   }
 
+  // Visualize the piece. For debugging.
+  void Draw() const {
+    int minR = 0;
+    int minC = 0;
+    int maxR = 0;
+    int maxC = 0;
+    for (const auto& coord : shape) {
+      if (coord.r < minR) minR = coord.r;
+      if (coord.c < minC) minC = coord.c;
+      if (coord.r > maxR) maxR = coord.r;
+      if (coord.c > maxC) maxC = coord.c;
+    }
+    Vector2 offset = Vector2(0, 0) - Vector2(minR, minC);
+    std::vector<std::vector<char>> displayMatrix(maxR - minR + 1, std::vector<char>(maxC - minC + 1));
+    for (int r = minR; r <= maxR; r++) {
+      for (int c = minC; c <= maxC; c++) {
+        displayMatrix[r + offset.r][c + offset.c] = 'O';
+      }
+    }
+    for (const auto& coord : shape) {
+      displayMatrix[coord.r + offset.r][coord.c + offset.c] = 'X';
+    }
+    for (int r = 0; r < displayMatrix.size(); r++) {
+      for (int c = 0; c < displayMatrix[0].size(); c++) {
+        std::cout << displayMatrix[r][c];
+      }
+      std::cout << std::endl;
+    }
+  }
+
   size_t area;
 
   // TODO: are these actually useful?

@@ -2,8 +2,7 @@
 
 #include "Puzzle.h"
 #include "PuzzleSolver.h"
-#include <iostream>
-#include <stdexcept>
+#include "Tetris.h"
 
 typedef std::chrono::high_resolution_clock HighResClock;
 typedef std::chrono::milliseconds MilliSecond;
@@ -234,7 +233,6 @@ int main() {
   PuzzleBW5();
   PuzzleEssentialBW1();
   PuzzleTetrisOriented1();
-
 
   return 0;
 }
