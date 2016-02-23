@@ -203,8 +203,6 @@ bool Path::EvaluateSegment(const BlockPtrSet& segment) {
     TetrisVector tetrisVector;
 
     // Sum of area has to match the current segment
-    std::cout << std::endl;
-    Print();
     size_t tetrisAreaSum = 0;
     const size_t segmentArea = segment.size();
     for (const auto& blockPtr : segment) {
@@ -226,7 +224,6 @@ bool Path::EvaluateSegment(const BlockPtrSet& segment) {
   }
 
   // Return true if it survives all the way to the end
-  std::cout << "survived segment evaluation" << std::endl;
   return true;
 }
 
