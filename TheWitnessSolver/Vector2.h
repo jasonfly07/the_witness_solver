@@ -13,13 +13,13 @@ struct Vector2 {
     return std::abs(r - other.r) + std::abs(c - other.c);
   }
 
-  Vector2 operator+(const Vector2& other) {
+  Vector2 operator+(const Vector2& other) const {
     return Vector2(r + other.r, c + other.c);
   }
-  Vector2 operator-(const Vector2& other) {
+  Vector2 operator-(const Vector2& other) const {
     return Vector2(r - other.r, c - other.c);
   }
-  Vector2 operator*(int mul) {
+  Vector2 operator*(int mul) const {
     return Vector2(r * mul, c * mul);
   }
   void operator=(const Vector2& other) {
