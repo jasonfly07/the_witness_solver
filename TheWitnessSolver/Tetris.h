@@ -27,6 +27,9 @@ struct Tetris {
       boxRow = 2; boxCol = 2;
       shape.clear(); shape.reserve(area);
       shape.push_back(Vector2(0, 0));
+      shape.push_back(Vector2(1, 1));
+      shape.push_back(Vector2(0, 1));
+      shape.push_back(Vector2(1, 0));
       break;
 
     case Line1x2:
