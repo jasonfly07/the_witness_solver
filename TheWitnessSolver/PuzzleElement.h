@@ -76,7 +76,6 @@ struct Block {
     coord = Vector2(r, c);
     type = Empty;
     neighborOffsets.clear();
-    passed = false;
     visited = false;
   }
   Vector2Set GetNeighborCoords() {
@@ -90,7 +89,6 @@ struct Block {
   Vector2 coord;
   Vector2Set neighborOffsets;
   BlockType type;
-  bool passed;  // marked true if the whole segment passes every available check
   bool visited; // used by segmentation
 };
 typedef std::unordered_set<Block*>            BlockPtrSet;
