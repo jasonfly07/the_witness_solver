@@ -3,6 +3,7 @@
 #include "Puzzle.h"
 #include "PuzzleSolver.h"
 #include "Tetris.h"
+#include "utilities.hpp"
 
 typedef std::chrono::high_resolution_clock HighResClock;
 typedef std::chrono::milliseconds MilliSecond;
@@ -19,7 +20,9 @@ static void SolvePuzzle(Puzzle &p)
   std::cout << p.GetName() << " solved in " << ms.count() << " ms" << std::endl;
 
   // Draw the first solution
-  ps.GetPaths()[0].Draw();
+  std::cout << std::endl;
+  draw(p, ps.GetPaths()[0]);
+  std::cout << std::endl;
 }
 
 // Simple maze
@@ -27,16 +30,16 @@ void PuzzleSimpleMaze1()
 {
   Puzzle p(5, 4);
   p.SetName("PuzzleSimpleMaze1");
-  p.AddHead(Vector2(4, 0));
-  p.AddTail(Vector2(0, 3));
-  p.AddObstacleSide(Vector2(3, 0), Vector2(4, 0));
-  p.AddObstacleSide(Vector2(3, 1), Vector2(4, 1));
-  p.AddObstacleSide(Vector2(1, 1), Vector2(2, 1));
-  p.AddObstacleSide(Vector2(1, 2), Vector2(2, 2));
-  p.AddObstacleSide(Vector2(1, 3), Vector2(2, 3));
-  p.AddObstacleSide(Vector2(0, 2), Vector2(1, 2));
-  p.AddObstacleSide(Vector2(0, 2), Vector2(0, 3));
-  p.AddObstacleSide(Vector2(0, 0), Vector2(0, 1));
+  p.AddHead({4, 0});
+  p.AddTail({0, 3});
+  p.AddObstacleSide({3, 0}, {4, 0});
+  p.AddObstacleSide({3, 1}, {4, 1});
+  p.AddObstacleSide({1, 1}, {2, 1});
+  p.AddObstacleSide({1, 2}, {2, 2});
+  p.AddObstacleSide({1, 3}, {2, 3});
+  p.AddObstacleSide({0, 2}, {1, 2});
+  p.AddObstacleSide({0, 2}, {0, 3});
+  p.AddObstacleSide({0, 0}, {0, 1});
   p.Regenerate();
 
   SolvePuzzle(p);
@@ -56,10 +59,10 @@ void PuzzleEssential1()
   p.AddObstacleSide(Vector2(2, 2), Vector2(3, 2));
   p.AddEssentialNode(Vector2(2, 0));
   p.AddEssentialNode(Vector2(2, 1));
-  p.AddEssentialNode(Vector2(0, 1));
   p.AddEssentialNode(Vector2(1, 2));
   p.AddEssentialNode(Vector2(1, 3));
   p.AddEssentialNode(Vector2(3, 3));
+  p.AddEssentialSide(Vector2(0, 1), Vector2(0, 2));
   p.Regenerate();
 
   SolvePuzzle(p);
@@ -77,6 +80,28 @@ void PuzzleEssential2()
       p.AddEssentialNode(Vector2(r, c));
     }
   }
+  p.Regenerate();
+
+  SolvePuzzle(p);
+}
+
+void PuzzleEssential3()
+{
+  Puzzle p(4, 4);
+  p.SetName("PuzzleEssential3");
+  p.AddHead({1, 1});
+  p.AddHead({2, 2});
+  p.AddTail({1, 0});
+  p.AddEssentialNode({0, 1});
+  p.AddEssentialNode({2, 0});
+  p.AddEssentialNode({2, 1});
+  p.AddEssentialNode({1, 2});
+  p.AddEssentialNode({1, 3});
+  p.AddEssentialNode({3, 3});
+  p.AddObstacleSide({0, 0}, {0, 1});
+  p.AddObstacleSide({0, 0}, {1, 0});
+  p.AddObstacleSide({2, 2}, {3, 2});
+  p.AddObstacleSide({1, 2}, {1, 3});
   p.Regenerate();
 
   SolvePuzzle(p);
@@ -177,6 +202,29 @@ void PuzzleBW5()
   p.AddSpecialBlock(Vector2(1, 3), White);
   p.AddSpecialBlock(Vector2(2, 3), White);
   p.AddSpecialBlock(Vector2(3, 3), White);
+  p.Regenerate();
+
+  SolvePuzzle(p);
+}
+
+void PuzzleBW6()
+{
+  Puzzle p(5, 5);
+  p.SetName("puzzleBW6");
+  p.AddHead({4, 0});
+  p.AddTail({4, 3});
+  p.AddSpecialBlock({0, 1}, Black);
+  p.AddSpecialBlock({0, 3}, Black);
+  p.AddSpecialBlock({1, 0}, Black);
+  p.AddSpecialBlock({1, 3}, Black);
+  p.AddSpecialBlock({2, 0}, Black);
+  p.AddSpecialBlock({2, 2}, Black);
+  p.AddSpecialBlock({3, 3}, Black);
+  p.AddSpecialBlock({0, 2}, White);
+  p.AddSpecialBlock({2, 1}, White);
+  p.AddSpecialBlock({3, 0}, White);
+  p.AddSpecialBlock({3, 1}, White);
+  p.AddSpecialBlock({3, 2}, White);
   p.Regenerate();
 
   SolvePuzzle(p);
@@ -295,14 +343,19 @@ int main()
 {
 
   PuzzleSimpleMaze1();
-  // PuzzleEssential1();
-  // PuzzleEssential2();
+  PuzzleEssential1();
+  PuzzleEssential2();
+  PuzzleEssential3();
 
   // PuzzleBW1();
   // PuzzleBW2();
   // PuzzleBW3();
   // PuzzleBW4();
   // PuzzleBW5();
+  PuzzleBW6();
+
+  // TODO: speed this up
+  // current record: 2504584 ms
   // PuzzleEssentialBW1();
 
   // PuzzleTetrisOriented1();

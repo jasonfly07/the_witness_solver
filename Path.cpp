@@ -363,36 +363,3 @@ bool Path::ProcessRemainingSegments()
   }
   return true;
 }
-
-void Path::Draw()
-{
-  assert(m_PuzzlePtr != NULL);
-
-  DisplayMatrix display;
-  m_PuzzlePtr->CreateDisplayMatrix(display);
-
-  // Add path to display
-  for (int i = 0; i < m_Path.size() - 1; i++)
-  {
-    Vector2 p1Coord = m_Path[i]->coord;
-    Vector2 p2Coord = m_Path[i + 1]->coord;
-    if (p1Coord.r == p2Coord.r)
-    {
-      display[p1Coord.r * 2][p1Coord.c + p2Coord.c] = '-';
-    }
-    else if (p1Coord.c == p2Coord.c)
-    {
-      display[p1Coord.r + p2Coord.r][p1Coord.c * 2] = '|';
-    }
-  }
-
-  // Drawing
-  for (int r = 0; r < display.size(); r++)
-  {
-    for (int c = 0; c < display[0].size(); c++)
-    {
-      std::cout << display[r][c];
-    }
-    std::cout << std::endl;
-  }
-}

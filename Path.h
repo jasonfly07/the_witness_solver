@@ -79,6 +79,7 @@ public:
   }
 
   NodePtrVector &GetPath() { return m_Path; }
+  const NodePtrVector &GetPath() const { return m_Path; }
 
   // Deal with all unprocessed segments.
   // Once reaching a tail, a path would have either 1 or 2 unprocessed segments;
@@ -88,9 +89,6 @@ public:
 
   // Print the path in sequence
   void Print() const;
-
-  // Drawing
-  void Draw();
 
 private:
   // Same as BlockMap::CutTie(), but the inputs are 2 adjacent nodes
