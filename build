@@ -1,0 +1,1 @@
+g++ BlockMap.cpp NodeMap.cpp Path.cpp Puzzle.cpp PuzzleSolver.cpp SolverMain.cpp -std=c++17 -o main

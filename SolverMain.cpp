@@ -8,7 +8,8 @@ typedef std::chrono::high_resolution_clock HighResClock;
 typedef std::chrono::milliseconds MilliSecond;
 
 // Utility for run solver and profiling
-static void SolvePuzzle(Puzzle& p) {
+static void SolvePuzzle(Puzzle &p)
+{
   std::chrono::time_point<HighResClock> start, end;
   start = HighResClock::now();
   PuzzleSolver ps(p, 1);
@@ -22,7 +23,8 @@ static void SolvePuzzle(Puzzle& p) {
 }
 
 // Simple maze
-void PuzzleSimpleMaze1() {
+void PuzzleSimpleMaze1()
+{
   Puzzle p(5, 4);
   p.SetName("PuzzleSimpleMaze1");
   p.AddHead(Vector2(4, 0));
@@ -41,7 +43,8 @@ void PuzzleSimpleMaze1() {
 }
 
 // Maze with essential nodes
-void PuzzleEssential1() {
+void PuzzleEssential1()
+{
   Puzzle p(4, 4);
   p.SetName("PuzzleEssential1");
   p.AddHead(Vector2(1, 1));
@@ -61,13 +64,16 @@ void PuzzleEssential1() {
 
   SolvePuzzle(p);
 }
-void PuzzleEssential2() {
+void PuzzleEssential2()
+{
   Puzzle p(5, 5);
   p.SetName("PuzzleEssential2");
   p.AddHead(Vector2(2, 2));
   p.AddTail(Vector2(0, 4));
-  for (int r = 0; r < 5; r++) {
-    for (int c = 0; c < 5; c++) {
+  for (int r = 0; r < 5; r++)
+  {
+    for (int c = 0; c < 5; c++)
+    {
       p.AddEssentialNode(Vector2(r, c));
     }
   }
@@ -77,7 +83,8 @@ void PuzzleEssential2() {
 }
 
 // Black & white separation
-void PuzzleBW1() {
+void PuzzleBW1()
+{
   Puzzle p(3, 3);
   p.SetName("PuzzleBW1");
   p.AddHead(Vector2(2, 0));
@@ -90,7 +97,8 @@ void PuzzleBW1() {
 
   SolvePuzzle(p);
 }
-void PuzzleBW2() {
+void PuzzleBW2()
+{
   Puzzle p(4, 4);
   p.SetName("puzzleBW2");
   p.AddHead(Vector2(3, 0));
@@ -108,7 +116,8 @@ void PuzzleBW2() {
 
   SolvePuzzle(p);
 }
-void PuzzleBW3() {
+void PuzzleBW3()
+{
   Puzzle p(5, 5);
   p.SetName("PuzzleBW3");
   p.AddHead(Vector2(4, 0));
@@ -132,7 +141,8 @@ void PuzzleBW3() {
 
   SolvePuzzle(p);
 }
-void PuzzleBW4() {
+void PuzzleBW4()
+{
   Puzzle p(4, 4);
   p.SetName("puzzleBW4");
   p.AddHead(Vector2(3, 0));
@@ -150,7 +160,8 @@ void PuzzleBW4() {
 
   SolvePuzzle(p);
 }
-void PuzzleBW5() {
+void PuzzleBW5()
+{
   Puzzle p(5, 5);
   p.SetName("puzzleBW5");
   p.AddHead(Vector2(2, 2));
@@ -172,7 +183,8 @@ void PuzzleBW5() {
 }
 
 // Black & white separation + essential nodes
-void PuzzleEssentialBW1() {
+void PuzzleEssentialBW1()
+{
   Puzzle p(8, 8);
   p.SetName("puzzleEssentialBW1");
   p.AddHead(Vector2(7, 0));
@@ -210,7 +222,8 @@ void PuzzleEssentialBW1() {
 }
 
 // Tetris (Oriented)
-void PuzzleTetrisOriented1() {
+void PuzzleTetrisOriented1()
+{
   Puzzle p(3, 3);
   p.SetName("PuzzleTetrisOriented1");
   p.AddHead(Vector2(2, 0));
@@ -220,7 +233,8 @@ void PuzzleTetrisOriented1() {
 
   SolvePuzzle(p);
 }
-void PuzzleTetrisOriented2() {
+void PuzzleTetrisOriented2()
+{
   Puzzle p(4, 4);
   p.SetName("PuzzleTetrisOriented2");
   p.AddHead(Vector2(3, 0));
@@ -233,7 +247,8 @@ void PuzzleTetrisOriented2() {
 
   SolvePuzzle(p);
 }
-void PuzzleTetrisOriented3() {
+void PuzzleTetrisOriented3()
+{
   Puzzle p(4, 4);
   p.SetName("PuzzleTetrisOriented3");
   p.AddHead(Vector2(3, 0));
@@ -244,7 +259,8 @@ void PuzzleTetrisOriented3() {
 
   SolvePuzzle(p);
 }
-void PuzzleTetrisOriented4() {
+void PuzzleTetrisOriented4()
+{
   Puzzle p(6, 6);
   p.SetName("PuzzleTetrisOriented4");
   p.AddHead(Vector2(5, 0));
@@ -260,7 +276,8 @@ void PuzzleTetrisOriented4() {
 
   SolvePuzzle(p);
 }
-void PuzzleTetrisOriented5() {
+void PuzzleTetrisOriented5()
+{
   Puzzle p(5, 5);
   p.SetName("PuzzleTetrisOriented5");
   p.AddHead(Vector2(4, 0));
@@ -274,24 +291,25 @@ void PuzzleTetrisOriented5() {
   SolvePuzzle(p);
 }
 
-int main() {
+int main()
+{
 
   PuzzleSimpleMaze1();
-  PuzzleEssential1();
-  PuzzleEssential2();
+  // PuzzleEssential1();
+  // PuzzleEssential2();
 
-  PuzzleBW1();
-  PuzzleBW2();
-  PuzzleBW3();
-  PuzzleBW4();
-  PuzzleBW5();
-  PuzzleEssentialBW1();
+  // PuzzleBW1();
+  // PuzzleBW2();
+  // PuzzleBW3();
+  // PuzzleBW4();
+  // PuzzleBW5();
+  // PuzzleEssentialBW1();
 
-  PuzzleTetrisOriented1();
-  PuzzleTetrisOriented2();
-  PuzzleTetrisOriented3();
-  PuzzleTetrisOriented4();
-  PuzzleTetrisOriented5();
+  // PuzzleTetrisOriented1();
+  // PuzzleTetrisOriented2();
+  // PuzzleTetrisOriented3();
+  // PuzzleTetrisOriented4();
+  // PuzzleTetrisOriented5();
 
   return 0;
 }
