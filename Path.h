@@ -8,8 +8,15 @@
 class Path
 {
 public:
-  // A path is initialized by specifying its "parent" puzzle
+  Path() {}
+
   Path(Puzzle *puzzle)
+  {
+    init(puzzle);
+  }
+
+  // A path is initialized by specifying its "parent" puzzle
+  void init(Puzzle *puzzle)
   {
     assert(puzzle != NULL);
 

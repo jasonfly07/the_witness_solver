@@ -1,27 +1,29 @@
 #include "PuzzleSolver.h"
 
-void PuzzleSolver::Solve() {
-
+void PuzzleSolver::Solve()
+{
   // Clear the solution container
   m_Paths.clear();
 
   // Create the stack for DFS
   std::stack<Path> pathStack;
-  for (const auto& head : m_PuzzlePtr->GetHeads()) {
+  for (const auto &head : m_PuzzlePtr->GetHeads())
+  {
     Path path(m_PuzzlePtr);
     path.AddNode(head);
     pathStack.push(path);
   }
 
   // Perform DFS
-  while (!pathStack.empty()) {
+  while (!pathStack.empty())
+  {
     Path currPath = pathStack.top();
     pathStack.pop();
 
     // Perform additional evaluation if the current path
     // has reached a goal (tail)
-    if (currPath.GetPath().back()->isTail) {
-
+    if (currPath.GetPath().back()->isTail)
+    {
       // Make a copy, since a path can still continue exploring after reaching a tail
       Path endPath(currPath);
 
@@ -29,26 +31,28 @@ void PuzzleSolver::Solve() {
       // Find them and process them.
       bool validEndPath = endPath.ProcessRemainingSegments();
 
-      if (validEndPath) {
-        // Additional essential nodes evaluation
-        if (m_PuzzlePtr->HasEssentialNode()) {
-          // Give up on this path if it has insufficient essential node count
-          if (!endPath.HasCollectedAllEssentialNodes()) {
-            continue;
-          }
+      if (validEndPath)
+      {
+        // Give up on this path if it has insufficient essential node count
+        if (m_PuzzlePtr->HasEssentialNode() &&
+            !endPath.HasCollectedAllEssentialNodes())
+        {
+          continue;
         }
 
         // If currPath survives all the checks above, include it in m_Paths
         //std::cout << "survived" << std::endl;
         m_Paths.push_back(endPath);
-        if (m_MaxNumSolutions != -1 && m_Paths.size() == m_MaxNumSolutions) {
+        if (m_MaxNumSolutions != -1 && m_Paths.size() == m_MaxNumSolutions)
+        {
           return;
         }
       }
     }
 
     // If the current path has no exit left, there's no need to further explore it
-    if (!currPath.HasTailLeft()) {
+    if (!currPath.HasTailLeft())
+    {
       continue;
     }
 
@@ -59,40 +63,53 @@ void PuzzleSolver::Solve() {
     // (otherwise there's no chance of stepping on it later)
     // If 2 or 3 of them are (unvisited) essential sides, this path is screwed
     int currEssentialSideCount = 0;
-    Node& currNode = *(currPath.GetPath().back());
-    for (const auto& neighborCoord : currPath.GetPath().back()->GetNeighborCoords()) {
-      Node& neighbor = m_PuzzlePtr->GetNode(neighborCoord);
-      if (!currPath.HasVisitedNode(&neighbor)) {
-        if (m_PuzzlePtr->GetEssentialSides().count(Side(&currNode, &neighbor)) == 1) {
+    Node &currNode = *(currPath.GetPath().back());
+    for (const auto &neighborCoord : currPath.GetPath().back()->GetNeighborCoords())
+    {
+      Node &neighbor = m_PuzzlePtr->GetNode(neighborCoord);
+      if (!currPath.HasVisitedNode(&neighbor))
+      {
+        if (m_PuzzlePtr->GetEssentialSides().count(Side(&currNode, &neighbor)) == 1)
+        {
           currEssentialSideCount++;
         }
       }
     }
-    if (currEssentialSideCount == 0) {
-      for (const auto& neighborCoord : currPath.GetPath().back()->GetNeighborCoords()) {
-        Node& neighbor = m_PuzzlePtr->GetNode(neighborCoord);
-        if (!currPath.HasVisitedNode(&neighbor)) {
+    if (currEssentialSideCount == 0)
+    {
+      for (const auto &neighborCoord : currPath.GetPath().back()->GetNeighborCoords())
+      {
+        Node &neighbor = m_PuzzlePtr->GetNode(neighborCoord);
+        if (!currPath.HasVisitedNode(&neighbor))
+        {
           Path newPath(currPath);
-          if(newPath.AddNode(&neighbor)) {
+          if (newPath.AddNode(&neighbor))
+          {
             pathStack.push(newPath);
           }
         }
       }
     }
-    else if (currEssentialSideCount == 1) {
-      for (const auto& neighborCoord : currPath.GetPath().back()->GetNeighborCoords()) {
-        Node& neighbor = m_PuzzlePtr->GetNode(neighborCoord);
-        if (!currPath.HasVisitedNode(&neighbor)) {
-          if (m_PuzzlePtr->GetEssentialSides().count(Side(&currNode, &neighbor)) == 1) {
+    else if (currEssentialSideCount == 1)
+    {
+      for (const auto &neighborCoord : currPath.GetPath().back()->GetNeighborCoords())
+      {
+        Node &neighbor = m_PuzzlePtr->GetNode(neighborCoord);
+        if (!currPath.HasVisitedNode(&neighbor))
+        {
+          if (m_PuzzlePtr->GetEssentialSides().count(Side(&currNode, &neighbor)) == 1)
+          {
             Path newPath(currPath);
-            if (newPath.AddNode(&neighbor)) {
+            if (newPath.AddNode(&neighbor))
+            {
               pathStack.push(newPath);
             }
           }
         }
       }
     }
-    else {
+    else
+    {
       // If currEssentialSideCount > 1, do nothing
     }
   }
